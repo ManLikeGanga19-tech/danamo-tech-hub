@@ -1,7 +1,16 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Book, Menu, Moon, Sun, Zap } from "lucide-react";
+import {
+    Book,
+    Menu,
+    Moon,
+    Sun,
+    Zap,
+    Brush,
+    ServerCog,
+    Package,
+} from "lucide-react";
 import {
     Accordion,
     AccordionContent,
@@ -63,7 +72,6 @@ export const Navbar1 = ({
         title: "Danamo Tech Hub",
     },
     menu = [
-        { title: "Home", url: "/" },
         {
             title: "Services",
             url: "/services",
@@ -79,6 +87,24 @@ export const Navbar1 = ({
                     description: "Grow your brand with our digital marketing",
                     icon: <Zap className="size-5 shrink-0" />,
                     url: "/services/seo",
+                },
+                {
+                    title: "Branding & UX/UI Design",
+                    description: "Visually engaging and user-friendly designs",
+                    icon: <Brush className="size-5 shrink-0" />,
+                    url: "/services/design",
+                },
+                {
+                    title: "Cloud & DevOps",
+                    description: "Streamlined deployment and cloud infrastructure",
+                    icon: <ServerCog className="size-5 shrink-0" />,
+                    url: "/services/devops",
+                },
+                {
+                    title: "SaaS Product Development",
+                    description: "Scalable SaaS platforms for your business",
+                    icon: <Package className="size-5 shrink-0" />,
+                    url: "/services/saas",
                 },
             ],
         },
@@ -101,9 +127,9 @@ export const Navbar1 = ({
             return (
                 <NavigationMenuItem key={item.title}>
                     <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-                    <NavigationMenuContent className="min-w-[320px] bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300 ease-in-out">
+                    <NavigationMenuContent className="bg-white/70 dark:bg-black/70 backdrop-blur-lg text-popover-foreground rounded-lg shadow-lg p-4 min-w-[280px] transition-all duration-300 ease-in-out border border-gray-300 dark:border-gray-700">
                         {item.items.map((subItem) => (
-                            <NavigationMenuLink asChild key={subItem.title}>
+                            <NavigationMenuLink asChild key={subItem.title} className="w-full">
                                 <SubMenuLink item={subItem} />
                             </NavigationMenuLink>
                         ))}
@@ -116,9 +142,9 @@ export const Navbar1 = ({
             <NavigationMenuItem key={item.title}>
                 <NavigationMenuLink
                     href={item.url}
-                    className={`group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-300 ease-in-out ${isActive
-                            ? "bg-muted font-semibold text-primary"
-                            : "hover:bg-gray-100 hover:text-black dark:hover:bg-gray-800 dark:hover:text-white"
+                    className={`group inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-300 ease-in-out ${isActive
+                            ? "bg-muted font-semibold text-blue-600 dark:text-blue-400"
+                            : "hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
                         }`}
                 >
                     {item.title}
@@ -149,7 +175,9 @@ export const Navbar1 = ({
             <a
                 key={item.title}
                 href={item.url}
-                className={`text-md font-semibold transition-colors duration-300 ease-in-out ${isActive ? "text-primary font-bold" : "hover:text-black dark:hover:text-white"
+                className={`text-md font-semibold transition-colors duration-300 ease-in-out ${isActive
+                        ? "text-blue-600 dark:text-blue-400 font-bold"
+                        : "hover:text-blue-600 dark:hover:text-blue-400"
                     }`}
             >
                 {item.title}
@@ -158,27 +186,29 @@ export const Navbar1 = ({
     };
 
     return (
-        <section className="sticky top-0 z-50 bg-white dark:bg-black shadow-sm transition-colors duration-300">
-            <div className="container py-4">
+        <section className="sticky top-0 z-50 bg-white/70 dark:bg-black/70 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="layout container py-3">
                 {/* Desktop Menu */}
-                <nav className="hidden justify-between lg:flex">
-                    <div className="flex items-center gap-6">
-                        <a href={logo.url} className="flex items-center gap-2">
-                            <img src={logo.src} className="max-h-8" alt={logo.alt} />
-                            <span className="text-lg font-semibold tracking-tighter">
-                                {logo.title}
-                            </span>
-                        </a>
-                        <div className="flex items-center">
-                            <NavigationMenu>
-                                <NavigationMenuList>
-                                    {menu.map((item) => renderMenuItem(item))}
-                                </NavigationMenuList>
-                            </NavigationMenu>
-                        </div>
+                <nav className="hidden lg:flex justify-between items-center">
+                    {/* Left: Logo */}
+                    <a href={logo.url} className="flex items-center gap-2">
+                        <img src={logo.src} className="max-h-8" alt={logo.alt} />
+                        <span className="text-lg font-semibold tracking-tighter text-blue-600 dark:text-blue-400">
+                            {logo.title}
+                        </span>
+                    </a>
+
+                    {/* Center: Menu */}
+                    <div className="flex items-center ml-auto">
+                        <NavigationMenu>
+                            <NavigationMenuList>
+                                {menu.map((item) => renderMenuItem(item))}
+                            </NavigationMenuList>
+                        </NavigationMenu>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    {/* Right: Controls */}
+                    <div className="flex items-center gap-6 ml-4">
                         <Button
                             variant="outline"
                             size="sm"
@@ -189,20 +219,23 @@ export const Navbar1 = ({
                             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                         </Button>
 
-                        <Button
-                            asChild
-                            size="sm"
-                            className="bg-white text-black border border-black transition-colors duration-300 ease-in-out hover:bg-black hover:text-white dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black"
-                        >
-                            <a href={auth.login.url}>{auth.login.title}</a>
-                        </Button>
-                        <Button
-                            asChild
-                            size="sm"
-                            className="bg-black text-white transition-colors duration-300 ease-in-out hover:bg-white hover:text-black dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white"
-                        >
-                            <a href={auth.signup.url}>{auth.signup.title}</a>
-                        </Button>
+                        {/* Auth Buttons */}
+                        <div className="flex items-center gap-2">
+                            <Button
+                                asChild
+                                size="sm"
+                                className="bg-white text-black border border-black transition-colors duration-300 ease-in-out hover:bg-black hover:text-white dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black"
+                            >
+                                <a href={auth.login.url}>{auth.login.title}</a>
+                            </Button>
+                            <Button
+                                asChild
+                                size="sm"
+                                className="bg-black text-white transition-colors duration-300 ease-in-out hover:bg-white hover:text-black dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white"
+                            >
+                                <a href={auth.signup.url}>{auth.signup.title}</a>
+                            </Button>
+                        </div>
                     </div>
                 </nav>
 
@@ -227,14 +260,10 @@ export const Navbar1 = ({
                                     </SheetTitle>
                                 </SheetHeader>
                                 <div className="flex flex-col gap-6 p-4">
-                                    <Accordion
-                                        type="single"
-                                        collapsible
-                                        className="flex w-full flex-col gap-4"
-                                    >
+                                    <Accordion type="single" collapsible className="flex w-full flex-col gap-4">
                                         {menu.map((item) => renderMobileMenuItem(item))}
                                     </Accordion>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-6">
                                         <Button
                                             variant="outline"
                                             onClick={toggleTheme}
@@ -270,10 +299,10 @@ export const Navbar1 = ({
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
     return (
         <a
-            className="flex min-w-[320px] flex-row gap-4 rounded-md p-3 leading-none no-underline select-none transition-colors duration-300 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-black dark:hover:text-white"
+            className="flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors duration-300 ease-in-out outline-none select-none hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
             href={item.url}
         >
-            <div className="text-inherit">{item.icon}</div>
+            <div className="text-foreground">{item.icon}</div>
             <div>
                 <div className="text-sm font-semibold">{item.title}</div>
                 {item.description && (
