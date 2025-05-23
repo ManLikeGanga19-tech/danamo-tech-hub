@@ -6,7 +6,9 @@ const config = {
   ],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      
+    },
   },
   plugins: [],
 };
