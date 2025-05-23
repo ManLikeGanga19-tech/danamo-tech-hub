@@ -35,6 +35,8 @@ import {
 } from "@/components/ui/sheet";
 
 import { useTheme } from "@/hooks/useTheme";
+import Image from "next/image";
+
 
 interface MenuItem {
     title: string;
@@ -67,7 +69,7 @@ interface Navbar1Props {
 export const Navbar1 = ({
     logo = {
         url: "#",
-        src: "public/hero-img.jpg",
+        src: "/",
         alt: "Logo",
         title: "Danamo Tech Hub",
     },
@@ -255,7 +257,7 @@ export const Navbar1 = ({
                                 <SheetHeader>
                                     <SheetTitle>
                                         <a href={logo.url} className="flex items-center gap-2">
-                                            <img src={logo.src} className="max-h-8" alt={logo.alt} />
+                                            <Image src={logo.src} className="max-h-8" alt={logo.alt} />
                                         </a>
                                     </SheetTitle>
                                 </SheetHeader>
