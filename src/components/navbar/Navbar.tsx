@@ -66,8 +66,8 @@ interface Navbar1Props {
 
 export const Navbar1 = ({
     logo = {
-        url: "/",
-        src: "/logo.png",
+        url: "#",
+        src: "public/hero-img.jpg",
         alt: "Logo",
         title: "Danamo Tech Hub",
     },
