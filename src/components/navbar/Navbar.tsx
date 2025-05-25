@@ -46,12 +46,7 @@ interface MenuItem {
 }
 
 interface Navbar1Props {
-    logo?: {
-        url: string;
-        src: string;
-        alt: string;
-        title: string;
-    };
+    
     menu?: MenuItem[];
     auth?: {
         login: {
@@ -66,12 +61,7 @@ interface Navbar1Props {
 }
 
 export const Navbar1 = ({
-    logo = {
-        url: "#",
-        src: "/",
-        alt: "Logo",
-        title: "Danamo Tech Hub",
-    },
+    
     menu = [
         {
             title: "Services",
