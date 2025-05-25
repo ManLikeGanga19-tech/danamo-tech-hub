@@ -177,8 +177,8 @@ export const Navbar1 = ({
     };
 
     return (
-        <section className="sticky top-0 z-50 bg-white/70 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
-            <div className="layout container py-3">
+        <section className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="layout container py-3 ">
                 {/* Desktop Menu */}
                 <nav className="hidden lg:flex justify-between items-center">
                     {/* Left: Logo */}
@@ -217,7 +217,7 @@ export const Navbar1 = ({
                             <Button
                                 asChild
                                 size="sm"
-                                className="bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-400 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+                                className="bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                             >
                                 <a href={auth.signup.url}>{auth.signup.title}</a>
                             </Button>
@@ -282,11 +282,11 @@ const SubMenuLink = ({ item }: { item: MenuItem }) => {
     return (
         <a
             href={item.url}
-            className="flex cursor-pointer select-none items-center rounded-md p-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="flex cursor-pointer select-none items-center rounded-md p-2 text-sm font-medium text-muted-foreground hover:bg-gray-100 hover:text-foreground dark:hover:text-gray-900"
         >
             {item.icon && <span className="mr-2">{item.icon}</span>}
             <div className="flex flex-col">
-                <span className="text-foreground">{item.title}</span>
+                <span className="text-blue-600 dark:text-blue-400 hover:dark:text-blue-600">{item.title}</span>
                 {item.description && (
                     <span className="text-muted-foreground text-xs">{item.description}</span>
                 )}
