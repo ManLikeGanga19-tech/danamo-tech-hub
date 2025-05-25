@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import {
-    Book,
     Menu,
     Moon,
     Sun,
@@ -10,6 +9,7 @@ import {
     Brush,
     ServerCog,
     Package,
+    Code2,
 } from "lucide-react";
 import {
     Accordion,
@@ -70,7 +70,7 @@ export const Navbar1 = ({
                 {
                     title: "Web Development",
                     description: "Custom website and web app development",
-                    icon: <Book className="size-5 shrink-0" />,
+                    icon: <Code2 className="size-5 shrink-0" />,
                     url: "/services/web",
                 },
                 {
