@@ -25,7 +25,7 @@ const Hero = () => {
                         <Button
                             asChild
                             size="lg"
-                            className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-black dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+                            className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                         >
                             <a href="/services">Our Services</a>
                         </Button>
