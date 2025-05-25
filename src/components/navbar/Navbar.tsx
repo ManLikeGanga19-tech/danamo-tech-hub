@@ -177,7 +177,7 @@ export const Navbar1 = ({
     };
 
     return (
-        <section className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+        <section className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm transition-colors duration-200 ease">
             <div className="layout container py-3 ">
                 {/* Desktop Menu */}
                 <nav className="hidden lg:flex justify-between items-center">
