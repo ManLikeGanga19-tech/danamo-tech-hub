@@ -231,8 +231,8 @@ export const Navbar1 = ({
                         <Logo className="text-lg" />
                         <Sheet>
                             <SheetTrigger asChild>
-                                <Button variant="outline" size="icon">
-                                    <Menu className="size-4" />
+                                <Button variant="outline" size="icon" className="border-blue-600 hover:bg-blue-600">
+                                    <Menu className="size-4 " />
                                 </Button>
                             </SheetTrigger>
                             <SheetContent className="overflow-y-auto transition-transform duration-300 ease-in-out bg-white dark:bg-black text-black dark:text-white">
