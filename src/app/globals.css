@@ -7,3 +7,10 @@
 .layout {
   @apply max-w-screen-xl mx-auto px-4 w-full;
 }
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
