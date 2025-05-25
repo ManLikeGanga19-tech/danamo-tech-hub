@@ -35,8 +35,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { useTheme } from "@/hooks/useTheme";
-import Image from "next/image";
-
+import { Logo } from "@/components/Logo"; 
 
 interface MenuItem {
     title: string;
@@ -145,8 +144,8 @@ export const Navbar1 = ({
                 <NavigationMenuLink
                     href={item.url}
                     className={`group inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-300 ease-in-out ${isActive
-                            ? "bg-muted font-semibold text-blue-600 dark:text-blue-400"
-                            : "hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
+                        ? "bg-muted font-semibold text-blue-600 dark:text-blue-400"
+                        : "hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
                         }`}
                 >
                     {item.title}
@@ -178,8 +177,8 @@ export const Navbar1 = ({
                 key={item.title}
                 href={item.url}
                 className={`text-md font-semibold transition-colors duration-300 ease-in-out ${isActive
-                        ? "text-blue-600 dark:text-blue-400 font-bold"
-                        : "hover:text-blue-600 dark:hover:text-blue-400"
+                    ? "text-blue-600 dark:text-blue-400 font-bold"
+                    : "hover:text-blue-600 dark:hover:text-blue-400"
                     }`}
             >
                 {item.title}
@@ -193,12 +192,7 @@ export const Navbar1 = ({
                 {/* Desktop Menu */}
                 <nav className="hidden lg:flex justify-between items-center">
                     {/* Left: Logo */}
-                    <a href={logo.url} className="flex items-center gap-2">
-                        <img src={logo.src} className="max-h-8" alt={logo.alt} />
-                        <span className="text-lg font-semibold tracking-tighter text-blue-600 dark:text-blue-400">
-                            {logo.title}
-                        </span>
-                    </a>
+                    <Logo className="text-lg" />
 
                     {/* Center: Menu */}
                     <div className="flex items-center ml-auto">
@@ -216,7 +210,7 @@ export const Navbar1 = ({
                             size="sm"
                             onClick={toggleTheme}
                             aria-label="Toggle theme"
-                            className="flex items-center justify-center transition-colors duration-300 ease-in-out"
+                            className="flex items-center justify-center transition-colors duration-300 ease-in-out border-blue-600"
                         >
                             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                         </Button>
@@ -226,14 +220,14 @@ export const Navbar1 = ({
                             <Button
                                 asChild
                                 size="sm"
-                                className="bg-white text-black border border-black transition-colors duration-300 ease-in-out hover:bg-black hover:text-white dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black"
+                                className="bg-white text-blue-600 border border-blue-600 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-black dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                             >
                                 <a href={auth.login.url}>{auth.login.title}</a>
                             </Button>
                             <Button
                                 asChild
                                 size="sm"
-                                className="bg-black text-white transition-colors duration-300 ease-in-out hover:bg-white hover:text-black dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white"
+                                className="bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-400 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                             >
                                 <a href={auth.signup.url}>{auth.signup.title}</a>
                             </Button>
@@ -244,9 +238,7 @@ export const Navbar1 = ({
                 {/* Mobile Menu */}
                 <div className="block lg:hidden">
                     <div className="flex items-center justify-between">
-                        <a href={logo.url} className="flex items-center gap-2">
-                            <img src={logo.src} className="max-h-8" alt={logo.alt} />
-                        </a>
+                        <Logo className="text-lg" />
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button variant="outline" size="icon">
@@ -256,9 +248,7 @@ export const Navbar1 = ({
                             <SheetContent className="overflow-y-auto transition-transform duration-300 ease-in-out bg-white dark:bg-black text-black dark:text-white">
                                 <SheetHeader>
                                     <SheetTitle>
-                                        <a href={logo.url} className="flex items-center gap-2">
-                                            <Image src={logo.src} className="max-h-8" alt={logo.alt} />
-                                        </a>
+                                        <Logo className="text-lg" />
                                     </SheetTitle>
                                 </SheetHeader>
                                 <div className="flex flex-col gap-6 p-4">
@@ -270,20 +260,20 @@ export const Navbar1 = ({
                                             variant="outline"
                                             onClick={toggleTheme}
                                             aria-label="Toggle theme"
-                                            className="flex items-center justify-center transition-colors duration-300 ease-in-out"
+                                            className="flex border-blue-600 items-center justify-center transition-colors duration-300 ease-in-out"
                                         >
                                             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                                         </Button>
                                         <Button
                                             asChild
                                             variant="outline"
-                                            className="bg-white text-black border border-black transition-colors duration-300 ease-in-out hover:bg-black hover:text-white dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black"
+                                            className="bg-white text-blue-600 border border-blue-600 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-black dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                                         >
                                             <a href={auth.login.url}>{auth.login.title}</a>
                                         </Button>
                                         <Button
                                             asChild
-                                            className="bg-black text-white transition-colors duration-300 ease-in-out hover:bg-white hover:text-black dark:bg-white dark:text-black dark:hover:bg-black dark:hover:text-white"
+                                            className="bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-400 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                                         >
                                             <a href={auth.signup.url}>{auth.signup.title}</a>
                                         </Button>
@@ -301,16 +291,14 @@ export const Navbar1 = ({
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
     return (
         <a
-            className="flex flex-row gap-4 rounded-md p-3 leading-none no-underline transition-colors duration-300 ease-in-out outline-none select-none hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
             href={item.url}
+            className="flex cursor-pointer select-none items-center rounded-md p-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
         >
-            <div className="text-foreground">{item.icon}</div>
-            <div>
-                <div className="text-sm font-semibold">{item.title}</div>
+            {item.icon && <span className="mr-2">{item.icon}</span>}
+            <div className="flex flex-col">
+                <span className="text-foreground">{item.title}</span>
                 {item.description && (
-                    <p className="text-sm leading-snug text-muted-foreground">
-                        {item.description}
-                    </p>
+                    <span className="text-muted-foreground text-xs">{item.description}</span>
                 )}
             </div>
         </a>

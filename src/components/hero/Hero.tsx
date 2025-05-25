@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 
 const Hero = () => {
     return (
-        <section className="w-full py-[15px] bg-gradient-to-b from-white to-gray-100 dark:from-black dark:to-gray-900">
+        <section
+            className="w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-gray-100 dark:from-[#0e0e15] dark:to-[#1E1E2F]"
+        >
             <div className="layout flex flex-col lg:flex-row items-center justify-between gap-10">
                 {/* Left Side: Text Content */}
                 <div className="text-center lg:text-left max-w-xl">
@@ -19,7 +21,7 @@ const Hero = () => {
                         top-notch DevOps solutions for startups and enterprises.
                     </p>
                     <div className="mt-8 flex flex-wrap items-center gap-4">
-                        {/* Our Services button (white background, black text) */}
+                        {/* Our Services button */}
                         <Button
                             asChild
                             size="lg"
@@ -28,7 +30,7 @@ const Hero = () => {
                             <a href="/services">Our Services</a>
                         </Button>
 
-                        {/* Contact Us button (black background, white text) */}
+                        {/* Contact Us button */}
                         <Button
                             asChild
                             size="lg"
