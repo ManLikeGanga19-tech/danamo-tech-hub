@@ -6,10 +6,9 @@ import { useEffect, useRef, useState } from "react";
 const AboutUs = () => {
     const [showText, setShowText] = useState(false);
     const sectionRef = useRef<HTMLDivElement>(null);
-    const fullText = "Danamo Tech is a forward-thinking tech startup specializing in web development, UI/UX design, SEO, cloud solutions, and SaaS innovations. We bring bold ideas to life using cutting-edge technologies.";
+    const fullText = "Danamo Tech is a privately owned company headquartered in Nairobi, Kenya founded in 2024, the company was established to bridge the technology gap faced by small businesses and startups in need of affordable digital solutions";
     const [typedText, setTypedText] = useState("");
 
-    // Typewriter effect
     useEffect(() => {
         if (!showText) return;
 
