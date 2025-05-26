@@ -61,6 +61,7 @@ const AboutUs = () => {
                         <span className="animate-blink text-[#2563EB]">|</span>
                     </p>
                 </div>
+                
             </div>
         </section>
     );
