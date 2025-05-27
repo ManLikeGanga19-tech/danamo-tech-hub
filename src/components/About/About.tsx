@@ -1,13 +1,16 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const AboutUs = () => {
     const [showText, setShowText] = useState(false);
     const sectionRef = useRef<HTMLDivElement>(null);
-    const fullText = "Danamo Tech is a privately owned company headquartered in Nairobi, Kenya founded in 2024, the company was established to bridge the technology gap faced by small businesses and startups in need of affordable digital solutions";
+    const fullText =
+        "Danamo Tech is a privately owned company headquartered in Nairobi, Kenya founded in 2024, the company was established to bridge the technology gap faced by small businesses and startups in need of affordable digital solutions. We specialize in providing high quality web development, search engine optimization(SEO), branding, digital marketing and custom software solutions for businesses and startups.";
     const [typedText, setTypedText] = useState("");
+    const router = useRouter();
 
     useEffect(() => {
         if (!showText) return;
@@ -21,7 +24,6 @@ const AboutUs = () => {
         return () => clearInterval(interval);
     }, [showText]);
 
-    // Intersection observer to trigger animation on scroll
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -39,10 +41,12 @@ const AboutUs = () => {
             ref={sectionRef}
             className="w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]"
         >
-            <h2 className="mt-10 text-4xl font-bold text-blue-600 mb-10 text-center dark:text-blue-400">About <span className="text-black dark:text-white">Us</span> </h2>
+            <h2 className="mt-10 text-4xl font-bold text-blue-600 mb-10 text-center dark:text-blue-400">
+                About <span className="text-black dark:text-white">Us</span>
+            </h2>
 
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-10">
-                {/* Image (hidden on small screens) */}
+                {/* Image */}
                 <div className="hidden md:block w-full md:w-1/2">
                     <Image
                         src="/about.jpg"
@@ -54,14 +58,22 @@ const AboutUs = () => {
                     />
                 </div>
 
-                {/* Text */}
-                <div className="w-full md:w-1/2 text-center md:text-left pb-[16em]">
-                    <p className="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line">
+                {/* Text with Fixed Button */}
+                <div className="w-full md:w-1/2 relative min-h-[300px]">
+                    {/* Text Content */}
+                    <p className="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line pr-4 text-center">
                         {typedText}
                         <span className="animate-blink text-[#2563EB]">|</span>
                     </p>
+
+                    {/* Fixed Button in Bottom-Right */}
+                    <button
+                        onClick={() => router.push("/about-us")}
+                        className="absolute bottom-0 right-0 px-6 py-2 mt-6 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition duration-300 ease"
+                    >
+                        Get In Touch
+                    </button>
                 </div>
-                
             </div>
         </section>
     );
