@@ -12,7 +12,7 @@ function Contact() {
         <div>
           <h1 className="text-4xl font-semibold text-blue-600 dark:text-blue-400"> Contact <span className='text-black dark:text-white'>Us</span></h1>
           <p className="text-lg text-black dark:text-white mt-6 leading-relaxed">
-            Have some big idea or brand to develop and need help? Then reach out we'd love to hear about your project and provide help.
+            {"Have some big idea or brand to develop and need help? Then reach out we&apos;d love to hear about your project and provide help."}
           </p>
 
           <ul className="mt-12 space-y-8">
