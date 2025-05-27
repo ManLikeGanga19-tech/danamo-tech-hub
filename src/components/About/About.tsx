@@ -61,7 +61,7 @@ const AboutUs = () => {
                 {/* Text with Fixed Button */}
                 <div className="w-full md:w-1/2 relative min-h-[300px]">
                     {/* Text Content */}
-                    <p className="text-lg text-gray-700 dark:text-gray-300 whitespace-pre-line pr-4 text-center">
+                    <p className="text-lg text-black dark:text-white whitespace-pre-line pr-4 text-center">
                         {typedText}
                         <span className="animate-blink text-[#2563EB]">|</span>
                     </p>
