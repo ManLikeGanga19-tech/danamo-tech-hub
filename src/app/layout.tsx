@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { Navbar1 } from '@/components/navbar/Navbar';
 import {SpeedInsights} from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next"
 import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main>{children}</main>
         </ThemeProvider>
         <SpeedInsights/>
+        <Analytics/>
       </body>
     </html>
   );
