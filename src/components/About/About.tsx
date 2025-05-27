@@ -58,18 +58,28 @@ const AboutUs = () => {
                     />
                 </div>
 
-                {/* Text with Fixed Button */}
-                <div className="w-full md:w-1/2 relative min-h-[300px]">
-                    {/* Text Content */}
-                    <p className="text-lg text-black dark:text-white whitespace-pre-line pr-4 text-center">
+                {/* Text Section with responsive button */}
+                <div className="w-full md:w-1/2 relative px-4 pb-16 flex flex-col items-center justify-start min-h-[300px]">
+                    {/* Text */}
+                    <p className="text-lg text-black dark:text-white whitespace-pre-line mt-6 text-center leading-relaxed">
                         {typedText}
                         <span className="animate-blink text-[#2563EB]">|</span>
                     </p>
 
-                    {/* Fixed Button in Bottom-Right */}
+                    {/* Button for small screens */}
+                    <div className="block sm:hidden mt-6">
+                        <button
+                            onClick={() => router.push("/about-us")}
+                            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition duration-300"
+                        >
+                            Get In Touch
+                        </button>
+                    </div>
+
+                    {/* Button for large screens */}
                     <button
                         onClick={() => router.push("/about-us")}
-                        className="absolute bottom-0 right-0 px-6 py-2 mt-6 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition duration-300 ease"
+                        className="hidden sm:block absolute bottom-4 right-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition duration-300"
                     >
                         Get In Touch
                     </button>
