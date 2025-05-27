@@ -109,7 +109,7 @@ function Contact() {
             <CardFooter className="flex justify-end">
               <Button {...({ type: "submit" } as React.ButtonHTMLAttributes<HTMLButtonElement>)} className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
               >
-                <Send size={12}/>
+                <Send size={12} className='animate-pulse'/>
                 Send Message
               </Button>
             </CardFooter>
