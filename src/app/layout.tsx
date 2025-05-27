@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { Navbar1 } from '@/components/navbar/Navbar';
+import {SpeedInsights} from "@vercel/speed-insights/next";
 import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Navbar1 />
           <main>{children}</main>
         </ThemeProvider>
+        <SpeedInsights/>
       </body>
     </html>
   );
