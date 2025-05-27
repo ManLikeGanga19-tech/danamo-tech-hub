@@ -1,40 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRef } from "react";
+import { Button } from "@/app/components/Button";
 
 const AboutUs = () => {
-    const [showText, setShowText] = useState(false);
     const sectionRef = useRef<HTMLDivElement>(null);
     const fullText =
         "Danamo Tech is a privately owned company headquartered in Nairobi, Kenya founded in 2024, the company was established to bridge the technology gap faced by small businesses and startups in need of affordable digital solutions. We specialize in providing high quality web development, search engine optimization(SEO), branding, digital marketing and custom software solutions for businesses and startups.";
-    const [typedText, setTypedText] = useState("");
-    const router = useRouter();
 
-    useEffect(() => {
-        if (!showText) return;
-
-        let index = 0;
-        const interval = setInterval(() => {
-            setTypedText(fullText.slice(0, index));
-            index++;
-            if (index > fullText.length) clearInterval(interval);
-        }, 30);
-        return () => clearInterval(interval);
-    }, [showText]);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) setShowText(true);
-            },
-            { threshold: 0.3 }
-        );
-
-        if (sectionRef.current) observer.observe(sectionRef.current);
-        return () => observer.disconnect();
-    }, []);
 
     return (
         <section
@@ -62,27 +36,27 @@ const AboutUs = () => {
                 <div className="w-full md:w-1/2 relative px-4 pb-16 flex flex-col items-center justify-start min-h-[300px]">
                     {/* Text */}
                     <p className="text-lg text-black dark:text-white whitespace-pre-line mt-6 text-center leading-relaxed">
-                        {typedText}
-                        <span className="animate-blink text-[#2563EB]">|</span>
+                        {fullText}
                     </p>
 
                     {/* Button for small screens */}
                     <div className="block sm:hidden mt-6">
-                        <button
-                            onClick={() => router.push("/about-us")}
-                            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition duration-300"
+                        <Button
+
+                            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-blue-600 rounded-lg transition duration-300"
                         >
-                            Get In Touch
-                        </button>
+                            <a href="/about-us">View More</a>
+
+                        </Button>
                     </div>
 
                     {/* Button for large screens */}
-                    <button
-                        onClick={() => router.push("/about-us")}
-                        className="hidden sm:block absolute bottom-4 right-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition duration-300"
+                    <Button
+
+                        className="hidden sm:block absolute bottom-4 right-4 px-6 py-2  text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white rounded"
                     >
-                        Get In Touch
-                    </button>
+                        <a href="/about-us">View More</a>
+                    </Button>
                 </div>
             </div>
         </section>
