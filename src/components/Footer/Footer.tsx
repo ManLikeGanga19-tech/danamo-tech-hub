@@ -1,0 +1,88 @@
+'use client'
+
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
+import Link from 'next/link'
+import { Logo } from "@/components/Logo";
+export default function Footer() {
+  return (
+
+    <footer
+      className="w-full min-h-[400px] px-4 py-10 transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] flex flex-col items-center justify-center"
+    >
+      <hr className="w-full border-t border-gray-300 dark:border-gray-700 mb-4 pt-4" />
+
+      {/* Top Section: Logo & Links */}
+      <div className="w-full max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-4 gap-10 items-center md:items-start text-center md:text-left">
+
+        {/* Logo & Description */}
+        <div>
+          <Logo className='text-lg' />
+          <p className="mt-4 text-lg text-gray-900 dark:text-white">
+            Empowering businesses through custom tech solutions and modern web development.
+          </p>
+        </div>
+
+        {/* Company Links */}
+        <div>
+          <h4 className="font-semibold mb-3">Company</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/about" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">About</Link></li>
+            <li><Link href="/team" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Our Team</Link></li>
+            <li><Link href="/careers" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Careers</Link></li>
+            <li><Link href="/services" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Services</Link></li>
+
+          </ul>
+        </div>
+
+        {/* Resources Links */}
+        <div>
+          <h4 className="font-semibold mb-3">Resources</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/blog" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Blog</Link></li>
+            <li><Link href="/faqs" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">FAQs</Link></li>
+            <li><Link href="/webinars" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Webinars / Events</Link></li>
+            <li><Link href="/help-center" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Help Center</Link></li>
+
+          </ul>
+        </div>
+
+        {/* legal links */}
+        <div>
+          <h4 className="font-semibold mb-3">Legal</h4>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/cookies" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Cookies Policy</Link></li>
+            <li><Link href="/privacy" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Privacy Policy</Link></li>
+            <li><Link href="/terms" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Terms of Service / Terms & Conditons</Link></li>
+            <li><Link href="/accessibility" className="hover:no-underline hover:text-blue-600 dark:hover:text-blue-400">Accessibility</Link></li>
+
+          </ul>
+        </div>
+      </div>
+
+      {/* Social Media Section */}
+      <div className="w-full mt-10 flex flex-col items-center">
+        <h4 className="font-semibold mb-3 text-blue-600">Connect with us</h4>
+        <div className="flex space-x-4 mb-6">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
+            <FaFacebookF className="w-5 h-5" />
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400">
+            <FaTwitter className="w-5 h-5" />
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500">
+            <FaInstagram className="w-5 h-5" />
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
+            <FaLinkedinIn className="w-5 h-5" />
+          </a>
+        </div>
+
+        {/* Separator */}
+        <hr className="w-full border-t border-gray-300 dark:border-gray-700 mb-4" />
+
+        {/* Bottom Text */}
+        <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF]">&copy; 2025 Danamo Tech. All rights reserved.</p>
+      </div>
+    </footer>
+  )
+}

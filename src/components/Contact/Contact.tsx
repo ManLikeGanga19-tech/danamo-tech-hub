@@ -24,7 +24,7 @@ import { Textarea } from "@/components/ui/textarea"
 function Contact() {
   return (
     <section
-      className="w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]"
+      className=" w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]"
     >
       <div className="grid lg:grid-cols-2 items-center gap-14 sm:p-8 p-4">
         {/* Contact Info */}
