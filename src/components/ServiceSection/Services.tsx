@@ -103,7 +103,7 @@ const InfiniteSlider = ({
 
     return (
         <section
-            className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
+            className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white  to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
@@ -146,7 +146,7 @@ const InfiniteSlider = ({
 export default function Services() {
     return (
         <section
-            className="w-full py-16 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
+            className="w-full py-16 bg-gradient-to-b from-gray-100 to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
             id="services"
         >
             <div className="container px-4 md:px-8">

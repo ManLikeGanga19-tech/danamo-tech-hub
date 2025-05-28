@@ -32,7 +32,7 @@ function Contact() {
           <h1 className="text-4xl text-center font-semibold text-blue-600 dark:text-blue-400">
             Contact <span className='text-black dark:text-white'>Us</span>
           </h1>
-          <p className="text-lg text-black dark:text-white mt-6 leading-relaxed">
+          <p className="text-lg text-black dark:text-white mt-6 leading-relaxed text-center">
             Have some big idea or brand to develop and need help? Then reach out we&apos;d love to hear about your project and provide help.
           </p>
 
@@ -69,13 +69,13 @@ function Contact() {
                 {/* Name */}
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name" className='text-blue-600 dark:text-blue-400'>Name</Label>
-                  <Input id="name" placeholder="Your full name" />
+                  <Input id="name" placeholder="Your full name" className='placeholder:text-gray-900 dark:placeholder:text-white'/>
                 </div>
 
                 {/* Email */}
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="email" className='text-blue-600 dark:text-blue-400'>Email</Label>
-                  <Input type="email" id="email" placeholder="you@example.com" />
+                  <Input type="email" id="email" placeholder="you@example.com" className='placeholder:text-gray-900 dark:placeholder:text-white'/>
                 </div>
 
                 {/* Interest Dropdown */}
@@ -102,7 +102,7 @@ function Contact() {
                 {/* Message */}
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="message" className='text-blue-600 dark:text-blue-400'>Message</Label>
-                  <Textarea id="message" placeholder="Tell us more about your project..." rows={4} />
+                  <Textarea id="message" placeholder="Tell us more about your project..." rows={4} className='placeholder:text-gray-900 dark:placeholder:text-white'/>
                 </div>
               </form>
             </CardContent>
