@@ -2,23 +2,25 @@
 
 import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
-import { Navbar1 } from '@/components/navbar/Navbar';
-import {SpeedInsights} from "@vercel/speed-insights/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next"
+import { ClerkProvider } from '@clerk/nextjs';
+
 import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen font-sans antialiased bg-white text-black dark:bg-black dark:text-white">
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <Navbar1 />
-          <main>{children}</main>
-        </ThemeProvider>
-        <SpeedInsights/>
-        <Analytics/>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className="min-h-screen font-sans antialiased bg-white text-black dark:bg-black dark:text-white">
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <main>{children}</main>
+          </ThemeProvider>
+          <SpeedInsights />
+          <Analytics />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
 
