@@ -41,6 +41,7 @@ export default function SignUp() {
           </div>
         )}
 
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email */}
           <div>
