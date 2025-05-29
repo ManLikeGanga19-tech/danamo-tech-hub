@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Logo } from "@/components/Logo";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -30,7 +31,7 @@ export default function SignUp() {
       <div className="w-full md:w-1/2 flex justify-center items-center p-6">
         <div className="w-full max-w-md bg-white p-8 shadow-lg rounded-2xl border border-blue-400 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
           <div className="mb-8 text-center">
-            <h2 className="text-3xl font-bold text-black dark:text-white mb-2">Create <span className="dark:text-blue-400">an</span> Account</h2>
+            <Logo className="text-lg"/>
             <p className="text-black dark:text-gray-300 text-sm">Join us by creating your free account</p>
           </div>
 
