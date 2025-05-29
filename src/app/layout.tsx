@@ -4,13 +4,11 @@ import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next"
-import { ClerkProvider } from '@clerk/nextjs';
 
 import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en" suppressHydrationWarning>
         <body className="min-h-screen font-sans antialiased bg-white text-black dark:bg-black dark:text-white">
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
@@ -20,7 +18,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Analytics />
         </body>
       </html>
-    </ClerkProvider>
   );
 }
 
