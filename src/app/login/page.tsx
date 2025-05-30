@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { auth } from "@/lib/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -14,18 +16,31 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-      callbackUrl: "/",
-    });
-    if (result?.error) {
-      setError("Invalid credentials");
-    } else {
-      window.location.href = "/";
+    setError("");
+
+    try {
+      // Step 1: Sign in with Firebase
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user.getIdToken();
+
+      // Step 2: Use NextAuth credentials provider
+      const result = await signIn("credentials", {
+        token,
+        redirect: false,
+        callbackUrl: "/",
+      });
+
+      if (result?.error) {
+        setError("Invalid credentials.");
+      } else {
+        window.location.href = "/";
+      }
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError("Invalid email or password.");
     }
   };
+
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -136,4 +151,4 @@ export default function LoginForm() {
       </div>
     </section>
   );
-}
+} 

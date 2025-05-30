@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase"; // adjust if your path is different
 import { Logo } from "@/components/Logo";
 
 export default function SignUp() {
@@ -13,16 +15,29 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
-    console.log("Signup submitted:", { email, password });
-    setError("");
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User created:", userCredential.user);
+      setError("");
+      setSuccess("Account created successfully. Redirecting to login...");
+
+      setTimeout(() => {
+        window.location.href = "/login"; 
+      }, 1000);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Failed to create account.");
+    }
   };
 
   return (
