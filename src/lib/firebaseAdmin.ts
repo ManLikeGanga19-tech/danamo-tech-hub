@@ -10,7 +10,7 @@ const requiredEnvVars = {
 
 // Log missing environment variables for debugging
 const missingVars = Object.entries(requiredEnvVars)
-    .filter(([_, value]) => !value)
+    .filter(([key, value]) => !value)
     .map(([key]) => key);
 if (missingVars.length > 0) {
     console.error(`Missing environment variables: ${missingVars.join(", ")}`);
