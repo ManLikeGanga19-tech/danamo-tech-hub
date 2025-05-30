@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -35,12 +36,11 @@ export default function LoginForm() {
       } else {
         window.location.href = "/";
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login error:", err);
       setError("Invalid email or password.");
     }
   };
-
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -119,8 +119,6 @@ export default function LoginForm() {
               </div>
             </div>
 
-
-
             <Button
               {...({ type: "submit" } as React.ButtonHTMLAttributes<HTMLButtonElement>)}
               className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
@@ -130,7 +128,7 @@ export default function LoginForm() {
           </form>
           <div className="mt-6 text-center text-sm">
             <p className="text-gray-600 dark:text-gray-300">
-              Don&apos;t have an account?{" "}
+              Don't have an account?{" "}
               <a href="/signup" className="font-medium text-blue-600 hover:text-blue-400">
                 Sign up
               </a>
@@ -151,4 +149,4 @@ export default function LoginForm() {
       </div>
     </section>
   );
-} 
+}
