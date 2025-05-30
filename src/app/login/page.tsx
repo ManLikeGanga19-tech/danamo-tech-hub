@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { FirebaseError } from "firebase/app";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -128,7 +127,7 @@ export default function LoginForm() {
           </form>
           <div className="mt-6 text-center text-sm">
             <p className="text-gray-600 dark:text-gray-300">
-              Don't have an account?{" "}
+              Don’t have an account?{" "}
               <a href="/signup" className="font-medium text-blue-600 hover:text-blue-400">
                 Sign up
               </a>
