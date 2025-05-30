@@ -4,7 +4,7 @@ import { verifyIdToken } from "@/lib/firebaseAdmin";
 import { JWT } from "next-auth/jwt";
 import { Session } from "next-auth";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
