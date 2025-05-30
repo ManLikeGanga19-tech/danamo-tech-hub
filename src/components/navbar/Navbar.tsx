@@ -39,6 +39,7 @@ import {
 import { useTheme } from "@/hooks/useTheme";
 import { Logo } from "@/components/Logo";
 import { useState } from "react";
+import Image from "next/image";
 
 interface MenuItem {
     title: string;
@@ -219,9 +220,11 @@ export const Navbar1 = ({
                                     className="flex items-center rounded-full border-2 border-blue-600 "
                                     aria-label="User menu"
                                 >
-                                    <img
-                                        src={(session.user as any)?.image || "/default-avatar.png"}
+                                    <Image
+                                        src={session?.user?.image || "/default-avatar.png"}
                                         alt="User Avatar"
+                                        height={32}
+                                        width={32}
                                         className="w-8 h-8 rounded-full object-cover"
                                     />
                                 </button>
@@ -290,9 +293,11 @@ export const Navbar1 = ({
                                         className="flex items-center rounded-full border-2 border-blue-600 "
                                         aria-label="User menu"
                                     >
-                                        <img
-                                            src={(session.user as any)?.image || "/default-avatar.png"}
+                                        <Image
+                                            src={session?.user?.image || "/default-avatar.png"}
                                             alt="User Avatar"
+                                            width={32}
+                                            height={32}
                                             className="w-8 h-8 rounded-full object-cover"
                                         />
                                     </button>

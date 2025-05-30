@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef } from "react"
+import React, { useRef, useMemo } from "react"
 import {
     Card,
     CardHeader,
@@ -22,7 +22,14 @@ import { motion, useAnimation } from "framer-motion"
 import { useEffect, useState } from "react"
 import "../../app/globals.css";
 
-const services = [
+// Define Service interface to avoid `any` type
+interface Service {
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+}
+
+const services: Service[] = [
     {
         title: "Custom Web Development",
         description: "Tailored websites and web apps to meet your unique business needs.",
@@ -72,7 +79,7 @@ const InfiniteSlider = ({
     items,
     direction = "left",
 }: {
-    items: typeof services
+    items: Service[]
     direction?: "left" | "right"
 }) => {
     const containerRef = useRef<HTMLDivElement>(null)
@@ -80,7 +87,7 @@ const InfiniteSlider = ({
     const [isHovered, setIsHovered] = useState(false)
 
     const isLeft = direction === "left"
-    const animationX = isLeft ? ["0%", "-50%"] : ["-50%", "0%"]
+    const animationX = useMemo(() => (isLeft ? ["0%", "-50%"] : ["-50%", "0%"]), [isLeft])
 
     useEffect(() => {
         const startAnimation = async () => {
@@ -165,4 +172,3 @@ export default function Services() {
         </section>
     )
 }
-
