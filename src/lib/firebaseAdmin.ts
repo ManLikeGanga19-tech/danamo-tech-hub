@@ -8,10 +8,15 @@ const requiredEnvVars = {
     FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
 };
 
-for (const [key, value] of Object.entries(requiredEnvVars)) {
-    if (!value) {
-        throw new Error(`${key} environment variable is missing. Please set it in your environment configuration.`);
-    }
+// Log missing environment variables for debugging
+const missingVars = Object.entries(requiredEnvVars)
+    .filter(([_, value]) => !value)
+    .map(([key]) => key);
+if (missingVars.length > 0) {
+    console.error(`Missing environment variables: ${missingVars.join(", ")}`);
+    throw new Error(
+        `The following environment variables are missing: ${missingVars.join(", ")}. Please set them in your environment configuration (e.g., Vercel dashboard or .env file).`
+    );
 }
 
 // Initialize Firebase Admin SDK
@@ -24,7 +29,9 @@ if (!getApps().length) {
                 privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
             }),
         });
+        console.log("Firebase Admin SDK initialized successfully");
     } catch (error) {
+        console.error("Firebase Admin SDK initialization failed:", error);
         throw new Error(`Failed to initialize Firebase Admin SDK: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
 }
