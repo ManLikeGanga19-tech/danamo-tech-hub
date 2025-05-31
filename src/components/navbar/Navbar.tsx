@@ -101,7 +101,7 @@ export const Navbar1 = ({
                 },
             ],
         },
-        { title: "Portfolio", url: "/portfolio" },
+        { title: "Blog", url: "/blogs" },
         { title: "About", url: "/about" },
         { title: "Contact", url: "/contact" },
     ],
