@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";  // << import next-auth hooks
+import { useSession, signOut } from "next-auth/react";
 import {
     Menu,
     Moon,
@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/sheet";
 import { useTheme } from "@/hooks/useTheme";
 import { Logo } from "@/components/Logo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface MenuItem {
@@ -114,6 +114,11 @@ export const Navbar1 = ({
     const { theme, toggleTheme } = useTheme();
     const { data: session, status } = useSession({ required: false });
     const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    // Debug session state
+    useEffect(() => {
+        console.log("Navbar session:", session, "Status:", status);
+    }, [session, status]);
 
     const renderMenuItem = (item: MenuItem) => {
         const isActive = pathname === item.url;
@@ -229,7 +234,6 @@ export const Navbar1 = ({
                                     />
                                 </button>
 
-
                                 {dropdownOpen && (
                                     <div
                                         onBlur={closeDropdown}
@@ -278,7 +282,6 @@ export const Navbar1 = ({
                     </div>
                 </nav>
 
-                {/* Mobile Menu */}
                 {/* Mobile Menu */}
                 <div className="block lg:hidden">
                     <div className="flex items-center justify-between ">
@@ -332,7 +335,6 @@ export const Navbar1 = ({
                                 // If not logged in, show login/signup buttons beside menu icon (optional)
                                 <>
                                     <Button asChild size="sm" className="hidden">
-                                        {/* You can hide these or move them into the sheet menu as you want */}
                                         <a href={auth.login.url}>{auth.login.title}</a>
                                     </Button>
                                 </>
@@ -387,7 +389,6 @@ export const Navbar1 = ({
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
     );
