@@ -123,7 +123,7 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F5F5F7] dark:bg-[#1E1E2F] text-[#333] dark:text-[#E5E7EB]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-white  to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] ">
       <Navbar1 />
       <main className="flex-grow p-6 md:p-12">
         <section
@@ -149,8 +149,8 @@ export default function ServicesPage() {
               className="cursor-pointer bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-md p-6 flex flex-col items-start gap-4 hover:shadow-xl hover:ring-2 hover:ring-blue-500 transition duration-300"
             >
               {service.icon}
-              <h3 className="text-xl font-semibold">{service.title}</h3>
-              <p className="text-[#6B7280] dark:text-[#9CA3AF]">{service.desc}</p>
+              <h3 className="text-xl font-semibold text-blue-600 dark:text-white">{service.title}</h3>
+              <p className="text-gray-700 dark:text-gray-400">{service.desc}</p>
             </div>
           ))}
         </section>
