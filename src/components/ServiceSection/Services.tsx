@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useMemo } from "react"
+import React, { useRef, useMemo, useEffect } from "react"
 import {
     Card,
     CardHeader,
@@ -19,10 +19,9 @@ import {
     Zap,
 } from "lucide-react"
 import { motion, useAnimation } from "framer-motion"
-import { useEffect, useState } from "react"
 import "../../app/globals.css";
 
-// Define Service interface to avoid `any` type
+// Define Service interface
 interface Service {
     title: string;
     description: string;
@@ -84,45 +83,29 @@ const InfiniteSlider = ({
 }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const controls = useAnimation()
-    const [isHovered, setIsHovered] = useState(false)
 
     const isLeft = direction === "left"
     const animationX = useMemo(() => (isLeft ? ["0%", "-50%"] : ["-50%", "0%"]), [isLeft])
 
     useEffect(() => {
-        const startAnimation = async () => {
-            while (true) {
-                if (!isHovered) {
-                    await controls.start({
-                        x: animationX,
-                        transition: {
-                            repeat: Infinity,
-                            duration: 20, // faster scroll
-                            ease: "linear",
-                        },
-                    })
-                }
-                await new Promise((resolve) => setTimeout(resolve, 100))
-            }
-        }
-        startAnimation()
-    }, [controls, isHovered, animationX])
+        controls.start({
+            x: animationX,
+            transition: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 20,
+                ease: "linear",
+            },
+        })
+    }, [controls, animationX])
 
     return (
-        <section
-            className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white  to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
+        <section className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white  to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]">
             <div ref={containerRef} className="overflow-x-auto cursor-pointer scrollbar-hide">
                 <motion.div
                     className="flex gap-6 w-max"
-                    drag="x"
-                    dragConstraints={containerRef}
-                    dragElastic={0.05}
                     animate={controls}
                 >
-
                     {[...items, ...items].map((service, index) => (
                         <Card
                             key={index}
@@ -140,12 +123,12 @@ const InfiniteSlider = ({
                     ))}
                 </motion.div>
             </div>
+
             {/* Left gradient */}
             <div className="pointer-events-none absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-[rgba(255,255,255,1)] to-[rgba(255,255,255,0)] dark:from-[#0e0e15] dark:to-transparent z-10" />
 
             {/* Right gradient */}
             <div className="pointer-events-none absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-[rgba(255,255,255,1)] to-[rgba(255,255,255,0)] dark:from-[#0e0e15] dark:to-transparent z-10" />
-
         </section>
     )
 }

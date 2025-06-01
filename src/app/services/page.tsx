@@ -2,31 +2,18 @@
 import { Navbar1 } from "@/components/navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import {
-  Code2,
-  Megaphone,
-  ShoppingCart,
-  Headphones,
-  Package,
-  ServerCog,
-  Brush,
-  Zap,
-  Send
+  Code2, Megaphone, ShoppingCart, Headphones, Package,
+  ServerCog, Brush, Zap, Send
 } from "lucide-react";
 import {
-  Card,
-  CardHeader,
-  CardDescription,
-  CardContent,
-  CardFooter
+  Card, CardHeader, CardDescription,
+  CardContent, CardFooter
 } from '@/components/ui/card';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
+  Select, SelectTrigger, SelectValue,
+  SelectContent, SelectItem
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -92,14 +79,12 @@ export default function ServicesPage() {
 
   const handleCardClick = (value: string) => {
     setSelectedService(value);
-    // Smooth scroll to form section
     formSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const sendEmail = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     if (!form.current) return;
 
     emailjs.sendForm(
@@ -111,7 +96,7 @@ export default function ServicesPage() {
       .then(() => {
         alert('Message sent successfully!');
         form.current?.reset();
-        setSelectedService(""); // Reset select
+        setSelectedService("");
       })
       .catch((error) => {
         console.error('EmailJS Error:', error);
@@ -123,25 +108,27 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-white  to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] ">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
       <Navbar1 />
-      <main className="flex-grow p-6 md:p-12">
+      <main className="flex-grow">
+        {/* HERO SECTION */}
         <section
-          className="max-w-6xl mx-auto text-center mb-16 relative bg-cover bg-center bg-no-repeat"
+          className="relative h-[60vh] w-full bg-cover bg-center bg-no-repeat flex items-center justify-center"
           style={{ backgroundImage: "url('/services-page/service.jpg')" }}
         >
           <div className="absolute inset-0 bg-black/40"></div>
-          <div className="relative z-10 py-20 px-6">
-            <h1 className="text-4xl font-bold mb-4 text-blue-600">
-              Our <span className="text-white dark:text-white">Services</span>
+          <div className="relative z-10 text-center px-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-blue-500">
+              Our <span className="text-white">Services</span>
             </h1>
-            <p className="text-gray-200">
+            <p className="text-gray-200 text-lg md:text-xl">
               Explore what Danamo Tech Hub can do for your business
             </p>
           </div>
         </section>
 
-        <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
+        {/* SERVICES CARDS */}
+        <section className="p-6 md:p-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
           {services.map((service, idx) => (
             <div
               key={idx}
@@ -149,14 +136,16 @@ export default function ServicesPage() {
               className="cursor-pointer bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-md p-6 flex flex-col items-start gap-4 hover:shadow-xl hover:ring-2 hover:ring-blue-500 transition duration-300"
             >
               {service.icon}
-              <h3 className="text-xl font-semibold text-blue-600 dark:text-white">{service.title}</h3>
+              <h3 className="text-xl font-semibold text-blue-600 dark:text-white">
+                {service.title}
+              </h3>
               <p className="text-gray-700 dark:text-gray-400">{service.desc}</p>
             </div>
           ))}
         </section>
 
-        {/* FORM SECTION */}
-        <div ref={formSectionRef} className="flex justify-center scroll-mt-24">
+        {/* CONTACT FORM */}
+        <div ref={formSectionRef} className="flex justify-center scroll-mt-24 px-4">
           <Card className="w-full max-w-md border-blue-400">
             <CardHeader>
               <CardDescription>
@@ -166,9 +155,7 @@ export default function ServicesPage() {
             <CardContent>
               <form ref={form} onSubmit={sendEmail} className="grid w-full gap-4">
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name" className="text-blue-600 dark:text-blue-400">
-                    Name
-                  </Label>
+                  <Label htmlFor="name" className="text-blue-600 dark:text-blue-400">Name</Label>
                   <Input
                     id="name"
                     name="user_name"
@@ -179,9 +166,7 @@ export default function ServicesPage() {
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="email" className="text-blue-600 dark:text-blue-400">
-                    Email
-                  </Label>
+                  <Label htmlFor="email" className="text-blue-600 dark:text-blue-400">Email</Label>
                   <Input
                     type="email"
                     id="email"
@@ -193,18 +178,14 @@ export default function ServicesPage() {
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="interest" className="text-blue-600 dark:text-blue-400">
-                    I am interested in...
-                  </Label>
+                  <Label htmlFor="interest" className="text-blue-600 dark:text-blue-400">I am interested in...</Label>
                   <Select value={selectedService} onValueChange={(value) => setSelectedService(value)}>
                     <SelectTrigger id="interest">
                       <SelectValue placeholder="Select a service" />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-100 dark:text-white dark:bg-[#1E1E2F]">
                       {services.map((service, idx) => (
-                        <SelectItem key={idx} value={service.value}>
-                          {service.title}
-                        </SelectItem>
+                        <SelectItem key={idx} value={service.value}>{service.title}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -212,9 +193,7 @@ export default function ServicesPage() {
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="message" className="text-blue-600 dark:text-blue-400">
-                    Message
-                  </Label>
+                  <Label htmlFor="message" className="text-blue-600 dark:text-blue-400">Message</Label>
                   <Textarea
                     id="message"
                     name="message"
@@ -236,6 +215,7 @@ export default function ServicesPage() {
                     <Send size={12} className="animate-pulse mr-2" />
                     {loading ? "Sending..." : "Send Message"}
                   </Button>
+
                 </CardFooter>
               </form>
             </CardContent>
