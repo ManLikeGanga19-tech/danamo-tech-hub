@@ -226,7 +226,7 @@ export const Navbar1 = ({
                                     aria-label="User menu"
                                 >
                                     <Image
-                                        src={session?.user?.image || "/default-avatar.png"}
+                                        src={session?.user?.image || "/avatar.jpg"}
                                         alt="User Avatar"
                                         height={32}
                                         width={32}
@@ -297,7 +297,7 @@ export const Navbar1 = ({
                                         aria-label="User menu"
                                     >
                                         <Image
-                                            src={session?.user?.image || "/default-avatar.png"}
+                                            src={session?.user?.image || "/avatar.jpg"}
                                             alt="User Avatar"
                                             width={32}
                                             height={32}
