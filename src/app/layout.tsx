@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next"
 import { SessionProvider } from 'next-auth/react';
+import { Toaster } from 'sonner';
 import './globals.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -13,7 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen font-sans antialiased bg-white text-black dark:bg-black dark:text-white">
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            <main>{children}</main>
+            <main>{children} <Toaster richColors position='top-center' /></main>
           </ThemeProvider>
           <SpeedInsights />
           <Analytics />

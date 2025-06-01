@@ -8,7 +8,7 @@ import { Logo } from "@/components/Logo";
 export default function Footer() {
   return (
     <footer
-      className="w-full min-h-[400px] px-4 py-10 transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] flex flex-col items-center justify-center"
+      className="w-full min-h-[400px] px-4 py-10 transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#1E1E2F] dark:to-[#0e0e15]  flex flex-col items-center justify-center"
     >
       <hr className="w-full border-t border-gray-300 dark:border-gray-700 mb-4 pt-4" />
 

@@ -45,7 +45,7 @@ const AboutUs = () => {
 
                             className="px-6 py-2 bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                         >
-                            <a href="/about-us">View More</a>
+                            <a href="/about">View More</a>
 
                         </Button>
                     </div>
@@ -55,7 +55,7 @@ const AboutUs = () => {
 
                         className="hidden sm:block absolute bottom-4 right-4 px-6 py-2  bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                     >
-                        <a href="/about-us">View More</a>
+                        <a href="/about">View More</a>
                     </Button>
                 </div>
             </div>
