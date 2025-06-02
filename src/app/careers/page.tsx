@@ -92,7 +92,7 @@ export default function CareersPage() {
       {/* CTA */}
       <section className="py-16  bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15]  dark:to-[#1E1E2F] text-white text-center px-4">
         <h2 className="text-3xl text-black dark:text-white font-bold mb-4">Ready to make an impact?</h2>
-        <p className="mb-6 text-lg text-black dark:text-white">We're always looking for passionate and creative individuals.</p>
+        <p className="mb-6 text-lg text-black dark:text-white">We&apos;re always looking for passionate and creative individuals.</p>
         <Button
           asChild
           size="lg"
