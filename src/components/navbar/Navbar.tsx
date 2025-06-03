@@ -103,7 +103,7 @@ export const Navbar1 = ({
         },
         { title: "Blog", url: "/blog" },
         { title: "About", url: "/about" },
-        { title: "Contact", url: "/contact" },
+        { title: "Webinars", url: "/webinars" },
     ],
     auth = {
         login: { title: "Login", url: "/login" },
