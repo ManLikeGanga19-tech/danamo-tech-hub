@@ -104,7 +104,7 @@ export default function HelpCenterPage() {
       <section className="py-16 px-4 md:px-16 max-w-4xl mx-auto ">
         <h2 className="text-3xl font-bold mb-8 text-center text-blue-600 dark:text-blue-400">Frequently Asked Questions</h2>
         {filteredFAQs.length === 0 ? (
-          <p className="text-center text-muted-foreground dark:text-gray-400">No results found for "{searchQuery}"</p>
+          <p className="text-center text-muted-foreground dark:text-gray-400">No results found for &quot;{searchQuery}&quot;</p>
         ) : (
           <Accordion type="multiple" className="space-y-4">
             {filteredFAQs.map((item, index) => (
