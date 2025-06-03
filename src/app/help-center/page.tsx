@@ -50,7 +50,7 @@ const faqData = [
   {
     question: 'What types of websites or apps can you build?',
     answer:
-      'We build everything from simple landing pages and blogs to complex SaaS platforms, e-commerce stores, enterprise-grade applications, and fully responsive mobile apps. Each solution is customized to meet our client’s specific needs.'
+      'We build everything from simple landing pages and blogs to complex SaaS platforms, e-commerce stores, enterprise-grade applications, and fully responsive mobile apps. Each solution is customized to meet our client\’s specific needs.'
   },
   {
     question: 'How do I contact support?',
