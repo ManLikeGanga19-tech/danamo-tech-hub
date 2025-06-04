@@ -3,7 +3,7 @@
 import React from "react"
 import { Github, Linkedin } from "lucide-react"
 import { motion } from "framer-motion"
-
+import Image from "next/image";
 interface TeamCardProps {
     name: string
     role: string
@@ -24,7 +24,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ name, role, bio, imageUrl, s
             viewport={{ once: true }}
             className="bg-white dark:bg-[#191924] rounded-2xl shadow-md p-6 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300"
         >
-            <img
+            <Image
                 src={imageUrl}
                 alt={name}
                 className="w-24 h-24 rounded-full object-cover mb-4 border-2 border-blue-500"

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Account, Models } from "appwrite";
+import { Models } from "appwrite";
 import {
     Menu,
     Moon,
@@ -40,7 +40,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { Logo } from "@/components/Logo";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { appwriteClient } from "@/lib/appwriteServices";
+import { account, appwriteClient } from "@/lib/appwriteServices"; // Import account
 
 // Define Appwrite User type
 type User = Models.User<Models.Preferences>;
@@ -120,8 +120,6 @@ export const Navbar1 = ({
     const [loading, setLoading] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const account = new Account(appwriteClient);
-
     // Fetch current user session on mount
     useEffect(() => {
         const checkSession = async () => {
@@ -136,7 +134,7 @@ export const Navbar1 = ({
             }
         };
         checkSession();
-    }, [account]); // Fix: Include `account` in dependency array
+    }, []); // Remove account from dependency array
 
     // Handle logout
     const handleLogout = async () => {
@@ -210,10 +208,10 @@ export const Navbar1 = ({
             <a
                 key={item.title}
                 href={item.url}
-                className={`text - md font - semibold transition - colors duration - 300 ease -in -out ${isActive
-                        ? "text-blue-600 dark:text-blue-400 font-bold"
-                        : "hover:text-blue-600 dark:hover:text-blue-400"
-                    } `}
+                className={`text-md font-semibold transition-colors duration-300 ease-in-out ${isActive
+                    ? "text-blue-600 dark:text-blue-400 font-bold"
+                    : "hover:text-blue-600 dark:hover:text-blue-400"
+                    }`}
             >
                 {item.title}
             </a>
@@ -276,7 +274,7 @@ export const Navbar1 = ({
                                             </a>
                                             <button
                                                 onClick={handleLogout}
-                                                className="w-full text-left px-4 py-2 text-sm text- gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+                                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
                                             >
                                                 <LogOut className="inline w-4 h-4 mr-2" />
                                                 Logout

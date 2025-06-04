@@ -1,15 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { account, ID } from "@/lib/appwriteServices"; // Import account and ID
-import { Models } from "appwrite"; // Import Models from appwrite
 import { Logo } from "@/components/Logo";
-
-// Define Appwrite user type
-type User = Models.User<Models.Preferences>;
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -19,7 +15,6 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [user, setUser] = useState<User | null>(null); // Type-safe user state
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,27 +34,12 @@ export default function SignUp() {
       setTimeout(() => {
         window.location.href = "/login";
       }, 1500);
-    } catch (err: unknown) { // Fix: Use `unknown` instead of `any`
+    } catch (err: unknown) {
       console.error("Appwrite signup error:", err);
       const errorMessage = err instanceof Error ? err.message : "Failed to create account.";
       setError(errorMessage);
     }
   };
-
-  // Optional: Check for existing session
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const currentUser = await account.get();
-        setUser(currentUser);
-        // Redirect if already logged in
-        window.location.href = "/";
-      } catch (error) {
-        setUser(null);
-      }
-    };
-    checkSession();
-  }, [account]); // Include `account` in dependency array
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -161,7 +141,7 @@ export default function SignUp() {
                   className="pl-10 w-full py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                   placeholder="***"
                   value={confirmPassword}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setConfirmPassword(e.target.value)} // Fix: Use setConfirmPassword
                   required
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
