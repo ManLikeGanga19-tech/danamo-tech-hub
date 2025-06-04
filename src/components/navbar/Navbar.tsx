@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
+import { Account } from "appwrite";
 import {
     Menu,
     Moon,
@@ -40,6 +40,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { Logo } from "@/components/Logo";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { appwriteClient } from "@/lib/appwriteServices";
 
 interface MenuItem {
     title: string;
@@ -112,13 +113,44 @@ export const Navbar1 = ({
 }: Navbar1Props) => {
     const pathname = usePathname();
     const { theme, toggleTheme } = useTheme();
-    const { data: session, status } = useSession({ required: false });
+    const [user, setUser] = useState<any | null>(null); // Store Appwrite user
+    const [loading, setLoading] = useState(true); // Track loading state
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    // Debug session state
+    const account = new Account(appwriteClient);
+
+    // Fetch current user session on mount
     useEffect(() => {
-        console.log("Navbar session:", session, "Status:", status);
-    }, [session, status]);
+        const checkSession = async () => {
+            try {
+                const currentUser = await account.get();
+                setUser(currentUser); // Set user if session exists
+            } catch (error) {
+                console.log("No active session:", error);
+                setUser(null); // No user logged in
+            } finally {
+                setLoading(false); // Done loading
+            }
+        };
+        checkSession();
+    }, []);
+
+    // Handle logout
+    const handleLogout = async () => {
+        try {
+            await account.deleteSession("current"); // Delete current session
+            setUser(null); // Clear user state
+            setDropdownOpen(false); // Close dropdown
+            window.location.href = "/"; // Redirect to login
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
+    };
+
+    // Debug user state
+    useEffect(() => {
+        console.log("Navbar user:", user, "Loading:", loading);
+    }, [user, loading]);
 
     const renderMenuItem = (item: MenuItem) => {
         const isActive = pathname === item.url;
@@ -143,8 +175,8 @@ export const Navbar1 = ({
                 <NavigationMenuLink
                     href={item.url}
                     className={`group inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-300 ease-in-out ${isActive
-                        ? "bg-muted font-semibold text-blue-600 dark:text-blue-400"
-                        : "hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
+                            ? "bg-muted font-semibold text-blue-600 dark:text-blue-400"
+                            : "hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
                         }`}
                 >
                     {item.title}
@@ -176,8 +208,8 @@ export const Navbar1 = ({
                 key={item.title}
                 href={item.url}
                 className={`text-md font-semibold transition-colors duration-300 ease-in-out ${isActive
-                    ? "text-blue-600 dark:text-blue-400 font-bold"
-                    : "hover:text-blue-600 dark:hover:text-blue-400"
+                        ? "text-blue-600 dark:text-blue-400 font-bold"
+                        : "hover:text-blue-600 dark:hover:text-blue-400"
                     }`}
             >
                 {item.title}
@@ -191,7 +223,7 @@ export const Navbar1 = ({
 
     return (
         <section className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm transition-colors duration-200 ease">
-            <div className="layout container py-3 ">
+            <div className="layout container py-3">
                 {/* Desktop Menu */}
                 <nav className="hidden lg:flex justify-between items-center">
                     {/* Left: Logo */}
@@ -217,16 +249,16 @@ export const Navbar1 = ({
                         </Button>
 
                         {/* Auth Buttons or Avatar Dropdown */}
-                        {status === "loading" ? null : session?.user ? (
+                        {loading ? null : user ? (
                             // Logged in: show avatar dropdown
                             <div className="relative">
                                 <button
                                     onClick={toggleDropdown}
-                                    className="flex items-center rounded-full border-2 border-blue-600 "
+                                    className="flex items-center rounded-full border-2 border-blue-600"
                                     aria-label="User menu"
                                 >
                                     <Image
-                                        src={session?.user?.image || "/avatar.jpg"}
+                                        src={user.prefs?.avatar || "/avatar.jpg"} // Use Appwrite user prefs for avatar
                                         alt="User Avatar"
                                         height={32}
                                         width={32}
@@ -250,7 +282,7 @@ export const Navbar1 = ({
                                                 Account Settings
                                             </a>
                                             <button
-                                                onClick={() => signOut()}
+                                                onClick={handleLogout}
                                                 className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
                                             >
                                                 <LogOut className="inline w-4 h-4 mr-2" />
@@ -284,20 +316,20 @@ export const Navbar1 = ({
 
                 {/* Mobile Menu */}
                 <div className="block lg:hidden">
-                    <div className="flex items-center justify-between ">
+                    <div className="flex items-center justify-between">
                         <Logo className="text-lg" />
 
                         <div className="flex items-center gap-3">
                             {/* Avatar dropdown for logged in users */}
-                            {status === "loading" ? null : session?.user ? (
+                            {loading ? null : user ? (
                                 <div className="relative">
                                     <button
                                         onClick={toggleDropdown}
-                                        className="flex items-center rounded-full border-2 border-blue-600 "
+                                        className="flex items-center rounded-full border-2 border-blue-600"
                                         aria-label="User menu"
                                     >
                                         <Image
-                                            src={session?.user?.image || "/avatar.jpg"}
+                                            src={user.prefs?.avatar || "/avatar.jpg"} // Use Appwrite user prefs for avatar
                                             alt="User Avatar"
                                             width={32}
                                             height={32}
@@ -321,7 +353,7 @@ export const Navbar1 = ({
                                                     Account Settings
                                                 </a>
                                                 <button
-                                                    onClick={() => signOut()}
+                                                    onClick={handleLogout}
                                                     className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
                                                 >
                                                     <LogOut className="inline w-4 h-4 mr-2" />
@@ -353,7 +385,7 @@ export const Navbar1 = ({
                                             <Logo className="text-lg" />
                                         </SheetTitle>
                                     </SheetHeader>
-                                    <div className="flex flex-col gap-6 p-4 ">
+                                    <div className="flex flex-col gap-6 p-4">
                                         <Accordion type="single" collapsible className="flex w-full flex-col gap-4">
                                             {menu.map((item) => renderMobileMenuItem(item))}
                                         </Accordion>
@@ -368,14 +400,18 @@ export const Navbar1 = ({
                                             </Button>
 
                                             {/* Auth buttons inside menu (optional if you want) */}
-                                            {status === "loading" ? null : !session?.user && (
+                                            {loading ? null : !user && (
                                                 <>
-                                                    <Button asChild size="sm"
+                                                    <Button
+                                                        asChild
+                                                        size="sm"
                                                         className="w-full bg-white text-blue-600 border border-blue-600 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                                                     >
                                                         <a href={auth.login.url}>{auth.login.title}</a>
                                                     </Button>
-                                                    <Button asChild size="sm"
+                                                    <Button
+                                                        asChild
+                                                        size="sm"
                                                         className="w-full bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                                                     >
                                                         <a href={auth.signup.url}>{auth.signup.title}</a>

@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { Account } from "appwrite";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { auth } from "@/lib/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { appwriteClient } from "@/lib/appwriteServices"; // Shared client
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -14,40 +13,30 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const account = new Account(appwriteClient); // Correct client-side usage
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      // Step 1: Sign in with Firebase
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const token = await userCredential.user.getIdToken();
-
-      // Step 2: Use NextAuth credentials provider
-      const result = await signIn("credentials", {
-        token,
-        redirect: false,
-        callbackUrl: "/",
-      });
-
-      if (result?.error) {
-        setError("Invalid credentials.");
-      } else {
-        window.location.href = "/";
-      }
-    } catch (err: unknown) {
-      console.error("Login error:", err);
-      setError("Invalid email or password.");
+      // ✅ No userId passed here
+      await account.createEmailPasswordSession(email, password);
+      window.location.href = "/";
+    } catch (err: any) {
+      console.error("Appwrite login error:", err);
+      setError(err?.message || "Login failed.");
     }
   };
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
-      {/* Left: Form */}
       <div className="w-full md:w-1/2 flex justify-center items-center p-6">
         <div className="w-full max-w-md bg-white p-8 shadow-lg rounded-2xl border border-blue-400 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
           <div className="mb-8 text-center">
-            <h2 className="text-2xl font-bold text-blue-600 dark:text-white mb-2">Wel<span className="text-black dark:text-blue-400">come</span> </h2>
+            <h2 className="text-2xl font-bold text-blue-600 dark:text-white mb-2">
+              Wel<span className="text-black dark:text-blue-400">come</span>
+            </h2>
             <p className="text-black dark:text-gray-300 text-sm">Sign in to your account to continue</p>
           </div>
 
@@ -63,7 +52,6 @@ export default function LoginForm() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">Email</label>
               <div className="relative rounded-md shadow-sm">
@@ -81,7 +69,6 @@ export default function LoginForm() {
               </div>
             </div>
 
-            {/* Password */}
             <div>
               <label className="block text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">Password</label>
               <div className="relative rounded-md shadow-sm">
@@ -118,10 +105,7 @@ export default function LoginForm() {
               </div>
             </div>
 
-            <Button
-              {...({ type: "submit" } as React.ButtonHTMLAttributes<HTMLButtonElement>)}
-              className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
-            >
+            <Button {...({ type: "submit" } as React.ButtonHTMLAttributes<HTMLButtonElement>)} className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white">
               Sign In
             </Button>
           </form>
@@ -136,15 +120,8 @@ export default function LoginForm() {
         </div>
       </div>
 
-      {/* Right: Image */}
       <div className="hidden md:block w-full md:w-1/2 relative">
-        <Image
-          src="/signin-img.jpg"
-          alt="Sign in"
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src="/signin-img.jpg" alt="Sign in" fill className="object-cover" priority />
       </div>
     </section>
   );
