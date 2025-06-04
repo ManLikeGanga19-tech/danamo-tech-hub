@@ -71,11 +71,11 @@ function Contact() {
     try {
       const databases = new Databases(appwriteClient);
       await databases.createDocument(
-        "6840196a001ea51cd944", // appwrite Database ID
-        "68401a06000f652d677d", // appwrite Collection ID
+        "contactDB", // Replace with your Database ID
+        "contactSubmissions", // Replace with your Collection ID
         ID.unique(),
         {
-          userID: user.$id, // Changed to userID to match collection attribute
+          userID: user.$id,
           name,
           email,
           interest,
@@ -107,7 +107,7 @@ function Contact() {
             Contact <span className='text-black dark:text-white'>Us</span>
           </h1>
           <p className="text-lg text-black dark:text-white mt-6 leading-relaxed text-center">
-            Have some big idea or brand to develop and need help? Then reach out we'd love to hear about your project and provide help.
+            Have some big idea or brand to develop and need help? Then reach out we\'d love to hear about your project and provide help.
           </p>
 
           <ul className="mt-12 space-y-8">

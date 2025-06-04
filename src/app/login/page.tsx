@@ -23,12 +23,12 @@ export default function LoginForm() {
       try {
         await account.get();
         router.push("/");
-      } catch (err) {
+      } catch {
         setLoading(false);
       }
     };
     checkSession();
-  }, [router]);
+  }, [account, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +38,7 @@ export default function LoginForm() {
     try {
       try {
         await account.deleteSession('current');
-      } catch (err) {
+      } catch {
         // Ignore if no session exists
       }
       await account.createEmailPasswordSession(email, password);
