@@ -1,34 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Account } from "appwrite";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { appwriteClient } from "@/lib/appwriteServices";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const account = new Account(appwriteClient);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        await account.get();
+        router.push("/");
+      } catch (err) {
+        setLoading(false);
+      }
+    };
+    checkSession();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
+      try {
+        await account.deleteSession('current');
+      } catch (err) {
+        // Ignore if no session exists
+      }
       await account.createEmailPasswordSession(email, password);
-      window.location.href = "/";
-    } catch (err: unknown) { // Replace `any` with `unknown`
+      router.push("/");
+    } catch (err: unknown) {
       console.error("Appwrite login error:", err);
-      // Check if err is an Appwrite error object with a message
       const errorMessage = err instanceof Error ? err.message : "Login failed.";
       setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -66,6 +92,7 @@ export default function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -83,12 +110,14 @@ export default function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={loading}
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    disabled={loading}
                   >
                     {showPassword ? (
                       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -106,8 +135,13 @@ export default function LoginForm() {
               </div>
             </div>
 
-            <Button {...({ type: "submit" } as React.ButtonHTMLAttributes<HTMLButtonElement>)} className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white">
-              Sign In
+            <Button
+              asChild
+              className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+            >
+              <button type="submit" disabled={loading}>
+                Sign In
+              </button>
             </Button>
           </form>
           <div className="mt-6 text-center text-sm">
