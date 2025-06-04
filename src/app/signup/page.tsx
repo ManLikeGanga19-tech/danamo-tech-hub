@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { account, ID } from "@/lib/appwriteServices"; // import Appwrite account instance
+import { account, ID } from "@/lib/appwriteServices"; // Import account and ID
+import { Models } from "appwrite"; // Import Models from appwrite
 import { Logo } from "@/components/Logo";
+
+// Define Appwrite user type
+type User = Models.User<Models.Preferences>;
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -15,6 +19,7 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [user, setUser] = useState<User | null>(null); // Type-safe user state
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,11 +30,7 @@ export default function SignUp() {
     }
 
     try {
-      // Appwrite signup requires a unique user ID for each user
-      // You can generate a random ID with 'unique()' helper method from appwrite sdk or use a UUID lib
-      // We'll use Appwrite's ID.unique() for this example
-
-      // Create a new user with email and password
+      // Create a new user
       await account.create(ID.unique(), email, password);
 
       setError("");
@@ -38,11 +39,27 @@ export default function SignUp() {
       setTimeout(() => {
         window.location.href = "/login";
       }, 1500);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "Failed to create account.");
+    } catch (err: unknown) { // Fix: Use `unknown` instead of `any`
+      console.error("Appwrite signup error:", err);
+      const errorMessage = err instanceof Error ? err.message : "Failed to create account.";
+      setError(errorMessage);
     }
   };
+
+  // Optional: Check for existing session
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const currentUser = await account.get();
+        setUser(currentUser);
+        // Redirect if already logged in
+        window.location.href = "/";
+      } catch (error) {
+        setUser(null);
+      }
+    };
+    checkSession();
+  }, [account]); // Include `account` in dependency array
 
   return (
     <section className="min-h-screen w-full flex flex-col md:flex-row transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -123,7 +140,8 @@ export default function SignUp() {
                       </svg>
                     ) : (
                       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.523 2.523l1.515 1.514a4 4 0 00-5.552-5.552z" clipRule="evenodd" />
+                        <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
+                        <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
                       </svg>
                     )}
                   </button>
@@ -143,7 +161,7 @@ export default function SignUp() {
                   className="pl-10 w-full py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                   placeholder="***"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">

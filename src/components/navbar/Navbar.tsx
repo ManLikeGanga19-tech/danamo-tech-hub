@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Account } from "appwrite";
+import { Account, Models } from "appwrite";
 import {
     Menu,
     Moon,
@@ -41,6 +41,9 @@ import { Logo } from "@/components/Logo";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { appwriteClient } from "@/lib/appwriteServices";
+
+// Define Appwrite User type
+type User = Models.User<Models.Preferences>;
 
 interface MenuItem {
     title: string;
@@ -113,8 +116,8 @@ export const Navbar1 = ({
 }: Navbar1Props) => {
     const pathname = usePathname();
     const { theme, toggleTheme } = useTheme();
-    const [user, setUser] = useState<any | null>(null); // Store Appwrite user
-    const [loading, setLoading] = useState(true); // Track loading state
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const account = new Account(appwriteClient);
@@ -124,24 +127,24 @@ export const Navbar1 = ({
         const checkSession = async () => {
             try {
                 const currentUser = await account.get();
-                setUser(currentUser); // Set user if session exists
+                setUser(currentUser);
             } catch (error) {
                 console.log("No active session:", error);
-                setUser(null); // No user logged in
+                setUser(null);
             } finally {
-                setLoading(false); // Done loading
+                setLoading(false);
             }
         };
         checkSession();
-    }, []);
+    }, [account]); // Fix: Include `account` in dependency array
 
     // Handle logout
     const handleLogout = async () => {
         try {
-            await account.deleteSession("current"); // Delete current session
-            setUser(null); // Clear user state
-            setDropdownOpen(false); // Close dropdown
-            window.location.href = "/"; // Redirect to login
+            await account.deleteSession("current");
+            setUser(null);
+            setDropdownOpen(false);
+            window.location.href = "/login";
         } catch (error) {
             console.error("Logout error:", error);
         }
@@ -175,8 +178,8 @@ export const Navbar1 = ({
                 <NavigationMenuLink
                     href={item.url}
                     className={`group inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-300 ease-in-out ${isActive
-                            ? "bg-muted font-semibold text-blue-600 dark:text-blue-400"
-                            : "hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
+                        ? "bg-muted font-semibold text-blue-600 dark:text-blue-400"
+                        : "hover:bg-gray-100 hover:text-blue-600 dark:hover:bg-gray-800 dark:hover:text-blue-400"
                         }`}
                 >
                     {item.title}
@@ -207,17 +210,16 @@ export const Navbar1 = ({
             <a
                 key={item.title}
                 href={item.url}
-                className={`text-md font-semibold transition-colors duration-300 ease-in-out ${isActive
+                className={`text - md font - semibold transition - colors duration - 300 ease -in -out ${isActive
                         ? "text-blue-600 dark:text-blue-400 font-bold"
                         : "hover:text-blue-600 dark:hover:text-blue-400"
-                    }`}
+                    } `}
             >
                 {item.title}
             </a>
         );
     };
 
-    // Dropdown toggle handlers
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
     const closeDropdown = () => setDropdownOpen(false);
 
@@ -226,17 +228,12 @@ export const Navbar1 = ({
             <div className="layout container py-3">
                 {/* Desktop Menu */}
                 <nav className="hidden lg:flex justify-between items-center">
-                    {/* Left: Logo */}
                     <Logo className="text-lg" />
-
-                    {/* Center: Menu */}
                     <div className="flex items-center ml-auto">
                         <NavigationMenu>
                             <NavigationMenuList>{menu.map((item) => renderMenuItem(item))}</NavigationMenuList>
                         </NavigationMenu>
                     </div>
-
-                    {/* Right: Controls */}
                     <div className="flex items-center gap-6 ml-4">
                         <Button
                             variant="outline"
@@ -247,10 +244,7 @@ export const Navbar1 = ({
                         >
                             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                         </Button>
-
-                        {/* Auth Buttons or Avatar Dropdown */}
                         {loading ? null : user ? (
-                            // Logged in: show avatar dropdown
                             <div className="relative">
                                 <button
                                     onClick={toggleDropdown}
@@ -258,14 +252,13 @@ export const Navbar1 = ({
                                     aria-label="User menu"
                                 >
                                     <Image
-                                        src={user.prefs?.avatar || "/avatar.jpg"} // Use Appwrite user prefs for avatar
+                                        src={user.prefs?.avatar || "/avatar.jpg"}
                                         alt="User Avatar"
                                         height={32}
                                         width={32}
                                         className="w-8 h-8 rounded-full object-cover"
                                     />
                                 </button>
-
                                 {dropdownOpen && (
                                     <div
                                         onBlur={closeDropdown}
@@ -283,7 +276,7 @@ export const Navbar1 = ({
                                             </a>
                                             <button
                                                 onClick={handleLogout}
-                                                className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
+                                                className="w-full text-left px-4 py-2 text-sm text- gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
                                             >
                                                 <LogOut className="inline w-4 h-4 mr-2" />
                                                 Logout
@@ -293,7 +286,6 @@ export const Navbar1 = ({
                                 )}
                             </div>
                         ) : (
-                            // Not logged in: show Login & Signup buttons
                             <div className="flex items-center gap-2">
                                 <Button
                                     asChild
@@ -318,9 +310,7 @@ export const Navbar1 = ({
                 <div className="block lg:hidden">
                     <div className="flex items-center justify-between">
                         <Logo className="text-lg" />
-
                         <div className="flex items-center gap-3">
-                            {/* Avatar dropdown for logged in users */}
                             {loading ? null : user ? (
                                 <div className="relative">
                                     <button
@@ -329,14 +319,13 @@ export const Navbar1 = ({
                                         aria-label="User menu"
                                     >
                                         <Image
-                                            src={user.prefs?.avatar || "/avatar.jpg"} // Use Appwrite user prefs for avatar
+                                            src={user.prefs?.avatar || "/avatar.jpg"}
                                             alt="User Avatar"
                                             width={32}
                                             height={32}
                                             className="w-8 h-8 rounded-full object-cover"
                                         />
                                     </button>
-
                                     {dropdownOpen && (
                                         <div
                                             onBlur={closeDropdown}
@@ -364,15 +353,12 @@ export const Navbar1 = ({
                                     )}
                                 </div>
                             ) : (
-                                // If not logged in, show login/signup buttons beside menu icon (optional)
                                 <>
                                     <Button asChild size="sm" className="hidden">
                                         <a href={auth.login.url}>{auth.login.title}</a>
                                     </Button>
                                 </>
                             )}
-
-                            {/* Hamburger menu trigger */}
                             <Sheet>
                                 <SheetTrigger asChild>
                                     <Button variant="outline" size="icon" className="border-blue-600 hover:bg-blue-600">
@@ -398,8 +384,6 @@ export const Navbar1 = ({
                                             >
                                                 {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                                             </Button>
-
-                                            {/* Auth buttons inside menu (optional if you want) */}
                                             {loading ? null : !user && (
                                                 <>
                                                     <Button
@@ -430,7 +414,6 @@ export const Navbar1 = ({
     );
 };
 
-// Helper for submenu links
 function SubMenuLink({ item }: { item: MenuItem }) {
     return (
         <a

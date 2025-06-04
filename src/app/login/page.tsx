@@ -5,7 +5,7 @@ import { Account } from "appwrite";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { appwriteClient } from "@/lib/appwriteServices"; // Shared client
+import { appwriteClient } from "@/lib/appwriteServices";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -13,19 +13,20 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const account = new Account(appwriteClient); // Correct client-side usage
+  const account = new Account(appwriteClient);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      // ✅ No userId passed here
       await account.createEmailPasswordSession(email, password);
       window.location.href = "/";
-    } catch (err: any) {
+    } catch (err: unknown) { // Replace `any` with `unknown`
       console.error("Appwrite login error:", err);
-      setError(err?.message || "Login failed.");
+      // Check if err is an Appwrite error object with a message
+      const errorMessage = err instanceof Error ? err.message : "Login failed.";
+      setError(errorMessage);
     }
   };
 
@@ -111,7 +112,7 @@ export default function LoginForm() {
           </form>
           <div className="mt-6 text-center text-sm">
             <p className="text-gray-600 dark:text-gray-300">
-              Don’t have an account?{" "}
+              Don&pos;t have an account?{" "}
               <a href="/signup" className="font-medium text-blue-600 hover:text-blue-400">
                 Sign up
               </a>
