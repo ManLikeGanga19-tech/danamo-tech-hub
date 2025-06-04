@@ -1,4 +1,5 @@
-'use client';
+"use client";
+
 import { Navbar1 } from "@/components/navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import {
@@ -8,7 +9,7 @@ import {
 import {
   Card, CardHeader, CardDescription,
   CardContent, CardFooter
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,8 +18,9 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useRef, useState } from 'react';
-import emailjs from '@emailjs/browser';
+import { useRef, useState, useEffect } from "react";
+import { account, appwriteClient } from "@/lib/appwriteServices";
+import { Models, Databases, ID } from "appwrite";
 
 const services = [
   {
@@ -72,39 +74,81 @@ const services = [
 ];
 
 export default function ServicesPage() {
-  const form = useRef<HTMLFormElement | null>(null);
   const formSectionRef = useRef<HTMLDivElement | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [selectedService, setSelectedService] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Check if user is logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const currentUser = await account.get();
+        setUser(currentUser);
+      } catch {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkSession();
+  }, []);
 
   const handleCardClick = (value: string) => {
     setSelectedService(value);
-    formSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    formSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const sendEmail = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
     setLoading(true);
-    if (!form.current) return;
 
-    emailjs.sendForm(
-      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_CONTACT!,
-      form.current,
-      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-    )
-      .then(() => {
-        alert('Message sent successfully!');
-        form.current?.reset();
-        setSelectedService("");
-      })
-      .catch((error) => {
-        console.error('EmailJS Error:', error);
-        alert('Failed to send message. Please try again later.');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (!user) {
+      setError("Please log in to submit the form.");
+      setLoading(false);
+      return;
+    }
+
+    if (!name || !email || !selectedService || !message) {
+      setError("All fields are required.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const databases = new Databases(appwriteClient);
+      await databases.createDocument(
+        "6840196a001ea51cd944", // appwrite Database ID
+        "6840913f00128df299b6", // servicesCollection ID
+        ID.unique(),
+        {
+          userID: user.$id,
+          name,
+          email,
+          service: selectedService,
+          message,
+          createdAt: new Date().toISOString(),
+        }
+      );
+      setSuccess("Message sent successfully!");
+      setName("");
+      setEmail("");
+      setSelectedService("");
+      setMessage("");
+    } catch (err: unknown) {
+      console.error("Appwrite database error:", JSON.stringify(err, null, 2));
+      const errorMessage = err instanceof Error ? err.message : "Failed to send message.";
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -149,18 +193,30 @@ export default function ServicesPage() {
           <Card className="w-full max-w-md border-blue-400">
             <CardHeader>
               <CardDescription>
-                Fill out the form and we will get back to you shortly.
+                {loading ? "Checking login status..." : user ? "Fill out the form and we will get back to you shortly." : "Please log in to send a message."}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form ref={form} onSubmit={sendEmail} className="grid w-full gap-4">
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
+                  <p className="text-red-600 text-sm">{error}</p>
+                </div>
+              )}
+              {success && (
+                <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
+                  <p className="text-green-600 text-sm">{success}</p>
+                </div>
+              )}
+              <form id="service-form" onSubmit={handleSubmit} className="grid w-full gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name" className="text-blue-600 dark:text-blue-400">Name</Label>
                   <Input
                     id="name"
-                    name="user_name"
                     placeholder="Your full name"
                     className="placeholder:text-gray-900 dark:placeholder:text-white"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={!user || loading}
                     required
                   />
                 </div>
@@ -170,16 +226,22 @@ export default function ServicesPage() {
                   <Input
                     type="email"
                     id="email"
-                    name="user_email"
                     placeholder="you@example.com"
                     className="placeholder:text-gray-900 dark:placeholder:text-white"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={!user || loading}
                     required
                   />
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="interest" className="text-blue-600 dark:text-blue-400">I am interested in...</Label>
-                  <Select value={selectedService} onValueChange={(value) => setSelectedService(value)}>
+                  <Select
+                    value={selectedService}
+                    onValueChange={(value) => setSelectedService(value)}
+                    disabled={!user || loading}
+                  >
                     <SelectTrigger id="interest">
                       <SelectValue placeholder="Select a service" />
                     </SelectTrigger>
@@ -189,33 +251,41 @@ export default function ServicesPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <input type="hidden" name="service" value={selectedService} />
                 </div>
 
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="message" className="text-blue-600 dark:text-blue-400">Message</Label>
                   <Textarea
                     id="message"
-                    name="message"
                     placeholder="Tell us more about your project..."
                     rows={4}
                     className="placeholder:text-gray-900 dark:placeholder:text-white"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    disabled={!user || loading}
                     required
                   />
                 </div>
 
                 <CardFooter className="flex justify-end p-0 pt-2">
-                  <Button
-                    {...({
-                      type: "submit",
-                      disabled: loading,
-                    } as React.ButtonHTMLAttributes<HTMLButtonElement>)}
-                    className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
-                  >
-                    <Send size={12} className="animate-pulse mr-2" />
-                    {loading ? "Sending..." : "Send Message"}
-                  </Button>
-
+                  {user ? (
+                    <Button
+                      asChild
+                      className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
+                    >
+                      <button type="submit" form="service-form" disabled={loading}>
+                        <Send size={12} className="animate-pulse mr-2" />
+                        {loading ? "Sending..." : "Send Message"}
+                      </button>
+                    </Button>
+                  ) : (
+                    <Button
+                      asChild
+                      className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                    >
+                      <a href="/login">Log in to Send</a>
+                    </Button>
+                  )}
                 </CardFooter>
               </form>
             </CardContent>
