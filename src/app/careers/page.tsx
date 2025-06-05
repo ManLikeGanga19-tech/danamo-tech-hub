@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { account, appwriteClient, databases, storage, ID } from "@/lib/appwriteServices";
+import { account, databases, storage, ID } from "@/lib/appwriteServices";
 import { Models } from "appwrite";
 
 const jobListings = [
