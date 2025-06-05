@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { account, appwriteClient } from "@/lib/appwriteServices";
-import { Models, Databases, ID } from "appwrite";
+import { account, appwriteClient, databases, storage, ID } from "@/lib/appwriteServices";
+import { Models } from "appwrite";
 
 const jobListings = [
   {
@@ -41,9 +41,8 @@ const jobListings = [
 export default function CareersPage() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<null | typeof jobListings[0]>(null);
-  // States for CV upload logic
   const [cvError, setCvError] = useState("");
-  const [selectedFileName, setSelectedFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -58,8 +57,10 @@ export default function CareersPage() {
     const checkSession = async () => {
       try {
         const currentUser = await account.get();
+        console.log("User session:", currentUser); // Debug log
         setUser(currentUser);
-      } catch {
+      } catch (error) {
+        console.error("Session check error:", error); // Debug log
         setUser(null);
       } finally {
         setLoading(false);
@@ -71,11 +72,10 @@ export default function CareersPage() {
   const openModal = (job: typeof jobListings[0]) => {
     setSelectedJob(job);
     setIsOpen(true);
-    // Reset form state on modal open
     setName("");
     setEmail("");
     setCoverLetter("");
-    setSelectedFileName("");
+    setSelectedFile(null);
     setCvError("");
     setError("");
     setSuccess("");
@@ -87,7 +87,7 @@ export default function CareersPage() {
     setName("");
     setEmail("");
     setCoverLetter("");
-    setSelectedFileName("");
+    setSelectedFile(null);
     setCvError("");
     setError("");
     setSuccess("");
@@ -104,11 +104,15 @@ export default function CareersPage() {
 
     if (file.type !== "application/pdf") {
       setCvError("Only PDF files are allowed.");
-      setSelectedFileName("");
+      setSelectedFile(null);
+      e.target.value = "";
+    } else if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      setCvError("File size must be less than 5MB.");
+      setSelectedFile(null);
       e.target.value = "";
     } else {
       setCvError("");
-      setSelectedFileName(file.name);
+      setSelectedFile(file);
     }
   };
 
@@ -116,43 +120,58 @@ export default function CareersPage() {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setLoading(true);
 
     if (!user) {
       setError("Please log in to apply.");
+      setLoading(false);
       return;
     }
 
-    if (!name || !email || !coverLetter || !selectedFileName || !selectedJob) {
+    if (!name || !email || !coverLetter || !selectedFile || !selectedJob) {
       setError("All fields and CV are required.");
+      setLoading(false);
       return;
     }
 
     try {
-      const databases = new Databases(appwriteClient);
+      console.log("Submitting with user:", user.$id); // Debug log
+      // Upload CV to Appwrite Storage
+      const fileResponse = await storage.createFile(
+        "68414d530023429f3754", // cvUploads bucket ID
+        ID.unique(),
+        selectedFile,
+        [`read("user:${user.$id}")`, `write("user:${user.$id}")`] // Permissions for user
+      );
+
+      // Save application to database
       await databases.createDocument(
-        "6840196a001ea51cd944", // Replace with your Database ID
-        "68409914002dcbfd0242", // Replace with your Collection ID
+        "6840196a001ea51cd944", // Database ID
+        "68409914002dcbfd0242", // Collection ID
         ID.unique(),
         {
           userID: user.$id,
           name,
           email,
           coverLetter,
-          cvFileName: selectedFileName,
+          fileId: fileResponse.$id,
           jobTitle: selectedJob.title,
           createdAt: new Date().toISOString(),
         }
       );
+
       setSuccess("Application submitted successfully!");
       setName("");
       setEmail("");
       setCoverLetter("");
-      setSelectedFileName("");
+      setSelectedFile(null);
       setIsOpen(false);
     } catch (err: unknown) {
-      console.error("Appwrite database error:", JSON.stringify(err, null, 2));
+      console.error("Appwrite error:", JSON.stringify(err, null, 2));
       const errorMessage = err instanceof Error ? err.message : "Failed to submit application.";
       setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -333,7 +352,7 @@ export default function CareersPage() {
                   className="text-blue-600 underline cursor-pointer select-none"
                   title="Click to upload or change your CV"
                 >
-                  {selectedFileName || "Upload CV"}
+                  {selectedFile ? selectedFile.name : "Upload CV"}
                 </a>
                 <input
                   type="file"
@@ -352,7 +371,7 @@ export default function CareersPage() {
                 className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
               >
                 <button type="submit" form="application-form" disabled={loading}>
-                  Submit Application
+                  {loading ? "Submitting..." : "Submit Application"}
                 </button>
               </Button>
             </form>
