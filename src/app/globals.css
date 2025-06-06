@@ -23,3 +23,9 @@
 .animate-blink {
   animation: blink 1s step-start infinite;
 }
+
+.modal button {
+  z-index: 99999;
+  display: flex;
+  visibility: visible;
+}
