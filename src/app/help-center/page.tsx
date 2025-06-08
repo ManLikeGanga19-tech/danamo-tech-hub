@@ -7,6 +7,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 import { Mail, MessageSquare, Search, ShieldCheck, Wallet, Wrench, Zap } from 'lucide-react';
 import { Navbar1 } from '@/components/navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
+import Image from 'next/image';
 
 const helpCategories = [
   {
@@ -76,13 +77,19 @@ export default function HelpCenterPage() {
       <Navbar1 />
 
       {/* Hero Section */}
-      <section
-        className="py-20 px-4 md:px-16 text-center bg-[url('/helpcenter-bg.jpg')] bg-cover bg-center bg-no-repeat relative"
-      >
-        {/* Overlay to preserve dark/light gradient */}
-        <div className="absolute inset-0 bg-black/40 opacity-90 backdrop-blur-sm"></div>
+      <section className="py-20 px-4 md:px-16 text-center relative">
+        <div className="absolute inset-0">
+          <Image
+            src="/helpcenter-bg.jpg"
+            alt="Help Center Hero Background"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={85}
+          />
+          <div className="absolute inset-0 bg-black/40 opacity-90 backdrop-blur-sm" />
+        </div>
 
-        {/* Content */}
         <div className="relative z-10">
           <h1 className="text-4xl font-bold mb-4 text-blue-500 dark:text-blue-400">How can we help you today?</h1>
           <p className="text-lg mb-6 text-gray-100">
@@ -147,7 +154,7 @@ export default function HelpCenterPage() {
           If you can&apos;t find what you&apos;re looking for, our support team is ready to assist you.
         </p>
         <a
-          href="https://wa.me/YOUR_WHATSAPP_NUMBER"
+          href="https://wa.me/+254785640048"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center p-3 rounded-full bg-green-500 hover:bg-green-600 transition animate-pulse"
