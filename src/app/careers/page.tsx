@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { account, databases, storage, ID } from "@/lib/appwriteServices";
 import { Models } from "appwrite";
+import Image from "next/image";
 
 const jobListings = [
   {
@@ -180,8 +181,19 @@ export default function CareersPage() {
       <Navbar1 />
 
       {/* Hero & Culture */}
-      <section className="relative bg-[url('/careers-hero.jpg')] bg-cover bg-center bg-fixed text-white">
-        <div className="min-h-screen flex flex-col justify-center items-center text-center px-4 py-24 bg-black/50 dark:bg-black/60">
+      <section className="relative text-white">
+        <div className="absolute inset-0">
+          <Image
+            src="/careers-hero.jpg"
+            alt="Careers Hero Background"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={85}
+          />
+          <div className="absolute inset-0 bg-black/50 dark:bg-black/60" />
+        </div>
+        <div className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 py-24">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">Join Our Innovative Team</h1>
           <p className="text-lg max-w-2xl text-gray-200">
             Help us build the future of tech at Danamo. Discover open roles and shape the world with your skills.
