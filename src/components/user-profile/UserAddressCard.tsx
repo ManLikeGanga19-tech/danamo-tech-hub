@@ -2,9 +2,9 @@
 import React from "react";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "../ui/modal";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function UserAddressCard() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -28,7 +28,7 @@ export default function UserAddressCard() {
                   Country
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  United States
+                  Kenya
                 </p>
               </div>
 
@@ -37,7 +37,7 @@ export default function UserAddressCard() {
                   City/State
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  Phoenix, Arizona, United States.
+                  Mombasa, Kenya
                 </p>
               </div>
 
@@ -46,7 +46,7 @@ export default function UserAddressCard() {
                   Postal Code
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  ERT 2489
+                  P.O box 93294
                 </p>
               </div>
 
@@ -55,7 +55,7 @@ export default function UserAddressCard() {
                   TAX ID
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  AS4568384
+                  A0000000P
                 </p>
               </div>
             </div>
@@ -87,7 +87,7 @@ export default function UserAddressCard() {
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4" showCloseButton={true}>
         <div className="relative w-full p-4 overflow-y-auto bg-white no-scrollbar rounded-3xl dark:bg-gray-900 lg:p-11">
           <div className="px-2 pr-14">
-            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+            <h4 className="mb-2 text-2xl font-semibold text-blue-600 dark:text-blue-400">
               Edit Address
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
@@ -98,31 +98,37 @@ export default function UserAddressCard() {
             <div className="px-2 overflow-y-auto custom-scrollbar">
               <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                 <div>
-                  <Label>Country</Label>
-                  <Input type="text" defaultValue="United States" />
+                  <Label className='text-blue-600 dark:text-blue-400'>Country</Label>
+                  <Input type="text" defaultValue="Kenya" className='placeholder:text-gray-900 dark:placeholder:text-white'
+                  />
                 </div>
 
                 <div>
-                  <Label>City/State</Label>
-                  <Input type="text" defaultValue="Arizona, United States." />
+                  <Label className='text-blue-600 dark:text-blue-400'>City/State</Label>
+                  <Input type="text" defaultValue="Mombasa, Kenya" className='placeholder:text-gray-900 dark:placeholder:text-white'
+                  />
                 </div>
 
                 <div>
-                  <Label>Postal Code</Label>
-                  <Input type="text" defaultValue="ERT 2489" />
+                  <Label className='text-blue-600 dark:text-blue-400'>Postal Code</Label>
+                  <Input type="text" defaultValue="P.O box 93294" className='placeholder:text-gray-900 dark:placeholder:text-white'
+                  />
                 </div>
 
                 <div>
-                  <Label>TAX ID</Label>
-                  <Input type="text" defaultValue="AS4568384" />
+                  <Label className='text-blue-600 dark:text-blue-400'>TAX ID</Label>
+                  <Input type="text" defaultValue="A0000000P" className='placeholder:text-gray-900 dark:placeholder:text-white'
+                  />
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button size="sm" variant="outline" onClick={closeModal}>
+              <Button size="sm" variant="outline" onClick={closeModal} className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+              >
                 Close
               </Button>
-              <Button size="sm" onClick={handleSave}>
+              <Button size="sm" onClick={handleSave} className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+              >
                 Save Changes
               </Button>
             </div>
