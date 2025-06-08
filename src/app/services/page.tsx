@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useRef, useState, useEffect } from "react";
 import { account, appwriteClient } from "@/lib/appwriteServices";
 import { Models, Databases, ID } from "appwrite";
+import Image from 'next/image';
 
 const services = [
   {
@@ -156,11 +157,18 @@ export default function ServicesPage() {
       <Navbar1 />
       <main className="flex-grow">
         {/* HERO SECTION */}
-        <section
-          className="relative h-[60vh] w-full bg-cover bg-center bg-no-repeat flex items-center justify-center"
-          style={{ backgroundImage: "url('/services-page/service.jpg')" }}
-        >
-          <div className="absolute inset-0 bg-black/40"></div>
+        <section className="relative h-[60vh] w-full flex items-center justify-center">
+          <div className="absolute inset-0">
+            <Image
+              src="/services-page/service.jpg"
+              alt="Services Hero Background"
+              fill
+              className="object-cover object-center"
+              priority
+              quality={85}
+            />
+            <div className="absolute inset-0 bg-black/40" />
+          </div>
           <div className="relative z-10 text-center px-4">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-blue-500">
               Our <span className="text-white">Services</span>
