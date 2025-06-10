@@ -45,7 +45,7 @@ export default function UserMetaCard() {
             <div className="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
               <a
                 target="_blank"
-                rel="noreferrer" href='https://www.facebook.com/PimjoHQ' className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                rel="noreferrer" href='https://www.facebook.com/' className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
                 <svg
                   className="fill-current"
                   width="20"
@@ -61,7 +61,7 @@ export default function UserMetaCard() {
                 </svg>
               </a>
 
-              <a href='https://x.com/PimjoHQ' target="_blank"
+              <a href='https://x.com/' target="_blank"
                 rel="noreferrer" className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
                 <svg
                   className="fill-current"
@@ -78,7 +78,7 @@ export default function UserMetaCard() {
                 </svg>
               </a>
 
-              <a href="https://www.linkedin.com/company/pimjo" target="_blank"
+              <a href="https://www.linkedin.com/company/" target="_blank"
                 rel="noreferrer" className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
                 <svg
                   className="fill-current"
@@ -95,7 +95,7 @@ export default function UserMetaCard() {
                 </svg>
               </a>
 
-              <a href='https://instagram.com/PimjoHQ' target="_blank"
+              <a href='https://instagram.com/' target="_blank"
                 rel="noreferrer" className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
                 <svg
                   className="fill-current"
@@ -137,7 +137,7 @@ export default function UserMetaCard() {
         </div>
       </div>
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4 max-h-[500px]">
-        <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xlp-4 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] lg:p-11">
+        <div className="no-scrollbar relative w-full rounded-3xl max-w-[700px] overflow-y-auto rounded-3xlp-4 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] lg:p-11">
           <div className="px-2 pr-14">
             <h4 className="mb-2 text-2xl font-semibold text-blue-600 dark:text-blue-400">
               Edit Personal Information
@@ -149,37 +149,37 @@ export default function UserMetaCard() {
           <form className="flex flex-col">
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
               <div>
-                <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+                <h5 className="mb-5 text-lg font-medium text-blue-600 dark:text-blue-400 lg:mb-6">
                   Social Links
                 </h5>
 
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div>
-                    <Label>Facebook</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Facebook</Label>
                     <Input
                       type="text"
-                      defaultValue="https://www.facebook.com"
+                      defaultValue="https://www.facebook.com/your-username"
                     />
                   </div>
 
                   <div>
-                    <Label>X.com</Label>
-                    <Input type="text" defaultValue="https://x.com" />
+                    <Label className="text-blue-600 dark:text-blue-400">X.com</Label>
+                    <Input type="text" defaultValue="https://x.com/your-username" />
                   </div>
 
                   <div>
-                    <Label>Linkedin</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Linkedin</Label>
                     <Input
                       type="text"
-                      defaultValue="https://www.linkedin.com"
+                      defaultValue="https://www.linkedin.com/your-username"
                     />
                   </div>
 
                   <div>
-                    <Label>Instagram</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Instagram</Label>
                     <Input
                       type="text"
-                      defaultValue="https://instagram.com"
+                      defaultValue="https://instagram.com/your-username"
                     />
                   </div>
                 </div>
@@ -191,27 +191,27 @@ export default function UserMetaCard() {
 
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>First Name</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">First Name</Label>
                     <Input type="text" defaultValue="Daniel" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Last Name</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Last Name</Label>
                     <Input type="text" defaultValue="Oganga" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Email Address</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Email Address</Label>
                     <Input type="text" defaultValue="danamotech@gmail.com" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Phone</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Phone</Label>
                     <Input type="text" defaultValue="+254785 640 048" />
                   </div>
 
                   <div className="col-span-2">
-                    <Label>Bio</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Bio</Label>
                     <Input type="text" defaultValue="Team Manager" />
                   </div>
                 </div>

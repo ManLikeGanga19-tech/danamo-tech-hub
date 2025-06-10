@@ -93,9 +93,9 @@ export default function UserInfoCard() {
       </div>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4 max-h-[500px]">
-        <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+        <div className="no-scrollbar relative w-full rounded-3xl max-w-[700px] overflow-y-auto rounded-3xlp-4 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] lg:p-11">
           <div className="px-2 pr-14">
-            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+            <h4 className="mb-2 text-2xl font-semibold text-blue-600 dark:text-blue-400">
               Edit Personal Information
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
@@ -111,31 +111,31 @@ export default function UserInfoCard() {
 
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div>
-                    <Label>Facebook</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Facebook</Label>
                     <Input
                       type="text"
-                      defaultValue="https://www.facebook.com/PimjoHQ"
+                      defaultValue="https://www.facebook.com/your-username"
                     />
                   </div>
 
                   <div>
-                    <Label>X.com</Label>
-                    <Input type="text" defaultValue="https://x.com/PimjoHQ" />
+                    <Label className="text-blue-600 dark:text-blue-400">X.com</Label>
+                    <Input type="text" defaultValue="https://x.com/your-username" />
                   </div>
 
                   <div>
-                    <Label>Linkedin</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Linkedin</Label>
                     <Input
                       type="text"
-                      defaultValue="https://www.linkedin.com/company/pimjo"
+                      defaultValue="https://www.linkedin.com/company/your-username"
                     />
                   </div>
 
                   <div>
-                    <Label>Instagram</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Instagram</Label>
                     <Input
                       type="text"
-                      defaultValue="https://instagram.com/PimjoHQ"
+                      defaultValue="https://instagram.com/your-username"
                     />
                   </div>
                 </div>
@@ -147,27 +147,27 @@ export default function UserInfoCard() {
 
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>First Name</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">First Name</Label>
                     <Input type="text" defaultValue="Musharof" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Last Name</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Last Name</Label>
                     <Input type="text" defaultValue="Chowdhury" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Email Address</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Email Address</Label>
                     <Input type="text" defaultValue="randomuser@pimjo.com" />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>Phone</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Phone</Label>
                     <Input type="text" defaultValue="+09 363 398 46" />
                   </div>
 
                   <div className="col-span-2">
-                    <Label>Bio</Label>
+                    <Label className="text-blue-600 dark:text-blue-400">Bio</Label>
                     <Input type="text" defaultValue="Team Manager" />
                   </div>
                 </div>
