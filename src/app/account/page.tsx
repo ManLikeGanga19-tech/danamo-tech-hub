@@ -16,7 +16,7 @@ interface AppwriteUser {
   $id: string;
   name: string;
   email: string;
-  [key: string]: any; // Allow additional properties
+  [key: string]: unknown; // Allow additional properties
 }
 
 export default function AccountSettings() {
