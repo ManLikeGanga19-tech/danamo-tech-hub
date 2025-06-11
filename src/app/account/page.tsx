@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -11,8 +10,16 @@ import { Label } from "@/components/ui/label";
 import { Navbar1 } from "@/components/navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 
+// Define custom interface for Appwrite user
+interface AppwriteUser {
+  $id: string;
+  name: string;
+  email: string;
+  [key: string]: any; // Allow additional properties
+}
+
 export default function AccountSettings() {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<AppwriteUser | null>(null); // Type user as AppwriteUser | null
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -78,15 +85,15 @@ export default function AccountSettings() {
     };
 
     // Handle form submission
-    const handleSave = async (event) => {
-        event.preventDefault(); // Prevent form submission refresh
+    const handleSave = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
         setError("");
         setSuccess("");
         if (!validateInputs()) return;
 
         try {
             if (!user) throw new Error("No user logged in");
-            const fullName = `${firstName} ${lastName} `.trim();
+            const fullName = `${ firstName } ${ lastName } `.trim();
             if (fullName !== user.name) {
                 await account.updateName(fullName);
                 console.log("Updated name:", fullName);
@@ -138,14 +145,14 @@ export default function AccountSettings() {
             setPhone("");
             setBio("");
             setIsSubmitted(true);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Error saving changes:", {
                 message: err.message,
                 code: err.code,
                 type: err.type,
                 response: err.response,
             });
-            setError(`Failed to save changes: ${err.message} `);
+            setError(`Failed to save changes: ${ err.message } `);
         }
     };
 
