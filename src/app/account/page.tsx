@@ -1,27 +1,258 @@
-'use client'
 
-import React from "react";
-import UserAddressCard from "@/components/user-profile/UserAddressCard";
-import UserInfoCard from "@/components/user-profile/UserInfoCard";
-import UserMetaCard from "@/components/user-profile/UserMetaCard";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { account, databases } from "@/lib/appwriteServices";
+import { Permission, Role, Query } from "appwrite";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Navbar1 } from "@/components/navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 
-export default function Profile() {
+export default function AccountSettings() {
+    const [user, setUser] = useState(null);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [bio, setBio] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const router = useRouter();
+
+    // Fetch user and profile data
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const userData = await account.get();
+                console.log("Fetched user:", userData.$id);
+                setUser(userData);
+                setEmail(userData.email || "");
+
+                const profile = await databases.listDocuments(
+                    "6840196a001ea51cd944",
+                    "68482e0c00163d490722",
+                    [Query.equal("userId", userData.$id)]
+                );
+                console.log("Fetched profile:", profile.documents);
+                if (profile.documents.length > 0) {
+                    const data = profile.documents[0];
+                    setFirstName(data.firstName || "");
+                    setLastName(data.lastName || "");
+                    setPhone(data.phone || "");
+                    setBio(data.bio || "");
+                }
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching user data:", err);
+                setError("Failed to load user data. Please log in or try again.");
+                setLoading(false);
+            }
+        };
+        fetchUser();
+    }, [router]);
+
+    // Validate inputs
+    const validateInputs = () => {
+        if (!firstName.trim()) {
+            setError("First name is required.");
+            return false;
+        }
+        if (!lastName.trim()) {
+            setError("Last name is required.");
+            return false;
+        }
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setError("Invalid email format.");
+            return false;
+        }
+        if (phone && !/^\+?[1-9]\d{1,14}$/.test(phone)) {
+            setError("Invalid phone number format (e.g., +1234567890).");
+            return false;
+        }
+        return true;
+    };
+
+    // Handle form submission
+    const handleSave = async (event) => {
+        event.preventDefault(); // Prevent form submission refresh
+        setError("");
+        setSuccess("");
+        if (!validateInputs()) return;
+
+        try {
+            if (!user) throw new Error("No user logged in");
+            const fullName = `${firstName} ${lastName} `.trim();
+            if (fullName !== user.name) {
+                await account.updateName(fullName);
+                console.log("Updated name:", fullName);
+            }
+            if (email && email !== user.email) {
+                throw new Error("Email updates require password authentication. Contact support.");
+            }
+
+            const profile = await databases.listDocuments(
+                "6840196a001ea51cd944",
+                "68482e0c00163d490722",
+                [Query.equal("userId", user.$id)]
+            );
+            console.log("Profile exists:", profile.documents.length > 0);
+            if (profile.documents.length > 0) {
+                await databases.updateDocument(
+                    "6840196a001ea51cd944",
+                    "68482e0c00163d490722",
+                    profile.documents[0].$id,
+                    { firstName, lastName, email, phone, bio }
+                );
+                console.log("Profile updated for userId:", user.$id);
+            } else {
+                await databases.createDocument(
+                    "6840196a001ea51cd944",
+                    "68482e0c00163d490722",
+                    user.$id,
+                    {
+                        userId: user.$id,
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        bio,
+                    },
+                    [
+                        Permission.read(Role.user(user.$id)),
+                        Permission.write(Role.user(user.$id)),
+                        Permission.delete(Role.user(user.$id)),
+                    ]
+                );
+                console.log("Profile created for userId:", user.$id);
+            }
+
+            setUser({ ...user, name: fullName });
+            setSuccess("Profile updated successfully!");
+            setFirstName("");
+            setLastName("");
+            setPhone("");
+            setBio("");
+            setIsSubmitted(true);
+        } catch (err) {
+            console.error("Error saving changes:", {
+                message: err.message,
+                code: err.code,
+                type: err.type,
+                response: err.response,
+            });
+            setError(`Failed to save changes: ${err.message} `);
+        }
+    };
+
+    if (loading) {
+        return <div className="flex justify-center py-10">Loading...</div>;
+    }
+
+    if (!user && error) {
+        return (
+            <div className="max-w-2xl mx-auto p-6">
+                <p className="text-red-500">{error}</p>
+                <Button onClick={() => router.push("/login")} className="mt-4">
+                    Go to Login
+                </Button>
+            </div>
+        );
+    }
+
     return (
-        <div className="bg-background text-foreground min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] ">
+        <>
             <Navbar1 />
-            <section className="border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
-                <h3 className="mb-5 text-lg font-semibold text-blue-600 dark:text-blue-400 lg:mb-7">
-                    Profile
-                </h3>
-                <div className="space-y-6">
-                    <UserMetaCard />
-                    <UserInfoCard />
-                    <UserAddressCard />
+            <div className="bg-background text-foreground min-h-screen items-center justify-center flex flex-col bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] ">
+                <div className="max-w-2xl w-full px-6 ">
+                    <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">Account <span className="text-black dark:text-white"> Settings</span></h1>
+                    {error && <p className="text-red-500 mb-4">{error}</p>}
+                    {success && <p className="text-green-500 mb-4">{success}</p>}
+                    <form className="space-y-6">
+                        {/* Personal Information */}
+                        <div className="space-y-4">
+                            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Personal Information</h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <Label className="text-gray-700 dark:text-gray-300">First Name</Label>
+                                    <Input
+                                        type="text"
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                        placeholder="First Name"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-gray-700 dark:text-gray-300">Last Name</Label>
+                                    <Input
+                                        type="text"
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                        placeholder="Last Name"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <Label className="text-gray-700 dark:text-gray-300">Email Address</Label>
+                                    <Input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="email@example.com"
+                                        disabled
+                                    />
+                                    <p className="text-sm text-gray-500 mt-1">Contact support to change email.</p>
+                                </div>
+                                <div>
+                                    <Label className="text-gray-700 dark:text-gray-300">Phone</Label>
+                                    <Input
+                                        type="text"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        placeholder="+254722991133"
+                                    />
+                                </div>
+                                <div className="col-span-1 sm:col-span-2">
+                                    <Label className="text-gray-700 dark:text-gray-300">Bio</Label>
+                                    <Input
+                                        type="text"
+                                        value={bio}
+                                        onChange={(e) => setBio(e.target.value)}
+                                        placeholder="Your role or bio"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex justify-end gap-4">
+                            <Button
+                                variant="outline"
+                                onClick={() => router.push("/")}
+                                className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                asChild
+                                onClick={handleSave}
+                                className={`bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white ${isSubmitted ? 'opacity-50 cursor-not-allowed' : ''} `}
+                            >
+                                <button type="button" disabled={isSubmitted}
+                                >
+                                    Save Changes
+                                </button>
+                            </Button>
+                        </div>
+                    </form>
                 </div>
-            </section>
-            <Footer/>
-        </div>
+            </div>
+            <Footer />
+        </>
     );
 }
