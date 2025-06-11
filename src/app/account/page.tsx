@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -19,7 +20,7 @@ interface AppwriteUser {
 }
 
 export default function AccountSettings() {
-    const [user, setUser] = useState<AppwriteUser | null>(null); // Type user as AppwriteUser | null
+    const [user, setUser] = useState<AppwriteUser | null>(null); // Type user as Appwriteuser | null
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -145,14 +146,14 @@ export default function AccountSettings() {
             setPhone("");
             setBio("");
             setIsSubmitted(true);
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Error saving changes:", {
-                message: err.message,
-                code: err.code,
-                type: err.type,
-                response: err.response,
+                message: err instanceof Error ? err.message : String(err),
+                code: err instanceof Error && 'code' in err ? err.code : undefined,
+                type: err instanceof Error && 'type' in err ? err.type : undefined,
+                response: err instanceof Error && 'response' in err ? err.response : undefined,
             });
-            setError(`Failed to save changes: ${ err.message } `);
+            setError(`Failed to save changes: ${ err instanceof Error ? err.message : String(err) } `);
         }
     };
 
