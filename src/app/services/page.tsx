@@ -22,6 +22,7 @@ import { useRef, useState, useEffect } from "react";
 import { account, appwriteClient } from "@/lib/appwriteServices";
 import { Models, Databases, ID } from "appwrite";
 import Image from 'next/image';
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const services = [
   {
@@ -153,154 +154,156 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
-      <Navbar1 />
-      <main className="flex-grow">
-        {/* HERO SECTION */}
-        <section className="relative h-[60vh] w-full flex items-center justify-center">
-          <div className="absolute inset-0">
-            <Image
-              src="/services-page/service.jpg"
-              alt="Services Hero Background"
-              fill
-              className="object-cover object-center"
-              priority
-              quality={85}
-            />
-            <div className="absolute inset-0 bg-black/40" />
-          </div>
-          <div className="relative z-10 text-center px-4">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-blue-500">
-              Our <span className="text-white">Services</span>
-            </h1>
-            <p className="text-gray-200 text-lg md:text-xl">
-              Explore what Danamo Tech Hub can do for your business
-            </p>
-          </div>
-        </section>
-
-        {/* SERVICES CARDS */}
-        <section className="p-6 md:p-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
-          {services.map((service, idx) => (
-            <div
-              key={idx}
-              onClick={() => handleCardClick(service.value)}
-              className="cursor-pointer bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-md p-6 flex flex-col items-start gap-4 hover:shadow-xl hover:ring-2 hover:ring-blue-500 transition duration-300"
-            >
-              {service.icon}
-              <h3 className="text-xl font-semibold text-blue-600 dark:text-white">
-                {service.title}
-              </h3>
-              <p className="text-gray-700 dark:text-gray-400">{service.desc}</p>
+    <ProtectedRoute>
+      <div className="flex flex-col min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
+        <Navbar1 />
+        <main className="flex-grow">
+          {/* HERO SECTION */}
+          <section className="relative h-[60vh] w-full flex items-center justify-center">
+            <div className="absolute inset-0">
+              <Image
+                src="/services-page/service.jpg"
+                alt="Services Hero Background"
+                fill
+                className="object-cover object-center"
+                priority
+                quality={85}
+              />
+              <div className="absolute inset-0 bg-black/40" />
             </div>
-          ))}
-        </section>
+            <div className="relative z-10 text-center px-4">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-blue-500">
+                Our <span className="text-white">Services</span>
+              </h1>
+              <p className="text-gray-200 text-lg md:text-xl">
+                Explore what Danamo Tech Hub can do for your business
+              </p>
+            </div>
+          </section>
 
-        {/* CONTACT FORM */}
-        <div ref={formSectionRef} className="flex justify-center scroll-mt-24 px-4">
-          <Card className="w-full max-w-md border-blue-400">
-            <CardHeader>
-              <CardDescription>
-                {loading ? "Checking login status..." : user ? "Fill out the form and we will get back to you shortly." : "Please log in to send a message."}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {error && (
-                <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
-                  <p className="text-red-600 text-sm">{error}</p>
-                </div>
-              )}
-              {success && (
-                <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
-                  <p className="text-green-600 text-sm">{success}</p>
-                </div>
-              )}
-              <form id="service-form" onSubmit={handleSubmit} className="grid w-full gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name" className="text-blue-600 dark:text-blue-400">Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Your full name"
-                    className="placeholder:text-gray-900 dark:placeholder:text-white"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    disabled={!user || loading}
-                    required
-                  />
-                </div>
+          {/* SERVICES CARDS */}
+          <section className="p-6 md:p-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
+            {services.map((service, idx) => (
+              <div
+                key={idx}
+                onClick={() => handleCardClick(service.value)}
+                className="cursor-pointer bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-md p-6 flex flex-col items-start gap-4 hover:shadow-xl hover:ring-2 hover:ring-blue-500 transition duration-300"
+              >
+                {service.icon}
+                <h3 className="text-xl font-semibold text-blue-600 dark:text-white">
+                  {service.title}
+                </h3>
+                <p className="text-gray-700 dark:text-gray-400">{service.desc}</p>
+              </div>
+            ))}
+          </section>
 
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="email" className="text-blue-600 dark:text-blue-400">Email</Label>
-                  <Input
-                    type="email"
-                    id="email"
-                    placeholder="you@example.com"
-                    className="placeholder:text-gray-900 dark:placeholder:text-white"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={!user || loading}
-                    required
-                  />
-                </div>
+          {/* CONTACT FORM */}
+          <div ref={formSectionRef} className="flex justify-center scroll-mt-24 px-4">
+            <Card className="w-full max-w-md border-blue-400">
+              <CardHeader>
+                <CardDescription>
+                  {loading ? "Checking login status..." : user ? "Fill out the form and we will get back to you shortly." : "Please log in to send a message."}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {error && (
+                  <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
+                    <p className="text-red-600 text-sm">{error}</p>
+                  </div>
+                )}
+                {success && (
+                  <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
+                    <p className="text-green-600 text-sm">{success}</p>
+                  </div>
+                )}
+                <form id="service-form" onSubmit={handleSubmit} className="grid w-full gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="name" className="text-blue-600 dark:text-blue-400">Name</Label>
+                    <Input
+                      id="name"
+                      placeholder="Your full name"
+                      className="placeholder:text-gray-900 dark:placeholder:text-white"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      disabled={!user || loading}
+                      required
+                    />
+                  </div>
 
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="interest" className="text-blue-600 dark:text-blue-400">I am interested in...</Label>
-                  <Select
-                    value={selectedService}
-                    onValueChange={(value) => setSelectedService(value)}
-                    disabled={!user || loading}
-                  >
-                    <SelectTrigger id="interest">
-                      <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-100 dark:text-white dark:bg-[#1E1E2F]">
-                      {services.map((service, idx) => (
-                        <SelectItem key={idx} value={service.value}>{service.title}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="email" className="text-blue-600 dark:text-blue-400">Email</Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      placeholder="you@example.com"
+                      className="placeholder:text-gray-900 dark:placeholder:text-white"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={!user || loading}
+                      required
+                    />
+                  </div>
 
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="message" className="text-blue-600 dark:text-blue-400">Message</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Tell us more about your project..."
-                    rows={4}
-                    className="placeholder:text-gray-900 dark:placeholder:text-white"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    disabled={!user || loading}
-                    required
-                  />
-                </div>
-
-                <CardFooter className="flex justify-end p-0 pt-2">
-                  {user ? (
-                    <Button
-                      asChild
-                      className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="interest" className="text-blue-600 dark:text-blue-400">I am interested in...</Label>
+                    <Select
+                      value={selectedService}
+                      onValueChange={(value) => setSelectedService(value)}
+                      disabled={!user || loading}
                     >
-                      <button type="submit" form="service-form" disabled={loading}>
-                        <Send size={12} className="animate-pulse mr-2" />
-                        {loading ? "Sending..." : "Send Message"}
-                      </button>
-                    </Button>
-                  ) : (
-                    <Button
-                      asChild
-                      className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                    >
-                      <a href="/login">Log in to Send</a>
-                    </Button>
-                  )}
-                </CardFooter>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-      <Footer />
-    </div>
+                      <SelectTrigger id="interest">
+                        <SelectValue placeholder="Select a service" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-100 dark:text-white dark:bg-[#1E1E2F]">
+                        {services.map((service, idx) => (
+                          <SelectItem key={idx} value={service.value}>{service.title}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex flex-col space-y-1.5">
+                    <Label htmlFor="message" className="text-blue-600 dark:text-blue-400">Message</Label>
+                    <Textarea
+                      id="message"
+                      placeholder="Tell us more about your project..."
+                      rows={4}
+                      className="placeholder:text-gray-900 dark:placeholder:text-white"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      disabled={!user || loading}
+                      required
+                    />
+                  </div>
+
+                  <CardFooter className="flex justify-end p-0 pt-2">
+                    {user ? (
+                      <Button
+                        asChild
+                        className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
+                      >
+                        <button type="submit" form="service-form" disabled={loading}>
+                          <Send size={12} className="animate-pulse mr-2" />
+                          {loading ? "Sending..." : "Send Message"}
+                        </button>
+                      </Button>
+                    ) : (
+                      <Button
+                        asChild
+                        className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                      >
+                        <a href="/login">Log in to Send</a>
+                      </Button>
+                    )}
+                  </CardFooter>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    </ProtectedRoute>
   );
 }

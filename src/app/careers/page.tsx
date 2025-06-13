@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { account, databases, storage, ID } from "@/lib/appwriteServices";
 import { Models } from "appwrite";
 import Image from "next/image";
-
+import ProtectedRoute from "@/components/ProtectedRoute";
 const jobListings = [
   {
     title: "Frontend Developer",
@@ -177,226 +177,228 @@ export default function CareersPage() {
   };
 
   return (
-    <>
-      <Navbar1 />
+    <ProtectedRoute>
+      <>
+        <Navbar1 />
 
-      {/* Hero & Culture */}
-      <section className="relative text-white">
-        <div className="absolute inset-0">
-          <Image
-            src="/careers-hero.jpg"
-            alt="Careers Hero Background"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={85}
-          />
-          <div className="absolute inset-0 bg-black/50 dark:bg-black/60" />
-        </div>
-        <div className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 py-24">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">Join Our Innovative Team</h1>
-          <p className="text-lg max-w-2xl text-gray-200">
-            Help us build the future of tech at Danamo. Discover open roles and shape the world with your skills.
-          </p>
-          <Button
-            asChild
-            size="lg"
-            className="mt-8 bg-white text-blue-600 border border-blue-600 dark:border-blue-500 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
-          >
-            <a href="#openings">See Open Roles</a>
-          </Button>
-        </div>
-
-        <div className="w-full py-20 backdrop-blur-sm bg-white/70 dark:bg-black/40 text-center px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Our Culture</h2>
-            <p className="text-lg text-gray-800 dark:text-gray-300">
-              At Danamo Tech, we value collaboration, creativity, and a constant drive to improve.
-              Every team member is empowered to make a difference and contribute to our mission.
+        {/* Hero & Culture */}
+        <section className="relative text-white">
+          <div className="absolute inset-0">
+            <Image
+              src="/careers-hero.jpg"
+              alt="Careers Hero Background"
+              fill
+              className="object-cover object-center"
+              priority
+              quality={85}
+            />
+            <div className="absolute inset-0 bg-black/50 dark:bg-black/60" />
+          </div>
+          <div className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 py-24">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">Join Our Innovative Team</h1>
+            <p className="text-lg max-w-2xl text-gray-200">
+              Help us build the future of tech at Danamo. Discover open roles and shape the world with your skills.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Openings */}
-      <section id="openings" className="py-16 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] text-gray-900 dark:text-gray-100">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-blue-600 dark:text-blue-400">
-            Open Positions
-          </h2>
-
-          <div className="grid gap-8 md:grid-cols-2">
-            {jobListings.map((job, idx) => (
-              <div key={idx} className="border border-gray-200 dark:border-gray-700 p-6 rounded-lg shadow-md bg-gray-50 dark:bg-[#2A2A3D]">
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2">{job.title}</h3>
-                <p className="text-sm mb-1">{job.type} • {job.location}</p>
-                <p className="mb-4 text-sm text-gray-700 dark:text-gray-300">{job.description}</p>
-                <Button
-                  size="lg"
-                  onClick={() => openModal(job)}
-                  className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
-                >
-                  Apply
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-16 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] text-center px-4">
-        <h2 className="text-3xl text-black dark:text-white font-bold mb-4">Ready to make an impact?</h2>
-        <p className="mb-6 text-lg text-black dark:text-white">
-          We&apos;re always looking for passionate and creative individuals.
-        </p>
-        <Button
-          onClick={() => openModal(jobListings[0])}
-          size="lg"
-          className="px-6 py-3 bg-white text-blue-600 border border-blue-600 dark:border-blue-500 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
-        >
-          Apply Now
-        </Button>
-      </section>
-
-      {/* Perks */}
-      <section className="py-16 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-black dark:text-white">Why Join Us?</h2>
-          <div className="grid gap-8 md:grid-cols-3 text-center">
-            {[
-              {
-                icon: <Laptop className="w-10 h-10 mx-auto mb-4 text-blue-600 dark:text-blue-400 animate-pulse" />,
-                title: "Remote Friendly",
-                description: "Work from anywhere with flexible hours and great support.",
-              },
-              {
-                icon: <TrendingUp className="w-10 h-10 mx-auto mb-4 text-blue-600 dark:text-blue-400 animate-pulse" />,
-                title: "Growth Opportunities",
-                description: "We invest in your career through mentorship and learning.",
-              },
-              {
-                icon: <Users className="w-10 h-10 mx-auto mb-4 text-blue-600 dark:text-blue-400 animate-pulse" />,
-                title: "Supportive Team",
-                description: "Join a team that cares about collaboration and well-being.",
-              },
-            ].map((perk, i) => (
-              <div key={i} className="p-6 bg-gray-100 dark:bg-[#2A2A3D] rounded-lg shadow">
-                {perk.icon}
-                <h4 className="text-xl font-semibold mb-2 text-black dark:text-white">{perk.title}</h4>
-                <p className="text-gray-600 dark:text-gray-300">{perk.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-
-      {/* APPLY MODAL */}
-      <Dialog open={isOpen} onOpenChange={(open) => { if (!open) closeModal(); }}>
-        <DialogContent className="sm:max-w-md bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
-          <DialogHeader>
-            <DialogTitle className="text-lg text-blue-600 dark:text-blue-400">
-              Apply for {selectedJob?.title}
-            </DialogTitle>
-            <DialogDescription>
-              {loading ? (
-                "Checking login status..."
-              ) : user ? (
-                <>
-                  <span><strong>Type:</strong> {selectedJob?.type}</span><br />
-                  <span><strong>Location:</strong> {selectedJob?.location}</span><br />
-                  <span><strong>Description:</strong> {selectedJob?.description}</span>
-                </>
-              ) : (
-                "Please log in to submit an application."
-              )}
-            </DialogDescription>
-          </DialogHeader>
-
-          {error && (
-            <div className="p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
-              <p className="text-red-600 text-sm">{error}</p>
-            </div>
-          )}
-          {success && (
-            <div className="p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
-              <p className="text-green-600 text-sm">{success}</p>
-            </div>
-          )}
-
-          {user ? (
-            <form id="application-form" onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <Input
-                type="text"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full px-4 py-2 border rounded dark:bg-gray-800 dark:text-white"
-                disabled={loading}
-              />
-              <Input
-                type="email"
-                placeholder="Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-2 border rounded dark:bg-gray-800 dark:text-white"
-                disabled={loading}
-              />
-              <Textarea
-                rows={4}
-                placeholder="Cover Letter"
-                value={coverLetter}
-                onChange={(e) => setCoverLetter(e.target.value)}
-                required
-                className="w-full px-4 py-2 border rounded dark:bg-gray-800 dark:text-white"
-                disabled={loading}
-              />
-
-              {/* Upload CV link and hidden file input */}
-              <div>
-                <a
-                  href="#"
-                  onClick={handleCvClick}
-                  className="text-blue-600 underline cursor-pointer select-none"
-                  title="Click to upload or change your CV"
-                >
-                  {selectedFile ? selectedFile.name : "Upload CV"}
-                </a>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept="application/pdf"
-                  style={{ display: "none" }}
-                />
-                {cvError && (
-                  <p className="text-red-600 mt-1 text-sm">{cvError}</p>
-                )}
-              </div>
-
-              <Button
-                asChild
-                className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
-              >
-                <button type="submit" form="application-form" disabled={loading}>
-                  {loading ? "Submitting..." : "Submit Application"}
-                </button>
-              </Button>
-            </form>
-          ) : (
             <Button
               asChild
-              className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+              size="lg"
+              className="mt-8 bg-white text-blue-600 border border-blue-600 dark:border-blue-500 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
             >
-              <a href="/login">Log in to Apply</a>
+              <a href="#openings">See Open Roles</a>
             </Button>
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
+          </div>
+
+          <div className="w-full py-20 backdrop-blur-sm bg-white/70 dark:bg-black/40 text-center px-4">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Our Culture</h2>
+              <p className="text-lg text-gray-800 dark:text-gray-300">
+                At Danamo Tech, we value collaboration, creativity, and a constant drive to improve.
+                Every team member is empowered to make a difference and contribute to our mission.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Openings */}
+        <section id="openings" className="py-16 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] text-gray-900 dark:text-gray-100">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12 text-blue-600 dark:text-blue-400">
+              Open Positions
+            </h2>
+
+            <div className="grid gap-8 md:grid-cols-2">
+              {jobListings.map((job, idx) => (
+                <div key={idx} className="border border-gray-200 dark:border-gray-700 p-6 rounded-lg shadow-md bg-gray-50 dark:bg-[#2A2A3D]">
+                  <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2">{job.title}</h3>
+                  <p className="text-sm mb-1">{job.type} • {job.location}</p>
+                  <p className="mb-4 text-sm text-gray-700 dark:text-gray-300">{job.description}</p>
+                  <Button
+                    size="lg"
+                    onClick={() => openModal(job)}
+                    className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
+                  >
+                    Apply
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-16 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] text-center px-4">
+          <h2 className="text-3xl text-black dark:text-white font-bold mb-4">Ready to make an impact?</h2>
+          <p className="mb-6 text-lg text-black dark:text-white">
+            We&apos;re always looking for passionate and creative individuals.
+          </p>
+          <Button
+            onClick={() => openModal(jobListings[0])}
+            size="lg"
+            className="px-6 py-3 bg-white text-blue-600 border border-blue-600 dark:border-blue-500 hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600"
+          >
+            Apply Now
+          </Button>
+        </section>
+
+        {/* Perks */}
+        <section className="py-16 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12 text-black dark:text-white">Why Join Us?</h2>
+            <div className="grid gap-8 md:grid-cols-3 text-center">
+              {[
+                {
+                  icon: <Laptop className="w-10 h-10 mx-auto mb-4 text-blue-600 dark:text-blue-400 animate-pulse" />,
+                  title: "Remote Friendly",
+                  description: "Work from anywhere with flexible hours and great support.",
+                },
+                {
+                  icon: <TrendingUp className="w-10 h-10 mx-auto mb-4 text-blue-600 dark:text-blue-400 animate-pulse" />,
+                  title: "Growth Opportunities",
+                  description: "We invest in your career through mentorship and learning.",
+                },
+                {
+                  icon: <Users className="w-10 h-10 mx-auto mb-4 text-blue-600 dark:text-blue-400 animate-pulse" />,
+                  title: "Supportive Team",
+                  description: "Join a team that cares about collaboration and well-being.",
+                },
+              ].map((perk, i) => (
+                <div key={i} className="p-6 bg-gray-100 dark:bg-[#2A2A3D] rounded-lg shadow">
+                  {perk.icon}
+                  <h4 className="text-xl font-semibold mb-2 text-black dark:text-white">{perk.title}</h4>
+                  <p className="text-gray-600 dark:text-gray-300">{perk.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+
+        {/* APPLY MODAL */}
+        <Dialog open={isOpen} onOpenChange={(open) => { if (!open) closeModal(); }}>
+          <DialogContent className="sm:max-w-md bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
+            <DialogHeader>
+              <DialogTitle className="text-lg text-blue-600 dark:text-blue-400">
+                Apply for {selectedJob?.title}
+              </DialogTitle>
+              <DialogDescription>
+                {loading ? (
+                  "Checking login status..."
+                ) : user ? (
+                  <>
+                    <span><strong>Type:</strong> {selectedJob?.type}</span><br />
+                    <span><strong>Location:</strong> {selectedJob?.location}</span><br />
+                    <span><strong>Description:</strong> {selectedJob?.description}</span>
+                  </>
+                ) : (
+                  "Please log in to submit an application."
+                )}
+              </DialogDescription>
+            </DialogHeader>
+
+            {error && (
+              <div className="p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
+            {success && (
+              <div className="p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
+                <p className="text-green-600 text-sm">{success}</p>
+              </div>
+            )}
+
+            {user ? (
+              <form id="application-form" onSubmit={handleSubmit} className="space-y-4 mt-4">
+                <Input
+                  type="text"
+                  placeholder="Your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border rounded dark:bg-gray-800 dark:text-white"
+                  disabled={loading}
+                />
+                <Input
+                  type="email"
+                  placeholder="Your Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border rounded dark:bg-gray-800 dark:text-white"
+                  disabled={loading}
+                />
+                <Textarea
+                  rows={4}
+                  placeholder="Cover Letter"
+                  value={coverLetter}
+                  onChange={(e) => setCoverLetter(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border rounded dark:bg-gray-800 dark:text-white"
+                  disabled={loading}
+                />
+
+                {/* Upload CV link and hidden file input */}
+                <div>
+                  <a
+                    href="#"
+                    onClick={handleCvClick}
+                    className="text-blue-600 underline cursor-pointer select-none"
+                    title="Click to upload or change your CV"
+                  >
+                    {selectedFile ? selectedFile.name : "Upload CV"}
+                  </a>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept="application/pdf"
+                    style={{ display: "none" }}
+                  />
+                  {cvError && (
+                    <p className="text-red-600 mt-1 text-sm">{cvError}</p>
+                  )}
+                </div>
+
+                <Button
+                  asChild
+                  className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+                >
+                  <button type="submit" form="application-form" disabled={loading}>
+                    {loading ? "Submitting..." : "Submit Application"}
+                  </button>
+                </Button>
+              </form>
+            ) : (
+              <Button
+                asChild
+                className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+              >
+                <a href="/login">Log in to Apply</a>
+              </Button>
+            )}
+          </DialogContent>
+        </Dialog>
+      </>
+    </ProtectedRoute>
   );
 }
