@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { account } from "@/lib/appwriteServices";
+import { AppwriteException } from "appwrite";
 
 interface Props {
     children: React.ReactNode;
@@ -19,11 +20,24 @@ const ProtectedRoute: React.FC<Props> = ({ children }) => {
                 await account.get();
                 console.log("ProtectedRoute: User authenticated");
                 setIsAuthenticated(true);
-            } catch (error: any) {
+            } catch (error: unknown) { // Use 'unknown' to fix ts(1196)
+                let errorMessage = "Unknown error";
+                let errorCode: number | undefined;
+                let errorType: string | undefined;
+
+                if (error instanceof AppwriteException) {
+                    errorMessage = error.message;
+                    errorCode = error.code;
+                    errorType = error.type;
+                } else if (error instanceof Error) {
+                    errorMessage = error.message;
+                }
+
                 console.error("ProtectedRoute auth error:", {
-                    message: error.message,
-                    code: error.code,
-                    type: error.type,
+                    message: errorMessage,
+                    code: errorCode,
+                    type: errorType,
+                    stack: error instanceof Error ? error.stack : undefined,
                 });
                 setIsAuthenticated(false);
                 const redirectUrl = `/login?redirect=${encodeURIComponent(window.location.pathname)}`;
