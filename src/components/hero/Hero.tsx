@@ -20,7 +20,7 @@ const Hero = () => {
                         We build scalable web apps, design modern interfaces, and deliver
                         top-notch DevOps solutions for startups and enterprises.
                     </p>
-                    <div className="mt-8 flex flex-wrap items-center gap-4">
+                    <div className="mt-8 flex flex-wrap items-center gap-4 max-sm:justify-center">
                         {/* Get started button */}
                         <Button
                             asChild
@@ -29,8 +29,6 @@ const Hero = () => {
                         >
                             <a href="/services">Get Started</a>
                         </Button>
-
-                        
                     </div>
                 </div>
 
