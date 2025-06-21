@@ -5,7 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next"
 import { SessionProvider } from 'next-auth/react';
-import { Toaster } from 'sonner';
+import { Toaster } from '@/components/ui/sonner';
 import WelcomeCard from '@/components/WelcomePopover';
 import './globals.css';
 

@@ -6,9 +6,10 @@ import Footer from '@/components/Footer/Footer'
 import Newsletter from '@/components/NewsLetter/NewsLetter'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, Share2, Copy, Tag } from 'lucide-react'
+import { Search, Copy, Tag, LucideBookOpen } from 'lucide-react'
 import Image from 'next/image'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { toast } from 'sonner'
 const dummyBlogs = [
   {
     id: 1,
@@ -115,9 +116,12 @@ export default function BlogPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <Button variant="ghost" className="text-blue-600 hover:text-blue-800">
-                        <Share2 className="w-4 h-4 mr-1" /> Share
+                        <LucideBookOpen className="w-4 h-4 mr-1" /> Open
                       </Button>
-                      <Button variant="ghost" className="text-blue-600 hover:text-blue-800">
+                      <Button variant="ghost" className="text-blue-600 hover:text-blue-800" onClick={() =>
+                        toast("Link copied successfully", {
+                          duration: 3000
+                        })}>
                         <Copy className="w-4 h-4 mr-1" /> Copy Link
                       </Button>
                     </div>
