@@ -55,7 +55,7 @@ export default function WelcomeCard() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
             >
-                <Card className="p-6 bg-white dark:bg-zinc-900 shadow-xl rounded-2xl min-h-[180px] flex flex-col justify-center items-center">
+                <Card className="p-6 transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] shadow-xl rounded-2xl min-h-[180px] flex flex-col justify-center items-center">
                     <AnimatePresence>
                         {loading ? (
                             <motion.div
@@ -76,15 +76,17 @@ export default function WelcomeCard() {
                                 exit={{ opacity: 0 }}
                                 className="w-full"
                             >
-                                <h3 className="text-lg font-semibold mb-2">Welcome to Danamo Tech 🎉</h3>
+                                <h3 className="text-lg font-semibold mb-2">Welcome to <span className='text-blue-600 dark:text-blue-400'>Danamo</span> Tech 🎉</h3>
                                 <p className="text-sm text-muted-foreground mb-4">
                                     We&apos;re excited to have you here! Let&apos;s get you started by setting up your account in Settings.
                                 </p>
                                 <div className="flex justify-end gap-2">
-                                    <Button variant="outline" onClick={() => setShow(false)}>
+                                    <Button variant="outline" className="bg-white text-blue-600 border border-blue-600 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+                                        onClick={() => setShow(false)}>
                                         Maybe Later
                                     </Button>
-                                    <Button onClick={() => router.push('/account')}>
+                                    <Button onClick={() => router.push('/account')} className="bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+                                    >
                                         Go to Settings
                                     </Button>
                                 </div>
