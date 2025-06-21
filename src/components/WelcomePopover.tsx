@@ -85,7 +85,10 @@ export default function WelcomeCard() {
                                         onClick={() => setShow(false)}>
                                         Maybe Later
                                     </Button>
-                                    <Button onClick={() => router.push('/account')} className="bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+                                    <Button onClick={() => {
+                                        setShow(false)
+                                        router.push('/account')
+                                    }} className="bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
                                     >
                                         Go to Settings
                                     </Button>
