@@ -1,132 +1,142 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { useRouter, usePathname } from 'next/navigation'
-import { account, databases } from '@/lib/appwriteServices'
-import { Query } from 'appwrite'
-import { Loader2 } from 'lucide-react'
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useRouter, usePathname } from "next/navigation";
+import { account, databases } from "@/lib/appwriteServices";
+import { Query } from "appwrite";
+import { Loader2 } from "lucide-react";
 
 // Define type for show state
-type PopoverState = null | 'welcome' | 'greeting'
+type PopoverState = null | "welcome" | "greeting";
 
 export default function WelcomeCard() {
-  const [show, setShow] = React.useState<PopoverState>(null) // Explicitly type show state
-  const [loading, setLoading] = React.useState(true)
-  const [userData, setUserData] = React.useState({ firstName: '', lastName: '' })
-  const router = useRouter()
-  const pathname = usePathname()
+  const [show, setShow] = React.useState<PopoverState>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [userData, setUserData] = React.useState({ firstName: "", lastName: "" });
+  const router = useRouter();
+  const pathname = usePathname();
 
   React.useEffect(() => {
     const checkUserStatus = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000)) // 2s delay
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // 2s delay
 
-      if (pathname !== '/' && pathname !== '/dashboard') {
-        setLoading(false)
-        return
+      if (pathname !== "/" && pathname !== "/dashboard") {
+        console.log("Pathname not / or /dashboard, skipping WelcomeCard");
+        setLoading(false);
+        return;
       }
 
       try {
-        const user = await account.get()
-        const isProfileIncomplete = !user.name || !user.email
+        const user = await account.get();
+        console.log("User fetched:", { id: user.$id, email: user.email, name: user.name });
 
         // Fetch profile from user_profiles collection
         const profile = await databases.listDocuments(
-          '6840196a001ea51cd944',
-          '68482e0c00163d490722',
-          [Query.equal('userId', user.$id)]
-        )
+          "6840196a001ea51cd944",
+          "68482e0c00163d490722",
+          [Query.equal("userId", user.$id)]
+        );
+        console.log("Profile fetched:", profile.documents);
 
-        let profileData = { firstName: '', lastName: '', profileSetup: false, hasSeenGreeting: false }
+        let profileData = { firstName: "", lastName: "", profileSetup: false, hasSeenGreeting: false };
+        let isProfileIncomplete = true; // Default to incomplete for OAuth users
+
         if (profile.documents.length > 0) {
           profileData = {
-            firstName: profile.documents[0].firstName || '',
-            lastName: profile.documents[0].lastName || '',
-            profileSetup: profile.documents[0].profileSetup ?? false, // Handle missing attribute
-            hasSeenGreeting: profile.documents[0].hasSeenGreeting ?? false, // Handle missing attribute
-          }
+            firstName: profile.documents[0].firstName || "",
+            lastName: profile.documents[0].lastName || "",
+            profileSetup: profile.documents[0].profileSetup ?? false,
+            hasSeenGreeting: profile.documents[0].hasSeenGreeting ?? false,
+          };
+          // Profile is complete only if firstName and lastName are non-empty
+          isProfileIncomplete = !profileData.firstName || !profileData.lastName;
         }
 
-        setUserData({ firstName: profileData.firstName, lastName: profileData.lastName })
+        setUserData({ firstName: profileData.firstName, lastName: profileData.lastName });
+        console.log("Profile data set:", profileData);
 
         // Check if welcome popover should be shown
-        const hasDismissedWelcome = user.prefs?.hasSeenWelcome || false
+        const hasDismissedWelcome = user.prefs?.hasSeenWelcome || false;
         if (isProfileIncomplete && !hasDismissedWelcome) {
-          setShow('welcome')
+          console.log("Showing welcome card: incomplete profile and not dismissed");
+          setShow("welcome");
         }
         // Check if greeting popover should be shown
         else if (profileData.profileSetup && !profileData.hasSeenGreeting) {
-          setShow('greeting')
+          console.log("Showing greeting card: profile complete and not seen greeting");
+          setShow("greeting");
         } else {
-          setShow(null)
+          console.log("No card shown: profile complete or cards dismissed");
+          setShow(null);
         }
       } catch (err) {
-        console.log('User not logged in or error fetching user:', err)
-        setShow(null)
+        console.error("Error in checkUserStatus:", err);
+        setShow(null);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    checkUserStatus()
-  }, [pathname])
+    checkUserStatus();
+  }, [pathname]);
 
   const handleMaybeLater = async () => {
     try {
-      const user = await account.get()
+      const user = await account.get();
       await account.updatePrefs({
         ...user.prefs,
         hasSeenWelcome: true,
-      })
-      setShow(null)
+      });
+      setShow(null);
     } catch (err) {
-      console.log('Error updating preferences:', err)
-      setShow(null)
+      console.error("Error updating preferences:", err);
+      setShow(null);
     }
-  }
+  };
 
   const handleGoToSettings = async () => {
     try {
-      const user = await account.get()
+      const user = await account.get();
       await account.updatePrefs({
         ...user.prefs,
         hasSeenWelcome: true,
-      })
-      setShow(null)
-      router.push('/account')
+      });
+      setShow(null);
+      router.push("/account");
     } catch (err) {
-      console.log('Error updating preferences:', err)
-      setShow(null)
-      router.push('/account')
+      console.error("Error updating preferences:", err);
+      setShow(null);
+      router.push("/account");
     }
-  }
+  };
 
   const handleCloseGreeting = async () => {
     try {
-      const user = await account.get()
+      const user = await account.get();
       const profile = await databases.listDocuments(
-        '6840196a001ea51cd944',
-        '68482e0c00163d490722',
-        [Query.equal('userId', user.$id)]
-      )
+        "6840196a001ea51cd944",
+        "68482e0c00163d490722",
+        [Query.equal("userId", user.$id)]
+      );
       if (profile.documents.length > 0) {
         await databases.updateDocument(
-          '6840196a001ea51cd944',
-          '68482e0c00163d490722',
+          "6840196a001ea51cd944",
+          "68482e0c00163d490722",
           profile.documents[0].$id,
           { hasSeenGreeting: true }
-        )
+        );
       }
-      setShow(null)
+      setShow(null);
     } catch (err) {
-      console.log('Error updating profile:', err)
-      setShow(null)
+      console.error("Error updating profile:", err);
+      setShow(null);
     }
-  }
+  };
 
-  if (!show) return null
+  if (!show) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm px-4">
@@ -149,7 +159,7 @@ export default function WelcomeCard() {
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
                 <p className="text-sm text-muted-foreground">Loading...</p>
               </motion.div>
-            ) : show === 'welcome' ? (
+            ) : show === "welcome" ? (
               <motion.div
                 key="welcome"
                 initial={{ opacity: 0 }}
@@ -207,5 +217,5 @@ export default function WelcomeCard() {
         </Card>
       </motion.div>
     </div>
-  )
+  );
 }
