@@ -114,19 +114,19 @@ function Contact() {
             <li className="flex items-center">
               <Mail className="text-blue-600 dark:text-blue-400" size={20} />
               <a href="mailto:info@example.com" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
-                info@example.com
+                danamotech@gmail.com
               </a>
             </li>
             <li className="flex items-center">
               <Phone className="text-blue-600 dark:text-blue-400" size={20} />
               <a href="tel:+254797233957" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
-                +254797233957
+                +254785640048
               </a>
             </li>
             <li className="flex items-center">
               <MapPin className="text-blue-600 dark:text-blue-400" size={20} />
               <span className="text-black dark:text-white text-sm ml-4">
-                123 Street, 254 House
+                Nairobi, Kenya
               </span>
             </li>
           </ul>

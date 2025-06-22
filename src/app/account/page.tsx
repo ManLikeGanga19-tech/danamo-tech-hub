@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -20,7 +19,7 @@ interface AppwriteUser {
 }
 
 export default function AccountSettings() {
-    const [user, setUser] = useState<AppwriteUser | null>(null); // Type user as Appwriteuser | null
+    const [user, setUser] = useState<AppwriteUser | null>(null);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -114,7 +113,7 @@ export default function AccountSettings() {
                     "6840196a001ea51cd944",
                     "68482e0c00163d490722",
                     profile.documents[0].$id,
-                    { firstName, lastName, email, phone, bio }
+                    { firstName, lastName, email, phone, bio, profileSetup: true }
                 );
                 console.log("Profile updated for userId:", user.$id);
             } else {
@@ -129,6 +128,7 @@ export default function AccountSettings() {
                         email,
                         phone,
                         bio,
+                        profileSetup: true,
                     },
                     [
                         Permission.read(Role.user(user.$id)),
@@ -146,6 +146,7 @@ export default function AccountSettings() {
             setPhone("");
             setBio("");
             setIsSubmitted(true);
+            router.push('/'); // Redirect to dashboard to trigger greeting popover
         } catch (err: unknown) {
             console.error("Error saving changes:", {
                 message: err instanceof Error ? err.message : String(err),
@@ -164,7 +165,8 @@ export default function AccountSettings() {
                     <div className="absolute h-16 w-16 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
                     <div className="h-12 w-12 animate-pulse rounded-full bg-blue-600/20"></div>
                 </div>
-            </div>);
+            </div>
+        );
     }
 
     if (!user && error) {
@@ -181,9 +183,11 @@ export default function AccountSettings() {
     return (
         <>
             <Navbar1 />
-            <div className="bg-background text-foreground min-h-screen items-center justify-center flex flex-col bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15] ">
-                <div className="max-w-2xl w-full px-6 ">
-                    <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">Account <span className="text-black dark:text-white"> Settings</span></h1>
+            <div className="bg-background text-foreground min-h-screen items-center justify-center flex flex-col bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
+                <div className="max-w-2xl w-full px-6">
+                    <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">
+                        Account <span className="text-black dark:text-white"> Settings</span>
+                    </h1>
                     {error && <p className="text-red-500 mb-4">{error}</p>}
                     {success && <p className="text-green-500 mb-4">{success}</p>}
                     <form className="space-y-6">
@@ -255,10 +259,9 @@ export default function AccountSettings() {
                             <Button
                                 asChild
                                 onClick={handleSave}
-                                className={`bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white ${isSubmitted ? 'opacity-50 cursor-not-allowed' : ''} `}
+                                className={`bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white ${ isSubmitted ? 'opacity-50 cursor-not-allowed' : '' } `}
                             >
-                                <button type="button" disabled={isSubmitted}
-                                >
+                                <button type="button" disabled={isSubmitted}>
                                     Save Changes
                                 </button>
                             </Button>

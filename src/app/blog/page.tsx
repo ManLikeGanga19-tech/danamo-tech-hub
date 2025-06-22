@@ -1,15 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import { Navbar1 } from '@/components/navbar/Navbar'
-import Footer from '@/components/Footer/Footer'
-import Newsletter from '@/components/NewsLetter/NewsLetter'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Search, Copy, Tag, LucideBookOpen } from 'lucide-react'
-import Image from 'next/image'
-import ProtectedRoute from '@/components/ProtectedRoute'
-import { toast } from 'sonner'
+import { useState } from 'react';
+import { Navbar1 } from '@/components/navbar/Navbar';
+import Footer from '@/components/Footer/Footer';
+import Newsletter from '@/components/NewsLetter/NewsLetter';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Search, Copy, Tag, LucideBookOpen } from 'lucide-react';
+import Image from 'next/image';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import { toast } from 'sonner';
 const dummyBlogs = [
   {
     id: 1,
