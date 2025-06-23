@@ -40,8 +40,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { Logo } from "@/components/Logo";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { account, databases, ID } from "@/lib/appwriteServices"; // Added databases import
-import { Query } from "appwrite";
+import { account, databases} from "@/lib/appwriteServices"; // Added databases import
 
 // Define Appwrite User type
 type User = Models.User<Models.Preferences>;
