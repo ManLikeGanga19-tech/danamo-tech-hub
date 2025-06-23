@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Models } from "appwrite";
+import { AppwriteException, Models } from "appwrite";
 import {
     Menu,
     Moon,
@@ -128,12 +128,20 @@ export const Navbar1 = ({
                         currentUser.$id
                     );
                     setProfileVerified(!!profile.profileSetup);
-                } catch (err: AppwriteException) { // Line 144
-                    console.error("Profile fetch error:", err.message, err.code, err.type);
+                } catch (err: unknown) { // Use 'unknown' instead of 'AppwriteException'
+                    if (err instanceof AppwriteException) {
+                        console.error("Profile fetch error:", err.message, err.code, err.type);
+                    } else {
+                        console.error("Unexpected profile fetch error:", err);
+                    }
                     setProfileVerified(false);
                 }
-            } catch (err: AppwriteException) { // Line 167
-                console.log("No session:", err.message, err.code, err.type);
+            } catch (err: unknown) { // Use 'unknown' instead of 'AppwriteException'
+                if (err instanceof AppwriteException) {
+                    console.log("No session:", err.message, err.code, err.type);
+                } else {
+                    console.log("Unexpected session error:", err);
+                }
                 setUser(null);
                 setProfileVerified(null);
             } finally {
