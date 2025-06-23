@@ -52,24 +52,15 @@ export default function LoginForm() {
     }
   };
 
-  const handleOAuthLogin = async (provider: OAuthProvider) => {
-    try {
-      const popup = window.open('', '_blank', 'width=600,height=700');
-
-      if (!popup) {
-        alert('Popup blocked. Please allow popups and try again.');
-        return;
-      }
-
-      await account.createOAuth2Session(provider);
-
-      // After login, reload current tab to refresh Navbar state
-      window.location.reload();
-    } catch (error) {
-      console.error("OAuth login error:", error);
-    }
+  const handleOAuthLogin = (provider: OAuthProvider) => {
+    console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.danamo-tech.co.ke";
+    account.createOAuth2Session(
+      provider,
+      `${baseUrl}`,
+      `${baseUrl}/login`
+    );
   };
-
 
   if (loading) {
     return (
