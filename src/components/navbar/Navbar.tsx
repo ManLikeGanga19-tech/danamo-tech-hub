@@ -120,7 +120,6 @@ export const Navbar1 = ({
     const [loading, setLoading] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    // Fetch current user session on mount
     useEffect(() => {
         const checkSession = async () => {
             try {
@@ -133,8 +132,18 @@ export const Navbar1 = ({
                 setLoading(false);
             }
         };
-        checkSession();
-    }, []); // Remove account from dependency array
+
+        // Force re-check if redirected from OAuth callback
+        if (window.location.href.includes("provider=")) {
+            // short delay to ensure Appwrite has created session
+            setTimeout(() => {
+                checkSession();
+            }, 300);
+        } else {
+            checkSession();
+        }
+    }, []);
+
 
     // Handle logout
     const handleLogout = async () => {
