@@ -4,11 +4,11 @@ import { appwriteClient } from "@/lib/appwriteServices";
 
 const account = new Account(appwriteClient);
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
     try {
         // Verify session
         const user = await account.get();
-        console.log("Appwrite OAuth callback: User logged in", user);
+        console.log("Appwrite OAuth callback: User logged in", { id: user.$id, email: user.email });
 
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
         if (!baseUrl) {
@@ -17,15 +17,17 @@ export async function GET(request: NextRequest) {
         }
 
         return NextResponse.redirect(new URL("/", baseUrl));
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Appwrite OAuth callback error:", error);
 
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
         let redirectUrl = "/login?error=oauth_failed";
 
-        if (error.code === 401 && error.type === "general_unauthorized_scope") {
-            console.log("No session found, redirecting to login...");
-            redirectUrl = "/login?error=session_failed";
+        if (error instanceof Error && "code" in error && "type" in error) {
+            if (error.code === 401 && error.type === "general_unauthorized_scope") {
+                console.log("No session found, redirecting to login...");
+                redirectUrl = "/login?error=session_failed";
+            }
         }
 
         try {
