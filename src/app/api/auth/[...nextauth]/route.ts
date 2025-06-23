@@ -72,14 +72,15 @@ const authOptions: NextAuthOptions = {
             try {
               await account.create(ID.unique(), email, ID.unique(), name);
               console.log("New Appwrite user created for Google login:", email);
-            } catch (err: any) {
-              if (err.code === 409) {
+            } catch (err: unknown) {
+              if (err instanceof Error && "code" in err && err.code === 409) {
                 console.log("Appwrite user already exists, skipping creation.");
               } else {
                 console.error("Failed to create Appwrite user:", err);
                 return false;
               }
             }
+
 
             // Create a basic user_profiles doc (safe, non-blocking)
             try {
