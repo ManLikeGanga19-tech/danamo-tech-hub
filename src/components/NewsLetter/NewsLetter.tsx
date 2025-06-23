@@ -80,7 +80,7 @@ export default function Newsletter() {
             <h3 className="text-2xl p-4 font-semibold tracking-tight text-black dark:text-white text-center">
               Subscribe to our <span className="text-blue-600 dark:text-blue-400">newsletter</span>
             </h3>
-            <p className="mt-4 text-lg text-black dark:text-white text-center">
+            <p className="mt-4 text-lg text-black dark:text-white sm:text-left md:text-center">
               Get the latest updates on cutting edge tech innovations, product launches, and exclusive insights from our team - straight to your inbox
             </p>
 

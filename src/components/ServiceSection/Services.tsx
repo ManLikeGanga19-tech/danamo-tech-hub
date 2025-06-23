@@ -100,28 +100,30 @@ const InfiniteSlider = ({
     }, [controls, animationX])
 
     return (
-        <section className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white  to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]">
-            <div ref={containerRef} className="overflow-x-auto cursor-pointer scrollbar-hide">
-                <motion.div
-                    className="flex gap-6 w-max"
-                    animate={controls}
-                >
-                    {[...items, ...items].map((service, index) => (
-                        <Card
-                            key={index}
-                            className="w-[300px] shrink-0 hover:shadow-lg transition-shadow duration-300 hover:border-blue-200"
-                        >
-                            <CardHeader className="flex flex-col gap-3 items-start">
-                                {service.icon}
-                                <CardTitle className="text-blue-600 dark:text-blue-400">
-                                    {service.title}
-                                </CardTitle>
-                                <CardDescription>{service.description}</CardDescription>
-                            </CardHeader>
-                            <CardContent />
-                        </Card>
-                    ))}
-                </motion.div>
+        <section className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]">
+            <div className="flex justify-center">
+                <div ref={containerRef} className="overflow-x-auto cursor-pointer scrollbar-hide max-w-full">
+                    <motion.div
+                        className="flex gap-6 w-max"
+                        animate={controls}
+                    >
+                        {[...items, ...items].map((service, index) => (
+                            <Card
+                                key={index}
+                                className="w-[300px] shrink-0 hover:shadow-lg transition-shadow duration-300 hover:border-blue-200"
+                            >
+                                <CardHeader className="flex flex-col gap-3 items-start">
+                                    {service.icon}
+                                    <CardTitle className="text-blue-600 dark:text-blue-400">
+                                        {service.title}
+                                    </CardTitle>
+                                    <CardDescription>{service.description}</CardDescription>
+                                </CardHeader>
+                                <CardContent />
+                            </Card>
+                        ))}
+                    </motion.div>
+                </div>
             </div>
 
             {/* Left gradient */}
@@ -139,7 +141,7 @@ export default function Services() {
             className="w-full py-16 bg-gradient-to-b from-gray-100 to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
             id="services"
         >
-            <div className="container px-4 md:px-8">
+            <div className="container mx-auto max-w-6xl px-4 md:px-8">
                 <h2 className="text-3xl font-bold text-center mb-10 text-blue-600 dark:text-blue-400">
                     Our <span className="text-black dark:text-white">Services</span>
                 </h2>

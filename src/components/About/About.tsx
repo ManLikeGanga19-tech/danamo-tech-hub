@@ -35,7 +35,7 @@ const AboutUs = () => {
                 {/* Text Section with responsive button */}
                 <div className="w-full md:w-1/2 relative px-4 pb-16 flex flex-col items-center justify-start min-h-[300px]">
                     {/* Text */}
-                    <p className="text-lg text-black dark:text-white whitespace-pre-line mt-6 text-center leading-relaxed">
+                    <p className="text-lg text-black dark:text-white whitespace-pre-line mt-6 sm:text-center md:text-left leading-relaxed">
                         {fullText}
                     </p>
 
