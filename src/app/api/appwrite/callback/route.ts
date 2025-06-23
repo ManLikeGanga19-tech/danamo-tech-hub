@@ -8,7 +8,7 @@ export async function GET() {
     try {
         // Verify session
         const user = await account.get();
-        console.log("Appwrite OAuth callback: User logged in", user);
+        console.log("Appwrite OAuth callback: User logged in", { id: user.$id, email: user.email });
 
         const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
         if (!baseUrl) {

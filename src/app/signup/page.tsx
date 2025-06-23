@@ -4,8 +4,9 @@ import { useState } from "react";
 import Image from "next/image";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { account, ID } from "@/lib/appwriteServices"; // Import account and ID
+import { account, ID } from "@/lib/appwriteServices";
 import { Logo } from "@/components/Logo";
+import { signIn } from "next-auth/react";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -15,12 +16,15 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
+      setLoading(false);
       return;
     }
 
@@ -38,6 +42,19 @@ export default function SignUp() {
       console.error("Appwrite signup error:", err);
       const errorMessage = err instanceof Error ? err.message : "Failed to create account.";
       setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setLoading(true);
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } catch (err) {
+      console.error("Google signup error:", err);
+      setError("Failed to sign up with Google.");
+      setLoading(false);
     }
   };
 
@@ -63,10 +80,10 @@ export default function SignUp() {
           )}
 
           {success && (
-            <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-md">
-              <p className="text-green-600 text-sm flex items-center">
+            <div className="mt-6 mb-6 p-4 bg-blue-600 border border-blue-200 rounded-md">
+              <p className="text-blue-50 dark:text-blue-400 text-sm font-semibold flex items-center justify-center">
                 <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 2 0 00-1.414-1.414L9 10.586 7.707 9.293a1 2 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 {success}
               </p>
@@ -76,7 +93,7 @@ export default function SignUp() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">Email</label>
+              <label className="block text-sm font-500 text-blue-600 dark:text-blue-400 mb-1">Email</label>
               <div className="relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -88,13 +105,14 @@ export default function SignUp() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={loading}
                 />
               </div>
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">Password</label>
+              <label className="block text-sm font-500 text-blue-600 dark:text-blue-400 mb-1">Password</label>
               <div className="relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -106,12 +124,14 @@ export default function SignUp() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={loading}
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    disabled={loading}
                   >
                     {showPassword ? (
                       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -131,24 +151,28 @@ export default function SignUp() {
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-medium text-blue-600 dark:text-blue-400 mb-1">Confirm Password</label>
+              <label className="block text-sm font-500 text-blue-600 dark:text-blue-400 mb-1">Confirm Password</label>
               <div className="relative rounded-md shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  <svg className="h-5 w-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
                 </div>
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   className="pl-10 w-full py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                   placeholder="***"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)} // Fix: Use setConfirmPassword
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
+                  disabled={loading}
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    disabled={loading}
                   >
                     {showConfirmPassword ? (
                       <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -167,12 +191,28 @@ export default function SignUp() {
             </div>
 
             <Button
-              className="w-full rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-              {...({ type: "submit" } as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+              className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+              {...({ type: "submit", disabled: loading } as React.ButtonHTMLAttributes<HTMLButtonElement>)}
             >
               Sign up
             </Button>
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-gray-600 dark:text-gray-300 text-sm">Or sign up with</p>
+          </div>
+
+          <div className="mt-3">
+            <Button
+              className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+              {...({ onClick: handleGoogleSignup, disabled: loading, "aria-label": "Sign up with Google" } as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+            >
+              <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032 s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2 C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.854h-9.426V10.239z" />
+              </svg>
+              Sign up with Google
+            </Button>
+          </div>
 
           <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
             Already have an account?{" "}
