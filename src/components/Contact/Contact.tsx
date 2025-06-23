@@ -113,13 +113,13 @@ function Contact() {
           <ul className="mt-12 space-y-8">
             <li className="flex items-center">
               <Mail className="text-blue-600 dark:text-blue-400" size={20} />
-              <a href="mailto:info@example.com" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
+              <a href="mailto:danamotech@gmail.com" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
                 danamotech@gmail.com
               </a>
             </li>
             <li className="flex items-center">
               <Phone className="text-blue-600 dark:text-blue-400" size={20} />
-              <a href="tel:+254797233957" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
+              <a href="tel:+254785640048" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
                 +254785640048
               </a>
             </li>

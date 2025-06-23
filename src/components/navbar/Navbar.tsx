@@ -128,7 +128,7 @@ export const Navbar1 = ({
                         currentUser.$id
                     );
                     setProfileVerified(!!profile.profileSetup);
-                } catch (err: unknown) { // Use 'unknown' instead of 'AppwriteException'
+                } catch (err: unknown) { 
                     if (err instanceof AppwriteException) {
                         console.error("Profile fetch error:", err.message, err.code, err.type);
                     } else {
@@ -136,7 +136,7 @@ export const Navbar1 = ({
                     }
                     setProfileVerified(false);
                 }
-            } catch (err: unknown) { // Use 'unknown' instead of 'AppwriteException'
+            } catch (err: unknown) { 
                 if (err instanceof AppwriteException) {
                     console.log("No session:", err.message, err.code, err.type);
                 } else {
