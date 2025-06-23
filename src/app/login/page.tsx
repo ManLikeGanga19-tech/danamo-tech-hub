@@ -54,7 +54,7 @@ export default function LoginForm() {
 
   const handleOAuthLogin = (provider: OAuthProvider) => {
     console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.danamo-tech.co.ke";
     account.createOAuth2Session(
       provider,
       `${baseUrl}`,

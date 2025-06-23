@@ -20,7 +20,7 @@ export async function GET() {
     } catch (error: unknown) {
         console.error("Appwrite OAuth callback error:", error);
 
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.danamo-tech.co.ke";
         let redirectUrl = "/login?error=oauth_failed";
 
         if (
