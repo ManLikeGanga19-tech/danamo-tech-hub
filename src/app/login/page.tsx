@@ -52,15 +52,24 @@ export default function LoginForm() {
     }
   };
 
-  const handleOAuthLogin = (provider: OAuthProvider) => {
-    console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://www.danamo-tech.co.ke";
-    account.createOAuth2Session(
-      provider,
-      `${baseUrl}`,
-      `${baseUrl}/login`
-    );
+  const handleOAuthLogin = async (provider: OAuthProvider) => {
+    try {
+      const popup = window.open('', '_blank', 'width=600,height=700');
+
+      if (!popup) {
+        alert('Popup blocked. Please allow popups and try again.');
+        return;
+      }
+
+      await account.createOAuth2Session(provider);
+
+      // After login, reload current tab to refresh Navbar state
+      window.location.reload();
+    } catch (error) {
+      console.error("OAuth login error:", error);
+    }
   };
+
 
   if (loading) {
     return (
@@ -194,7 +203,7 @@ export default function LoginForm() {
               </button>
             </Button>
                 {/* facebook button */}
-            {/* <Button
+            <Button
               asChild
               className="w-full bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
             >
@@ -207,7 +216,7 @@ export default function LoginForm() {
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </button>
-            </Button> */}
+            </Button>
           </div>
 
           <div className="mt-6 text-center text-sm">
