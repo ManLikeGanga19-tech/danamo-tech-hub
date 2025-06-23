@@ -101,15 +101,18 @@ const authOptions: NextAuthOptions = {
           }
 
           return true;
-        } catch (error: any) {
-          console.error("Google sign-in error:", {
-            message: error.message,
-            code: error.code,
-            type: error.type,
-            stack: error.stack,
-          });
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            console.error("Google sign-in error:", {
+              message: error.message,
+              stack: error.stack,
+            });
+          } else {
+            console.error("Google sign-in error:", error);
+          }
           return false;
         }
+
       }
 
       return true;
