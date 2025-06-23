@@ -117,55 +117,23 @@ export const Navbar1 = ({
 
     useEffect(() => {
         const checkSession = async () => {
-            setLoading(true);
             try {
-                // Log environment variables
-                console.log("Env vars:", {
-                    dbId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
-                    collectionId: process.env.NEXT_PUBLIC_APPWRITE_USER_PROFILE_COLLECTION_ID,
-                });
-
-                // Get current user
                 const currentUser = await account.get();
-                console.log("Current user:", currentUser);
                 setUser(currentUser);
 
-                // Fetch profile with retries
-                const fetchProfile = async (userId: string, retries = 3, delay = 1000): Promise<boolean> => {
-                    for (let attempt = 1; attempt <= retries; attempt++) {
-                        try {
-                            const profile = await databases.getDocument(
-                                process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-                                process.env.NEXT_PUBLIC_APPWRITE_USER_PROFILE_COLLECTION_ID!,
-                                userId
-                            );
-                            console.log("Profile fetched:", profile);
-                            return !!profile.profileSetup;
-                        } catch (err: any) {
-                            if (err.code === 404) {
-                                console.warn("Profile not found, creating default...");
-                                await databases.createDocument(
-                                    process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-                                    process.env.NEXT_PUBLIC_APPWRITE_USER_PROFILE_COLLECTION_ID!,
-                                    userId,
-                                    { profileSetup: false }
-                                );
-                                return false;
-                            }
-                            if (attempt === retries || err.code !== 429) {
-                                throw err;
-                            }
-                            console.warn(`Retry ${attempt}/${retries} after error:`, err);
-                            await new Promise((resolve) => setTimeout(resolve, delay));
-                        }
-                    }
-                    return false;
-                };
-
-                const verified = await fetchProfile(currentUser.$id);
-                setProfileVerified(verified);
-            } catch (err: any) {
-                console.error("Session or profile error:", err.message, err.code, err.type);
+                try {
+                    const profile = await databases.getDocument(
+                        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+                        process.env.NEXT_PUBLIC_APPWRITE_USER_PROFILE_COLLECTION_ID!,
+                        currentUser.$id
+                    );
+                    setProfileVerified(!!profile.profileSetup);
+                } catch (err: AppwriteException) { // Line 144
+                    console.error("Profile fetch error:", err.message, err.code, err.type);
+                    setProfileVerified(false);
+                }
+            } catch (err: AppwriteException) { // Line 167
+                console.log("No session:", err.message, err.code, err.type);
                 setUser(null);
                 setProfileVerified(null);
             } finally {
