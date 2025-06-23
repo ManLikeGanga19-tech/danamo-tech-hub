@@ -54,10 +54,11 @@ export default function LoginForm() {
 
   const handleOAuthLogin = (provider: OAuthProvider) => {
     console.log("NEXT_PUBLIC_APP_URL:", process.env.NEXT_PUBLIC_APP_URL);
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     account.createOAuth2Session(
       provider,
-      `${process.env.NEXT_PUBLIC_APP_URL}/`, // Note: This should be updated to /api/appwrite/callback as per previous fix
-      `${process.env.NEXT_PUBLIC_APP_URL}/login`
+      `${baseUrl}/api/appwrite/callback`,
+      `${baseUrl}/login`
     );
   };
 
