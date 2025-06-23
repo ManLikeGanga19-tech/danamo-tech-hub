@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+'use client';
+
 import { ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -8,10 +9,7 @@ import { Toaster } from '@/components/ui/sonner';
 import WelcomeCard from '@/components/WelcomePopover';
 import './globals.css';
 
-export const metadata: Metadata = {
-  title: "Danamo-Tech",
-  description: "Company head-quartered in Nairobi, Kenya. Founded in 2024, the company was established to bridge the technology gap faced by small business and startups in need of affordable digital solutions.",
-};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
