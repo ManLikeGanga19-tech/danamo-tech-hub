@@ -12,15 +12,17 @@ import AnnouncementBar from "@/components/AnnouncementBar";
 
 export default function Home() {
   return (
-    <main className=" text-black dark:bg-gray-900 dark:text-white flex flex-col ">
+    <main className="min-h-screen text-black dark:bg-gray-900 dark:text-white">
       <AnnouncementBar/>
       <Navbar1 />
-      <Hero />
-      <Services />
-      <About />
-      <Contact />
-      <NewsLetter />
-      <Footer />
+      <div className="flex flex-col">
+        <Hero />
+        <Services />
+        <About />
+        <Contact />
+        <NewsLetter />
+        <Footer />
+      </div>
     </main>
   );
 }

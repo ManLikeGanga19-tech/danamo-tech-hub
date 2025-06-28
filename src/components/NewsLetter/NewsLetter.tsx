@@ -72,32 +72,43 @@ export default function Newsletter() {
 
   return (
     <section
-      className="w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]"
+      className="relative w-full py-16 sm:py-20 lg:py-24 transition-colors duration-700 bg-gradient-to-br from-white via-gray-50 to-blue-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950/20 overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] dark:opacity-[0.05]"></div>
+      <div className="absolute top-10 right-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
-          <div className="max-w-xl lg:max-w-lg">
-            <h3 className="text-2xl p-4 font-semibold tracking-tight text-black dark:text-white text-center">
-              Subscribe to our <span className="text-blue-600 dark:text-blue-400">newsletter</span>
-            </h3>
-            <p className="mt-4 text-lg text-black dark:text-white sm:text-left md:text-center">
-              Get the latest updates on cutting edge tech innovations, product launches, and exclusive insights from our team - straight to your inbox
-            </p>
+          <div className="max-w-xl lg:max-w-lg space-y-8">
+            <div className="text-center lg:text-left">
+              <h3 className="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+                Subscribe to our{" "}
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
+                  newsletter
+                </span>
+              </h3>
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                Get the latest updates on cutting-edge tech innovations, product launches, and exclusive insights from our team — straight to your inbox.
+              </p>
+            </div>
 
-            {/* Centered and Responsive Form */}
-            <div className="mt-6 flex justify-center">
-              <div className="w-full max-w-md space-y-4">
-                {error && (
-                  <div className="p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
-                    <p className="text-red-600 text-sm">{error}</p>
-                  </div>
-                )}
-                {success && (
-                  <div className="p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
-                    <p className="text-green-600 text-sm">{success}</p>
-                  </div>
-                )}
-                <form id="newsletter-form" onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-4">
+            {/* Enhanced Form */}
+            <div className="space-y-6">
+              {error && (
+                <div className="p-4 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-red-600 dark:text-red-400 text-sm font-medium">{error}</p>
+                </div>
+              )}
+              {success && (
+                <div className="p-4 bg-green-50 dark:bg-green-950/50 border border-green-200 dark:border-green-800 rounded-lg">
+                  <p className="text-green-600 dark:text-green-400 text-sm font-medium">{success}</p>
+                </div>
+              )}
+              
+              <form id="newsletter-form" onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch gap-4">
+                <div className="flex-1">
                   <Label htmlFor="email-address" className="sr-only">
                     Email address
                   </Label>
@@ -106,53 +117,58 @@ export default function Newsletter() {
                     name="email"
                     type="email"
                     required
-                    placeholder="Enter your email"
+                    placeholder="Enter your email address"
                     autoComplete="email"
-                    className="w-full sm:flex-auto rounded-md bg-white/5 px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-blue-600 placeholder:text-gray-900 dark:placeholder:text-white focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                    className="h-12 text-base border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white/80 dark:bg-gray-800/80"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={!user || loading}
                   />
-                  {user ? (
-                    <Button
-                      asChild
-                      className="w-full sm:w-auto flex-none rounded-md px-3.5 py-2.5 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
-                    >
-                      <button type="submit" form="newsletter-form" disabled={loading}>
-                        Subscribe
-                        <BellIcon size={16} className="animate-pulse" />
-                      </button>
-                    </Button>
-                  ) : (
-                    <Button
-                      asChild
-                      className="w-full sm:w-auto flex-none rounded-md px-3.5 py-2.5 text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                    >
-                      <a href="/login">Log in to Subscribe</a>
-                    </Button>
-                  )}
-                </form>
-              </div>
+                </div>
+                {user ? (
+                  <button
+                    type="submit"
+                    form="newsletter-form"
+                    disabled={loading}
+                    className="h-12 px-6 text-base font-semibold bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg transition-all duration-300 ease-in-out dark:bg-blue-500 dark:hover:bg-blue-600 rounded-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
+                  >
+                    Subscribe
+                    <BellIcon size={16} />
+                  </button>
+                ) : (
+                  <Button
+                    asChild
+                    size="lg"
+                    className="h-12 px-6 text-base font-semibold bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg transition-all duration-300 ease-in-out dark:bg-blue-500 dark:hover:bg-blue-600 whitespace-nowrap"
+                  >
+                    <a href="/login">Log in to Subscribe</a>
+                  </Button>
+                )}
+              </form>
+              
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center lg:text-left">
+                Join 1,000+ subscribers. Unsubscribe at any time.
+              </p>
             </div>
           </div>
 
           <dl className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:pt-2">
-            <div className="flex flex-col items-start">
-              <div className="rounded-md dark:bg-white/5 p-2 ring-1 dark:ring-white/10">
-                <CalendarDays aria-hidden="true" className="size-6 text-blue-600 dark:text-blue-400" />
+            <div className="flex flex-col items-start space-y-4">
+              <div className="flex items-center justify-center w-12 h-12 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-200 dark:border-blue-800">
+                <CalendarDays aria-hidden="true" className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <dt className="mt-4 text-base font-semibold text-black dark:text-white">Weekly articles</dt>
-              <dd className="mt-2 text-base/7 text-gray-800 dark:text-white">
-                Explore curated articles on tech trends, software tips, and startup strategies delivered weekly
+              <dt className="text-lg font-bold text-gray-900 dark:text-gray-100">Weekly Articles</dt>
+              <dd className="text-base leading-7 text-gray-600 dark:text-gray-300">
+                Explore curated articles on tech trends, software tips, and startup strategies delivered weekly.
               </dd>
             </div>
-            <div className="flex flex-col items-start">
-              <div className="rounded-md dark:bg-white/5 p-2 ring-1 dark:ring-white/10">
-                <Hand aria-hidden="true" className="size-6 text-blue-600 dark:text-blue" />
+            <div className="flex flex-col items-start space-y-4">
+              <div className="flex items-center justify-center w-12 h-12 bg-green-50 dark:bg-green-900/30 rounded-xl border border-green-200 dark:border-green-800">
+                <Hand aria-hidden="true" className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
-              <dt className="mt-4 text-base font-semibold text-black dark:text-white">No spam</dt>
-              <dd className="mt-2 text-base/7 text-gray-800 dark:text-white">
-                Your time is valuable. We send only high-quality updates when it matters most
+              <dt className="text-lg font-bold text-gray-900 dark:text-gray-100">No Spam</dt>
+              <dd className="text-base leading-7 text-gray-600 dark:text-gray-300">
+                Your time is valuable. We send only high-quality updates when it matters most.
               </dd>
             </div>
           </dl>

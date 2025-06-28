@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import { Github, Linkedin } from "lucide-react"
+import { Fullscreen, Github, Linkedin } from "lucide-react"
 import { motion } from "framer-motion"
 import Image from "next/image";
 interface TeamCardProps {
@@ -28,6 +28,8 @@ export const TeamCard: React.FC<TeamCardProps> = ({ name, role, bio, imageUrl, s
                 src={imageUrl}
                 alt={name}
                 className="w-24 h-24 rounded-full object-cover mb-4 border-2 border-blue-500"
+                width={100}
+                height={100}
             />
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{name}</h3>
             <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">{role}</p>

@@ -22,18 +22,33 @@ export default function AnnouncementBar({ onClose }: AnnouncementBarProps) {
     }, [controls])
 
     return (
-        <div className="w-full transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F] text-black dark:text-white text-sm py-2 px-4 flex items-center justify-between relative overflow-hidden">
+        <div className="relative w-full bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 text-white text-sm py-3 px-4 flex items-center justify-center overflow-hidden shadow-md">
+            {/* Background pattern */}
+            <div className="absolute inset-0 bg-white/5 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.15)_1px,transparent_0)] bg-[length:16px_16px]"></div>
+            
             <motion.div
-                className="whitespace-nowrap"
+                className="whitespace-nowrap font-medium text-center relative z-10"
                 animate={controls}
                 initial={{ x: '100%' }}
-                transition={{ duration: 12, ease: 'linear' }}
+                transition={{ duration: 15, ease: 'linear' }}
             >
-                🎉 Welcome to Danamo Tech! Get 20% OFF all services this month — Book your FREE consultation today! 🚀
+                <span className="inline-flex items-center gap-2">
+                    <span className="text-lg">🎉</span>
+                    <span>Welcome to Danamo Tech! Get</span>
+                    <span className="font-bold bg-white/20 px-2 py-1 rounded-full">20% OFF</span>
+                    <span>all services this month — Book your</span>
+                    <span className="font-bold underline">FREE consultation</span>
+                    <span>today!</span>
+                    <span className="text-lg">🚀</span>
+                </span>
             </motion.div>
 
             {onClose && (
-                <button onClick={onClose} className="absolute right-2 top-2">
+                <button 
+                    onClick={onClose} 
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 hover:bg-white/20 rounded-full transition-colors duration-200 z-20"
+                    aria-label="Close announcement"
+                >
                     <X size={16} />
                 </button>
             )}
