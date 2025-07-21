@@ -86,12 +86,14 @@ function Contact() {
       setInterest("");
       setMessage("");
 
-      // Clear success after 3s
       setTimeout(() => setSuccess(""), 3000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Appwrite database error:", err);
-      const errorMessage = err?.message || "Failed to send message.";
-      setError(errorMessage);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to send message.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -237,7 +239,6 @@ function Contact() {
                   </Button>
                 )}
               </CardFooter>
-
             </Card>
           </div>
         </div>
