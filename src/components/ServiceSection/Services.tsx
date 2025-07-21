@@ -19,13 +19,12 @@ import {
     Zap,
 } from "lucide-react"
 import { motion, useAnimation } from "framer-motion"
-import "../../app/globals.css";
+import "../../app/globals.css"
 
-// Define Service interface
 interface Service {
-    title: string;
-    description: string;
-    icon: React.ReactNode;
+    title: string
+    description: string
+    icon: React.ReactNode
 }
 
 const services: Service[] = [
@@ -102,7 +101,7 @@ const InfiniteSlider = ({
     return (
         <section className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]">
             <div className="flex justify-center">
-                <div ref={containerRef} className="overflow-x-auto cursor-pointer scrollbar-hide max-w-full">
+                <div ref={containerRef} className="overflow-x-auto cursor-pointer scrollbar-hide w-full px-4">
                     <motion.div
                         className="flex gap-6 w-max"
                         animate={controls}
@@ -110,7 +109,7 @@ const InfiniteSlider = ({
                         {[...items, ...items].map((service, index) => (
                             <Card
                                 key={index}
-                                className="w-[300px] shrink-0 hover:shadow-lg transition-shadow duration-300 hover:border-blue-200"
+                                className="min-w-[250px] md:min-w-[300px] max-w-sm w-full shrink-0 hover:shadow-lg transition-shadow duration-300 hover:border-blue-200"
                             >
                                 <CardHeader className="flex flex-col gap-3 items-start">
                                     {service.icon}
@@ -141,17 +140,17 @@ export default function Services() {
             className="w-full py-16 bg-gradient-to-b from-gray-100 to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
             id="services"
         >
-            <div className="container mx-auto max-w-6xl px-4 md:px-8">
-                <h2 className="text-3xl font-bold text-center mb-10 text-blue-600 dark:text-blue-400">
-                    Our <span className="text-black dark:text-white">Services</span>
-                </h2>
+            <div className="w-full">
+                {/* Title Container with Padding */}
+                <div className="max-w-6xl mx-auto px-4 md:px-8">
+                    <h2 className="text-3xl font-bold text-center mb-10 text-blue-600 dark:text-blue-400">
+                        Our <span className="text-black dark:text-white">Services</span>
+                    </h2>
+                </div>
 
-                {/* Top: scroll right to left */}
+                {/* Full-width sliders */}
                 <InfiniteSlider items={topRow} direction="left" />
-
                 <div className="h-5" />
-
-                {/* Bottom: scroll left to right */}
                 <InfiniteSlider items={bottomRow} direction="right" />
             </div>
         </section>

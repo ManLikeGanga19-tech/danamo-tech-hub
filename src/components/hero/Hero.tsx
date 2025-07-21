@@ -11,7 +11,7 @@ const Hero = () => {
         >
             <div className="layout flex flex-col lg:flex-row items-center justify-between gap-10">
                 {/* Left Side: Text Content */}
-                <div className="text-center lg:text-left max-w-xl">
+                <div className="text-left max-w-xl">
                     <h1 className="text-4xl sm:text-5xl font-bold mb-4 leading-tight">
                         Empowering Digital Innovation with{" "}
                         <span className="text-blue-600 dark:text-blue-400">Danamo Tech</span>
@@ -20,7 +20,7 @@ const Hero = () => {
                         We build scalable web apps, design modern interfaces, and deliver
                         top-notch DevOps solutions for startups and enterprises.
                     </p>
-                    <div className="mt-8 flex flex-wrap items-center gap-4 max-sm:justify-center">
+                    <div className="mt-8 flex flex-wrap items-center gap-4">
                         {/* Get started button */}
                         <Button
                             asChild

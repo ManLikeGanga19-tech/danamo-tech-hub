@@ -222,7 +222,7 @@ export const Navbar1 = ({
     };
 
     return (
-        <section className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900 border-b shadow-sm">
+        <section className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900 shadow-sm">
             <div className="layout container py-3">
                 <nav className="hidden lg:flex justify-between items-center">
                     <Logo className="text-lg" />

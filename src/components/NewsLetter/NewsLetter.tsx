@@ -9,16 +9,12 @@ import { account, appwriteClient } from "@/lib/appwriteServices"
 import { Models, Databases, ID } from "appwrite"
 
 export default function Newsletter() {
-  // Form state
   const [email, setEmail] = useState("")
-  // User and loading state
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null)
   const [loading, setLoading] = useState(true)
-  // Feedback state
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
 
-  // Check if user is logged in
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -33,7 +29,6 @@ export default function Newsletter() {
     checkSession()
   }, [])
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
@@ -52,8 +47,8 @@ export default function Newsletter() {
     try {
       const databases = new Databases(appwriteClient)
       await databases.createDocument(
-        "6840196a001ea51cd944", // appwrite Database ID
-        "68406feb00364a7418b0", // newsletterCollection ID
+        "6840196a001ea51cd944",
+        "68406feb00364a7418b0",
         ID.unique(),
         {
           userID: user.$id,
@@ -71,21 +66,20 @@ export default function Newsletter() {
   }
 
   return (
-    <section
-      className="w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]"
-    >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
+    <section className="w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#0e0e15]">
+      <div className="layout">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-2">
           <div className="max-w-xl lg:max-w-lg">
-            <h3 className="text-2xl p-4 font-semibold tracking-tight text-black dark:text-white text-center">
-              Subscribe to our <span className="text-blue-600 dark:text-blue-400">newsletter</span>
-            </h3>
-            <p className="mt-4 text-lg text-black dark:text-white sm:text-left md:text-center">
-              Get the latest updates on cutting edge tech innovations, product launches, and exclusive insights from our team - straight to your inbox
-            </p>
+            <div className="flex-1">
+              <h3 className="text-2xl p-4 font-semibold tracking-tight text-black dark:text-white text-left">
+                Subscribe to our <span className="text-blue-600 dark:text-blue-400">newsletter</span>
+              </h3>
+              <p className="mt-4 text-lg text-black dark:text-white text-left">
+                Get the latest updates on cutting edge tech innovations, product launches, and exclusive insights from our team – straight to your inbox.
+              </p>
+            </div>
 
-            {/* Centered and Responsive Form */}
-            <div className="mt-6 flex justify-center">
+            <div className="mt-6 flex justify-start">
               <div className="w-full max-w-md space-y-4">
                 {error && (
                   <div className="p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
@@ -97,7 +91,7 @@ export default function Newsletter() {
                     <p className="text-green-600 text-sm">{success}</p>
                   </div>
                 )}
-                <form id="newsletter-form" onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-4">
+                <form id="newsletter-form" onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-start gap-4">
                   <Label htmlFor="email-address" className="sr-only">
                     Email address
                   </Label>
@@ -120,7 +114,7 @@ export default function Newsletter() {
                     >
                       <button type="submit" form="newsletter-form" disabled={loading}>
                         Subscribe
-                        <BellIcon size={16} className="animate-pulse" />
+                        <BellIcon size={16} className="animate-pulse ml-1" />
                       </button>
                     </Button>
                   ) : (
@@ -148,7 +142,7 @@ export default function Newsletter() {
             </div>
             <div className="flex flex-col items-start">
               <div className="rounded-md dark:bg-white/5 p-2 ring-1 dark:ring-white/10">
-                <Hand aria-hidden="true" className="size-6 text-blue-600 dark:text-blue" />
+                <Hand aria-hidden="true" className="size-6 text-blue-600 dark:text-blue-400" />
               </div>
               <dt className="mt-4 text-base font-semibold text-black dark:text-white">No spam</dt>
               <dd className="mt-2 text-base/7 text-gray-800 dark:text-white">
