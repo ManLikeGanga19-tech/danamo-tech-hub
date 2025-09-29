@@ -5,8 +5,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     return [
         {
+            url: `${baseUrl}/`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: "daily",
+            priority: 1.0,
+        },
+        {
             url: `${baseUrl}/about`,
-            lastModified: new Date().toISOString(), 
+            lastModified: new Date().toISOString(),
             changeFrequency: "monthly",
             priority: 0.8,
         },
