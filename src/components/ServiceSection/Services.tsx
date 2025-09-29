@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useMemo, useEffect } from "react"
+import React, { useRef, useEffect, memo } from "react"
 import {
     Card,
     CardHeader,
@@ -73,20 +73,41 @@ const services: Service[] = [
 const topRow = services.slice(0, 4)
 const bottomRow = services.slice(4)
 
-const InfiniteSlider = ({
+const ServiceCard = memo(({ service, index }: { service: Service; index: number }) => (
+    <Card
+        className="min-w-[250px] md:min-w-[300px] max-w-sm w-full shrink-0 hover:shadow-lg transition-shadow duration-300 hover:border-blue-200"
+        role="article"
+        aria-labelledby={`service-${index}`}
+    >
+        <CardHeader className="flex flex-col gap-3 items-start">
+            <div aria-hidden="true">{service.icon}</div>
+            <CardTitle id={`service-${index}`} className="text-blue-600 dark:text-blue-400">
+                {service.title}
+            </CardTitle>
+            <CardDescription>{service.description}</CardDescription>
+        </CardHeader>
+        <CardContent />
+    </Card>
+))
+
+ServiceCard.displayName = "ServiceCard"
+
+const InfiniteSlider = memo(({
     items,
     direction = "left",
+    ariaLabel,
 }: {
     items: Service[]
     direction?: "left" | "right"
+    ariaLabel: string
 }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const controls = useAnimation()
 
-    const isLeft = direction === "left"
-    const animationX = useMemo(() => (isLeft ? ["0%", "-50%"] : ["-50%", "0%"]), [isLeft])
-
     useEffect(() => {
+        const isLeft = direction === "left"
+        const animationX = isLeft ? ["0%", "-50%"] : ["-50%", "0%"]
+
         controls.start({
             x: animationX,
             transition: {
@@ -96,62 +117,79 @@ const InfiniteSlider = ({
                 ease: "linear",
             },
         })
-    }, [controls, animationX])
+    }, [controls, direction])
+
+    const duplicatedItems = [...items, ...items]
 
     return (
-        <section className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]">
+        <div
+            className="relative overflow-hidden w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-white to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
+            role="region"
+            aria-label={ariaLabel}
+        >
             <div className="flex justify-center">
-                <div ref={containerRef} className="overflow-x-auto cursor-pointer scrollbar-hide w-full px-4">
+                <div
+                    ref={containerRef}
+                    className="overflow-x-auto cursor-pointer scrollbar-hide w-full px-4"
+                    tabIndex={0}
+                >
                     <motion.div
                         className="flex gap-6 w-max"
                         animate={controls}
                     >
-                        {[...items, ...items].map((service, index) => (
-                            <Card
-                                key={index}
-                                className="min-w-[250px] md:min-w-[300px] max-w-sm w-full shrink-0 hover:shadow-lg transition-shadow duration-300 hover:border-blue-200"
-                            >
-                                <CardHeader className="flex flex-col gap-3 items-start">
-                                    {service.icon}
-                                    <CardTitle className="text-blue-600 dark:text-blue-400">
-                                        {service.title}
-                                    </CardTitle>
-                                    <CardDescription>{service.description}</CardDescription>
-                                </CardHeader>
-                                <CardContent />
-                            </Card>
+                        {duplicatedItems.map((service, index) => (
+                            <ServiceCard
+                                key={`${service.title}-${index}`}
+                                service={service}
+                                index={index}
+                            />
                         ))}
                     </motion.div>
                 </div>
             </div>
 
-            {/* Left gradient */}
-            <div className="pointer-events-none absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-[rgba(255,255,255,1)] to-[rgba(255,255,255,0)] dark:from-[#0e0e15] dark:to-transparent z-10" />
-
-            {/* Right gradient */}
-            <div className="pointer-events-none absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-[rgba(255,255,255,1)] to-[rgba(255,255,255,0)] dark:from-[#0e0e15] dark:to-transparent z-10" />
-        </section>
+            <div
+                className="pointer-events-none absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-[rgba(255,255,255,1)] to-[rgba(255,255,255,0)] dark:from-[#0e0e15] dark:to-transparent z-10"
+                aria-hidden="true"
+            />
+            <div
+                className="pointer-events-none absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-[rgba(255,255,255,1)] to-[rgba(255,255,255,0)] dark:from-[#0e0e15] dark:to-transparent z-10"
+                aria-hidden="true"
+            />
+        </div>
     )
-}
+})
+
+InfiniteSlider.displayName = "InfiniteSlider"
 
 export default function Services() {
     return (
         <section
             className="w-full py-16 bg-gradient-to-b from-gray-100 to-white dark:from-[#1E1E2F] dark:to-[#1E1E2F]"
             id="services"
+            aria-labelledby="services-heading"
         >
             <div className="w-full">
-                {/* Title Container with Padding */}
                 <div className="max-w-6xl mx-auto px-4 md:px-8">
-                    <h2 className="text-3xl font-bold text-center mb-10 text-blue-600 dark:text-blue-400">
+                    <h2
+                        id="services-heading"
+                        className="text-3xl font-bold text-center mb-10 text-blue-600 dark:text-blue-400"
+                    >
                         Our <span className="text-black dark:text-white">Services</span>
                     </h2>
                 </div>
 
-                {/* Full-width sliders */}
-                <InfiniteSlider items={topRow} direction="left" />
-                <div className="h-5" />
-                <InfiniteSlider items={bottomRow} direction="right" />
+                <InfiniteSlider
+                    items={topRow}
+                    direction="left"
+                    ariaLabel="Primary services carousel"
+                />
+                <div className="h-5" aria-hidden="true" />
+                <InfiniteSlider
+                    items={bottomRow}
+                    direction="right"
+                    ariaLabel="Additional services carousel"
+                />
             </div>
         </section>
     )
