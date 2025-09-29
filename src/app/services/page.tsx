@@ -24,6 +24,33 @@ import { Models, Databases, ID } from "appwrite";
 import Image from 'next/image';
 import ProtectedRoute from "@/components/ProtectedRoute";
 
+// --- SEO Structured Data ---
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  serviceType: "IT & Digital Solutions",
+  provider: {
+    "@type": "Organization",
+    name: "Danamo Tech Hub",
+    url: "https://www.danamo-tech.co.ke",
+    logo: "https://www.danamo-tech.co.ke/logo.png",
+  },
+  areaServed: {
+    "@type": "Place",
+    name: "Kenya",
+  },
+  offers: [
+    { "@type": "Offer", name: "Custom Web Development" },
+    { "@type": "Offer", name: "Search Engine Optimisation" },
+    { "@type": "Offer", name: "Branding & UI/UX Design" },
+    { "@type": "Offer", name: "Social Media & Digital Marketing" },
+    { "@type": "Offer", name: "E-Commerce Solutions" },
+    { "@type": "Offer", name: "IT Consulting & Support" },
+    { "@type": "Offer", name: "SaaS Product Development" },
+    { "@type": "Offer", name: "Cloud & DevOps" },
+  ]
+};
+
 const services = [
   {
     title: "Custom Web Development",
@@ -86,7 +113,6 @@ export default function ServicesPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Check if user is logged in
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -127,8 +153,8 @@ export default function ServicesPage() {
     try {
       const databases = new Databases(appwriteClient);
       await databases.createDocument(
-        "6840196a001ea51cd944", // appwrite Database ID
-        "6840913f00128df299b6", // servicesCollection ID
+        "6840196a001ea51cd944",
+        "6840913f00128df299b6",
         ID.unique(),
         {
           userID: user.$id,
@@ -159,11 +185,14 @@ export default function ServicesPage() {
         <Navbar1 />
         <main className="flex-grow">
           {/* HERO SECTION */}
-          <section className="relative h-[60vh] w-full flex items-center justify-center">
+          <section
+            className="relative h-[60vh] w-full flex items-center justify-center text-center"
+            aria-label="Our Services Overview"
+          >
             <div className="absolute inset-0">
               <Image
                 src="/services-page/service.jpg"
-                alt="Services Hero Background"
+                alt="Danamo Tech Services - Hero Background"
                 fill
                 className="object-cover object-center"
                 priority
@@ -171,35 +200,42 @@ export default function ServicesPage() {
               />
               <div className="absolute inset-0 bg-black/40" />
             </div>
-            <div className="relative z-10 text-center px-4">
+            <div className="relative z-10 px-4">
               <h1 className="text-4xl md:text-5xl font-bold mb-4 text-blue-500">
                 Our <span className="text-white">Services</span>
               </h1>
-              <p className="text-gray-200 text-lg md:text-xl">
+              <p className="text-gray-200 text-lg md:text-xl max-w-2xl mx-auto">
                 Explore what Danamo Tech Hub can do for your business
               </p>
             </div>
           </section>
 
           {/* SERVICES CARDS */}
-          <section className="p-6 md:p-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
+          <section
+            className="p-6 md:p-12 grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20"
+            aria-label="List of Services"
+          >
             {services.map((service, idx) => (
-              <div
+              <article
                 key={idx}
                 onClick={() => handleCardClick(service.value)}
                 className="cursor-pointer bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-md p-6 flex flex-col items-start gap-4 hover:shadow-xl hover:ring-2 hover:ring-blue-500 transition duration-300"
               >
                 {service.icon}
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-white">
+                <h2 className="text-xl font-semibold text-blue-600 dark:text-white">
                   {service.title}
-                </h3>
+                </h2>
                 <p className="text-gray-700 dark:text-gray-400">{service.desc}</p>
-              </div>
+              </article>
             ))}
           </section>
 
           {/* CONTACT FORM */}
-          <div ref={formSectionRef} className="flex justify-center scroll-mt-24 px-4">
+          <div
+            ref={formSectionRef}
+            className="flex justify-center scroll-mt-24 px-4"
+            aria-label="Contact Form Section"
+          >
             <Card className="w-full max-w-md border-blue-400">
               <CardHeader>
                 <CardDescription>
@@ -223,7 +259,6 @@ export default function ServicesPage() {
                     <Input
                       id="name"
                       placeholder="Your full name"
-                      className="placeholder:text-gray-900 dark:placeholder:text-white"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       disabled={!user || loading}
@@ -237,7 +272,6 @@ export default function ServicesPage() {
                       type="email"
                       id="email"
                       placeholder="you@example.com"
-                      className="placeholder:text-gray-900 dark:placeholder:text-white"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={!user || loading}
@@ -269,7 +303,6 @@ export default function ServicesPage() {
                       id="message"
                       placeholder="Tell us more about your project..."
                       rows={4}
-                      className="placeholder:text-gray-900 dark:placeholder:text-white"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       disabled={!user || loading}
@@ -303,6 +336,10 @@ export default function ServicesPage() {
           </div>
         </main>
         <Footer />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </div>
     </ProtectedRoute>
   );
