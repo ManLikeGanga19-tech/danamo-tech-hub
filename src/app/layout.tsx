@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "google4c249a539a678fdd.html",
   },
   alternates: {
     canonical: "https://www.danamo-tech.co.ke/",
