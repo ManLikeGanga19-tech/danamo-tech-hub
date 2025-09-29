@@ -25,6 +25,17 @@ interface AppwriteUser {
     [key: string]: unknown;
 }
 
+// Define interface for profile data
+interface ProfileData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    bio: string;
+    profileSetup: boolean;
+    userId?: string;
+}
+
 // Constants for database IDs to avoid magic strings
 const DATABASE_ID = "6840196a001ea51cd944";
 const COLLECTION_ID = "68482e0c00163d490722";
@@ -83,7 +94,7 @@ export default function AccountSettings() {
     }, []);
 
     // Memoized update profile function
-    const updateUserProfile = useCallback(async (profileData: any, documentId?: string) => {
+    const updateUserProfile = useCallback(async (profileData: ProfileData, documentId?: string) => {
         if (documentId) {
             return await databases.updateDocument(
                 DATABASE_ID,
@@ -98,9 +109,9 @@ export default function AccountSettings() {
                 "unique()", // Let Appwrite generate unique ID
                 profileData,
                 [
-                    Permission.read(Role.user(profileData.userId)),
-                    Permission.write(Role.user(profileData.userId)),
-                    Permission.delete(Role.user(profileData.userId)),
+                    Permission.read(Role.user(profileData.userId!)),
+                    Permission.write(Role.user(profileData.userId!)),
+                    Permission.delete(Role.user(profileData.userId!)),
                 ]
             );
         }
@@ -173,7 +184,7 @@ export default function AccountSettings() {
             const profile = await fetchUserProfile(user.$id);
             console.log("Profile exists:", profile.length > 0);
 
-            const profileData = {
+            const profileData: ProfileData = {
                 firstName,
                 lastName,
                 email,
@@ -270,6 +281,7 @@ export default function AccountSettings() {
                                         placeholder="First Name"
                                         required
                                         className="w-full"
+                                        aria-required="true"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -284,6 +296,7 @@ export default function AccountSettings() {
                                         placeholder="Last Name"
                                         required
                                         className="w-full"
+                                        aria-required="true"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -298,8 +311,11 @@ export default function AccountSettings() {
                                         placeholder="email@example.com"
                                         disabled
                                         className="w-full"
+                                        aria-describedby="email-help"
                                     />
-                                    <p className="text-xs sm:text-sm text-gray-500 mt-1">Contact support to change email.</p>
+                                    <p id="email-help" className="text-xs sm:text-sm text-gray-500 mt-1">
+                                        Contact support to change email.
+                                    </p>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="phone" className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
@@ -307,7 +323,7 @@ export default function AccountSettings() {
                                     </Label>
                                     <Input
                                         id="phone"
-                                        type="text"
+                                        type="tel"
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
                                         placeholder="+254722991133"
@@ -332,14 +348,23 @@ export default function AccountSettings() {
 
                         {/* Actions */}
                         <div className="flex justify-end gap-4">
-                            <Button
-                                onClick={handleSave}
-                                className={`bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white ${isSubmitted ? 'opacity-50 cursor-not-allowed' : ''
-                                    } w-full sm:w-auto`}
-                            // Fixed: Remove disabled prop and handle it via className and onClick
-                            >
-                                {isSubmitted ? "Saved!" : "Save Changes"}
-                            </Button>
+                            {isSubmitted ? (
+                                <button
+                                    disabled
+                                    className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 opacity-50 cursor-not-allowed transition-colors duration-300 ease-in-out w-full sm:w-auto px-4 py-2 rounded-md text-sm font-medium"
+                                    aria-label="Changes saved"
+                                >
+                                    Saved!
+                                </button>
+                            ) : (
+                                <Button
+                                    onClick={handleSave}
+                                    className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white w-full sm:w-auto"
+                                    aria-label="Save account changes"
+                                >
+                                    Save Changes
+                                </Button>
+                            )}
                         </div>
                     </form>
                 </div>
