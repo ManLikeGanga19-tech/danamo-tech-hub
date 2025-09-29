@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { Navbar1 } from '@/components/navbar/Navbar';
+import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 const faqs = [
   {

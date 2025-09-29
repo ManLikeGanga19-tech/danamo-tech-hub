@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Mail, MessageSquare, Search, ShieldCheck, Wallet, Wrench, Zap } from 'lucide-react';
-import { Navbar1 } from '@/components/navbar/Navbar';
+import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Image from 'next/image';
 

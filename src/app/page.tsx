@@ -1,6 +1,6 @@
 "use client"
 
-import { Navbar1 } from "@/components/navbar/Navbar";
+import { Navbar1 } from "@/components/Navbar/Navbar";
 import Hero from "@/components/hero/Hero";
 import Services from "@/components/ServiceSection/Services";
 import About from "@/components/About/About";

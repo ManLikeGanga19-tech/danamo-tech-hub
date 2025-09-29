@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Navbar1 } from "@/components/navbar/Navbar";
+import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Laptop, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";

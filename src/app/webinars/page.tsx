@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Newsletter from '@/components/NewsLetter/NewsLetter';
-import { Navbar1 } from '@/components/navbar/Navbar';
+import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Image from 'next/image';
 import { motion } from 'framer-motion';

@@ -1,6 +1,6 @@
 "use client";
 
-import { Navbar1 } from "@/components/navbar/Navbar";
+import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import {
   Code2, Megaphone, ShoppingCart, Headphones, Package,

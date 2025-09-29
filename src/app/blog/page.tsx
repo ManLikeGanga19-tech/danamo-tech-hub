@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import { Navbar1 } from '@/components/navbar/Navbar';
+import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Newsletter from '@/components/NewsLetter/NewsLetter';
 import { Input } from '@/components/ui/input';

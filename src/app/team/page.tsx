@@ -1,7 +1,7 @@
 "use client"
 
 import { TeamCard } from "@/components/TeamCard/TeamCard";
-import { Navbar1 } from "@/components/navbar/Navbar";
+import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Button } from "@/components/ui/button";
 const teamMembers = [

@@ -7,7 +7,7 @@ import { Permission, Role, Query } from "appwrite";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Navbar1 } from "@/components/navbar/Navbar";
+import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 
 // Define custom interface for Appwrite user
