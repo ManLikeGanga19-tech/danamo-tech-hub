@@ -1,49 +1,67 @@
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
-import type { Metadata, Viewport } from 'next';
-import Providers from '@/app/providers';
-import './globals.css';
+import type { Metadata, Viewport } from "next";
+import Providers from "@/app/providers";
+import "./globals.css";
+import { Inter } from "next/font/google";
+
+// Use next/font for performance (no layout shift)
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 // SEO Metadata Configuration
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.danamo-tech.co.ke/'), // Replace with your actual domain
+  metadataBase: new URL("https://www.danamo-tech.co.ke/"),
   title: {
-    default: 'Danamo - Tech Insights & Innovation',
-    template: '%s | Danamo'
+    default: "Danamo - Tech Insights & Innovation",
+    template: "%s | Danamo",
   },
-  description: 'Explore cutting-edge tutorials, opinions, and innovations from Danamo\'s team of developers, designers, and engineers.',
-  keywords: ['web development', 'technology', 'AI', 'JavaScript', 'UX design', 'tutorials', 'tech blog'],
-  authors: [{ name: 'Danamo Team' }],
-  creator: 'Danamo',
-  publisher: 'Danamo',
+  description:
+    "Explore cutting-edge tutorials, opinions, and innovations from Danamo's team of developers, designers, and engineers.",
+  keywords: [
+    "web development",
+    "technology",
+    "AI",
+    "JavaScript",
+    "UX design",
+    "tutorials",
+    "tech blog",
+  ],
+  authors: [{ name: "Danamo Team" }],
+  creator: "Danamo",
+  publisher: "Danamo",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://www.danamo-tech.co.ke/',
-    title: 'Danamo - Tech Insights & Innovation',
-    description: 'Explore cutting-edge tutorials, opinions, and innovations from our team of developers, designers, and engineers.',
-    siteName: 'Danamo',
+    type: "website",
+    locale: "en_US",
+    url: "https://www.danamo-tech.co.ke/",
+    title: "Danamo - Tech Insights & Innovation",
+    description:
+      "Explore cutting-edge tutorials, opinions, and innovations from our team of developers, designers, and engineers.",
+    siteName: "Danamo",
     images: [
       {
-        url: '/og-image.jpg', // Create this image (1200x630px recommended)
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: 'Danamo - Tech Insights & Innovation',
-      }
+        alt: "Danamo - Tech Insights & Innovation",
+      },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Danamo - Tech Insights & Innovation',
-    description: 'Explore cutting-edge tutorials, opinions, and innovations from our team of developers, designers, and engineers.',
-    images: ['/og-image.jpg'],
-    creator: '@yourtwitterhandle', // Replace with your Twitter handle
+    card: "summary_large_image",
+    title: "Danamo - Tech Insights & Innovation",
+    description:
+      "Explore cutting-edge tutorials, opinions, and innovations from our team of developers, designers, and engineers.",
+    images: ["/og-image.jpg"],
+    creator: "@yourtwitterhandle",
   },
   robots: {
     index: true,
@@ -51,31 +69,29 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
   verification: {
-    google: 'your-google-verification-code', // Add your Google Search Console verification
-    // yandex: 'your-yandex-verification-code',
-    // bing: 'your-bing-verification-code',
+    google: "your-google-verification-code",
   },
   alternates: {
-    canonical: 'https://www.danamo-tech.co.ke/',
+    canonical: "https://www.danamo-tech.co.ke/",
   },
-  category: 'technology',
+  category: "technology",
 };
 
 // Viewport Configuration
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' }
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
 };
 
@@ -87,17 +103,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Preconnect to external domains for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
         {/* Favicon and App Icons */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="min-h-screen font-sans antialiased bg-white text-black dark:bg-black dark:text-white">
+      <body
+        className={`${inter.className} min-h-screen antialiased bg-white text-black dark:bg-black dark:text-white`}
+      >
         <Providers>
           {/* Skip to main content link for accessibility */}
           <a
@@ -107,9 +121,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             Skip to main content
           </a>
 
-          <main id="main-content">
-            {children}
-          </main>
+          <main id="main-content">{children}</main>
         </Providers>
 
         <SpeedInsights />
@@ -120,21 +132,22 @@ export default function RootLayout({ children }: RootLayoutProps) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Danamo',
-              url: 'https://www.danamo-tech.co.ke/',
-              logo: 'https://www.danamo-tech.co.ke/logo.png',
-              description: 'Tech insights and innovation from developers, designers, and engineers.',
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Danamo",
+              url: "https://www.danamo-tech.co.ke/",
+              logo: "https://www.danamo-tech.co.ke/logo.png",
+              description:
+                "Tech insights and innovation from developers, designers, and engineers.",
               sameAs: [
-                'https://twitter.com/yourhandle',
-                'https://linkedin.com/company/yourcompany',
-                'https://github.com/yourorg',
+                "https://twitter.com/yourhandle",
+                "https://linkedin.com/company/yourcompany",
+                "https://github.com/yourorg",
               ],
               contactPoint: {
-                '@type': 'ContactPoint',
-                email: 'contact@yourdomain.com',
-                contactType: 'Customer Service',
+                "@type": "ContactPoint",
+                email: "contact@yourdomain.com",
+                contactType: "Customer Service",
               },
             }),
           }}
