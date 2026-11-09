@@ -95,3 +95,13 @@ class CareerApplication(Base):
     cv_file_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("cv_files.id", ondelete="SET NULL"))
     status: Mapped[str] = mapped_column(String(20), default="received")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class WebinarRegistration(Base):
+    __tablename__ = "webinar_registrations"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    name: Mapped[str] = mapped_column(String(120))
+    email: Mapped[str] = mapped_column(String(320))
+    webinar_title: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
