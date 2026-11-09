@@ -12,6 +12,7 @@ import {
     Code2,
     LogOut,
     UserCircle,
+    X, // Added X for closing the mobile menu
 } from "lucide-react";
 import {
     Accordion,
@@ -28,18 +29,11 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet";
 import { useTheme } from "@/hooks/useTheme";
-import { Logo } from "@/components/Logo";
 import { useState } from "react";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { motion, AnimatePresence } from "framer-motion"; // Added Framer Motion
 
 interface MenuItem {
     title: string;
@@ -83,10 +77,12 @@ export const Navbar1 = ({
     const { theme, toggleTheme } = useTheme();
     const { user, loading, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Added state for mobile menu
 
     const handleLogout = async () => {
         await logout();
         setDropdownOpen(false);
+        setIsMobileMenuOpen(false);
         window.location.href = "/login";
     };
 
@@ -127,20 +123,25 @@ export const Navbar1 = ({
         const isActive = pathname === item.url;
         return item.items ? (
             <AccordionItem key={item.title} value={item.title} className="border-b-0">
-                <AccordionTrigger className="py-0 text-md font-semibold hover:no-underline">
+                <AccordionTrigger className="py-4 text-lg font-semibold hover:no-underline">
                     {item.title}
                 </AccordionTrigger>
-                <AccordionContent className="mt-2">
-                    {item.items.map((sub) => (
-                        <SubMenuLink key={sub.title} item={sub} />
-                    ))}
+                <AccordionContent className="pt-2 pb-4">
+                    <div className="flex flex-col gap-3">
+                        {item.items.map((sub) => (
+                            <div key={sub.title} onClick={() => setIsMobileMenuOpen(false)}>
+                                <SubMenuLink item={sub} />
+                            </div>
+                        ))}
+                    </div>
                 </AccordionContent>
             </AccordionItem>
         ) : (
             <a
                 key={item.title}
                 href={item.url}
-                className={`text-md font-semibold ${isActive ? "text-blue-600 dark:text-blue-400 font-bold" : "hover:text-blue-600 dark:hover:text-blue-400"}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`block py-4 text-lg font-semibold ${isActive ? "text-blue-600 dark:text-blue-400 font-bold" : "hover:text-blue-600 dark:hover:text-blue-400"}`}
             >
                 {item.title}
             </a>
@@ -151,7 +152,8 @@ export const Navbar1 = ({
         <section className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900 shadow-sm">
             <div className="layout container py-3">
                 <nav className="hidden lg:flex justify-between items-center">
-                    <Logo className="text-lg" />
+                    <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={140} height={40} className="h-10 w-auto object-contain" priority />
+                    
                     <div className="flex items-center ml-auto">
                         <NavigationMenu>
                             <NavigationMenuList>{menu.map((item) => renderMenuItem(item))}</NavigationMenuList>
@@ -174,7 +176,7 @@ export const Navbar1 = ({
                                     className="border-2 rounded-full border-blue-600"
                                     aria-label="User menu"
                                 >
-                                    <Image src={avatarSrc} alt="Avatar" width={32} height={32} className="rounded-full" />
+                                    <Image src={avatarSrc} alt="Avatar" width={32} height={32} className="rounded-full object-cover" />
                                 </button>
                                 {dropdownOpen && (
                                     <div
@@ -225,72 +227,101 @@ export const Navbar1 = ({
                     </div>
                 </nav>
 
+                {/* Mobile Navbar Top Bar */}
                 <div className="block lg:hidden">
                     <div className="flex items-center justify-between">
-                        <Logo className="text-lg" />
+                        <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={140} height={40} className="h-10 w-auto object-contain" priority />
+                        
                         <div className="flex items-center gap-3">
-                            {!loading && user && (
-                                <div className="relative">
-                                    <button
-                                        onClick={toggleDropdown}
-                                        className="border-2 rounded-full border-blue-600"
-                                        aria-label="User menu"
-                                    >
-                                        <Image src={avatarSrc} alt="Avatar" width={32} height={32} className="rounded-full" />
-                                    </button>
-                                    {dropdownOpen && (
-                                        <div
-                                            onBlur={closeDropdown}
-                                            tabIndex={0}
-                                            className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
-                                        >
-                                            <div className="py-1">
-                                                <a href="/account" onClick={closeDropdown} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <UserCircle className="inline w-4 h-4 mr-2" />
-                                                    Account Settings
-                                                </a>
-                                                <button onClick={handleLogout} className="w-full text-left px-4 py-2 flex items-center text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <LogOut className="inline w-4 h-4 mr-2" />
-                                                    Logout
-                                                </button>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <Button variant="outline" size="icon">
-                                        <Menu className="size-4" />
-                                    </Button>
-                                </SheetTrigger>
-                                <SheetContent className="overflow-y-auto transition-transform duration-300 ease-in-out bg-gradient-to-b from-white to-gray-100 dark:from-[#0e0e15] dark:to-[#1E1E2F]">
-                                    <SheetHeader>
-                                        <SheetTitle><Logo className="text-lg" /></SheetTitle>
-                                    </SheetHeader>
-                                    <Accordion type="single" collapsible className="flex w-full flex-col gap-4">
-                                        {menu.map(renderMobileMenuItem)}
-                                    </Accordion>
-                                    <div className="flex items-center gap-6 mt-4">
-                                        <Button variant="outline" size="icon" onClick={toggleTheme}>
-                                            {theme === "dark" ? <Sun /> : <Moon />}
-                                        </Button>
-                                        {!user && (
-                                            <>
-                                                <Button asChild size="sm" variant="outline" className="w-full bg-white text-blue-600 border border-blue-600 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white">
-                                                    <a href={auth.login.url}>{auth.login.title}</a>
-                                                </Button>
-                                                <Button asChild size="sm" className="w-full bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white">
-                                                    <a href={auth.signup.url}>{auth.signup.title}</a>
-                                                </Button>
-                                            </>
-                                        )}
-                                    </div>
-                                </SheetContent>
-                            </Sheet>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={toggleTheme}
+                                aria-label="Toggle theme"
+                            >
+                                {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                            </Button>
+
+                            {/* Trigger for Framer Motion Menu */}
+                            <Button variant="outline" size="icon" onClick={() => setIsMobileMenuOpen(true)}>
+                                <Menu className="size-4" />
+                            </Button>
                         </div>
                     </div>
                 </div>
+
+                {/* Framer Motion Mobile Menu Overlay & Drawer */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <>
+                            {/* Dark Backdrop */}
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="fixed inset-0 bg-black/50 z-[100] lg:hidden backdrop-blur-sm"
+                            />
+                            
+                            {/* Sliding Drawer */}
+                            <motion.div
+                                initial={{ x: "100%" }}
+                                animate={{ x: 0 }}
+                                exit={{ x: "100%" }}
+                                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                                className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-gradient-to-b from-white to-gray-100 dark:from-[#0e0e15] dark:to-[#1E1E2F] z-[101] shadow-2xl overflow-y-auto flex flex-col lg:hidden"
+                            >
+                                <div className="p-6 flex flex-col min-h-full">
+                                    {/* Drawer Header */}
+                                    <div className="flex items-center justify-between mb-8">
+                                        <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={140} height={40} className="h-10 w-auto object-contain" />
+                                        <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
+                                            <X className="w-6 h-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" />
+                                        </Button>
+                                    </div>
+                                    
+                                    {/* Drawer Links */}
+                                    <Accordion type="single" collapsible className="flex w-full flex-col gap-2">
+                                        {menu.map(renderMobileMenuItem)}
+                                    </Accordion>
+                                    
+                                    {/* Drawer Profile / Auth */}
+                                    <div className="flex flex-col gap-4 mt-auto pt-8 border-t border-gray-200 dark:border-gray-800">
+                                        {!loading && user ? (
+                                            <>
+                                                <div className="flex items-center gap-4 px-2 mb-2">
+                                                    <Image src={avatarSrc} alt="Avatar" width={48} height={48} className="rounded-full border-2 border-blue-600 object-cover" />
+                                                    <div className="flex flex-col">
+                                                        <span className="font-semibold text-gray-900 dark:text-white">{user.full_name || "User"}</span>
+                                                        <span className="text-sm text-gray-500">{user.email}</span>
+                                                    </div>
+                                                </div>
+                                                <Button asChild variant="ghost" className="w-full justify-start h-12 text-base">
+                                                    <a href="/account" onClick={() => setIsMobileMenuOpen(false)}>
+                                                        <UserCircle className="inline w-5 h-5 mr-3" /> Account Settings
+                                                    </a>
+                                                </Button>
+                                                <Button variant="ghost" onClick={handleLogout} className="w-full justify-start h-12 text-base text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950">
+                                                    <LogOut className="inline w-5 h-5 mr-3" /> Logout
+                                                </Button>
+                                            </>
+                                        ) : !loading && !user ? (
+                                            <div className="flex flex-col gap-3">
+                                                <Button asChild size="lg" variant="outline" className="w-full h-12 bg-white text-blue-600 border border-blue-600 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white">
+                                                    <a href={auth.login.url}>{auth.login.title}</a>
+                                                </Button>
+                                                <Button asChild size="lg" className="w-full h-12 bg-blue-600 border-blue-600 text-white transition-colors duration-300 ease-in-out hover:bg-blue-700 hover:text-white dark:bg-blue-500 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white">
+                                                    <a href={auth.signup.url}>{auth.signup.title}</a>
+                                                </Button>
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </>
+                    )}
+                </AnimatePresence>
+
             </div>
         </section>
     );
@@ -298,7 +329,7 @@ export const Navbar1 = ({
 
 function SubMenuLink({ item }: { item: MenuItem }) {
     return (
-        <a href={item.url} className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+        <a href={item.url} className="flex items-center gap-3 px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
             {item.icon}
             <div className="flex flex-col">
                 <span className="font-semibold">{item.title}</span>
