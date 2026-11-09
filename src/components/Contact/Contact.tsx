@@ -91,7 +91,6 @@ function Contact() {
     >
       <div className="layout w-full max-w-[85rem] mx-auto px-4 md:px-8">
         
-        {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
             Contact <span className="text-blue-600 dark:text-blue-400">Us</span>
@@ -103,7 +102,6 @@ function Contact() {
 
         <div className="grid lg:grid-cols-2 items-center gap-16 lg:gap-24 py-4">
           
-          {/* Contact Info */}
           <div className="flex flex-col items-start lg:pr-10">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Let&apos;s discuss your next project.
@@ -151,7 +149,6 @@ function Contact() {
             </ul>
           </div>
 
-          {/* Contact Form */}
           <div className="flex justify-center w-full">
             <Card className="w-full max-w-xl rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/60 dark:bg-[#1E1E2F]/60 backdrop-blur-sm shadow-2xl shadow-blue-500/5">
               <CardHeader className="pb-6">

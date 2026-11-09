@@ -4,7 +4,7 @@ const config = {
     "./src/app/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: "class", 
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -28,7 +28,10 @@ const config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+
+  ],
 };
 
 export default config;

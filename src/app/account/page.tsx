@@ -1,235 +1,161 @@
 "use client";
 
-import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
 
-function Contact() {
-  const [name, setName] = useState("");
+const Navbar1 = lazy(() =>
+  import("@/components/Navbar/Navbar").then(module => ({ default: module.Navbar1 }))
+);
+
+const Footer = lazy(() => import("@/components/Footer/Footer"));
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_REGEX = /^\+?[1-9]\d{1,14}$/;
+
+export default function AccountSettings() {
+  const { user, loading, refresh } = useAuth();
+  const router = useRouter();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [interest, setInterest] = useState("");
-  const [message, setMessage] = useState("");
-  const { user, loading } = useAuth();
-  const [submitting, setSubmitting] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [bio, setBio] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [saving, setSaving] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!user) return;
+    const parts = (user.full_name || "").trim().split(/\s+/);
+    setFirstName(parts[0] || "");
+    setLastName(parts.slice(1).join(" ") || "");
+    setEmail(user.email || "");
+    setPhone(user.phone || "");
+    setBio(user.bio || "");
+  }, [user]);
+
+  const validateInputs = useCallback(() => {
+    if (!firstName.trim()) { setError("First name is required."); return false; }
+    if (email && !EMAIL_REGEX.test(email)) { setError("Invalid email format."); return false; }
+    if (phone && !PHONE_REGEX.test(phone)) { setError("Invalid phone number format (e.g., +254722991133)."); return false; }
+    return true;
+  }, [firstName, email, phone]);
+
+  const handleSave = useCallback(async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
     setError("");
     setSuccess("");
+    if (!validateInputs()) return;
 
-    if (!user) {
-      setError("Please log in to submit the form.");
-      return;
-    }
-
-    if (!name || !email || !interest || !message) {
-      setError("All fields are required.");
-      return;
-    }
-
-    setSubmitting(true);
+    setSaving(true);
     try {
-      await apiFetch("/contact", {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          email,
-          subject: interest, // maps the "I am interested in..." dropdown to the contact subject
-          message,
-        }),
+      const full_name = `${firstName} ${lastName}`.trim();
+      await apiFetch("/auth/me", {
+        method: "PATCH",
+        body: JSON.stringify({ full_name, phone, bio }),
       });
-      setSuccess("Message sent successfully!");
-      setName("");
-      setEmail("");
-      setInterest("");
-      setMessage("");
-
-      setTimeout(() => setSuccess(""), 3000);
+      await refresh();
+      setSuccess("Profile updated successfully!");
+      setTimeout(() => router.push("/"), 1000);
     } catch (err: unknown) {
-      let msg = "Failed to send message.";
-      if (err instanceof Error) {
-        const raw = err.message.replace(/^API \d+: /, "");
-        try {
-          const parsed = JSON.parse(raw);
-          if (typeof parsed?.detail === "string") msg = parsed.detail;
-          else msg = raw || msg;
-        } catch {
-          msg = raw || msg;
-        }
-      }
-      setError(msg);
+      setError(`Failed to save changes: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
-      setSubmitting(false);
+      setSaving(false);
     }
-  };
+  }, [firstName, lastName, phone, bio, validateInputs, refresh, router]);
+
+  const LoadingSpinner = useMemo(() => (
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
+      <div className="relative flex items-center justify-center">
+        <div className="absolute h-16 w-16 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+        <div className="h-12 w-12 animate-pulse rounded-full bg-blue-600/20"></div>
+      </div>
+    </div>
+  ), []);
+
+  if (loading) return LoadingSpinner;
+
+  if (!user) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 mt-24 text-center">
+        <p className="text-red-500 mb-4">You must be logged in to view this page.</p>
+        <Button onClick={() => router.push("/login")}>Go to Login</Button>
+      </div>
+    );
+  }
 
   return (
-    <section className="w-full py-[15px] transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
-      <div className="layout">
-        <div className="grid lg:grid-cols-2 items-center gap-14 py-10">
-          {/* Contact Info */}
-          <div className="flex flex-col items-center lg:items-start">
-            <h1 className="text-4xl font-semibold text-blue-600 dark:text-blue-400">
-              Contact <span className="text-black dark:text-white">Us</span>
-            </h1>
-            <p className="text-lg text-black dark:text-white mt-6 leading-relaxed max-w-xl">
-              Have some big idea or brand to develop and need help? Then reach out we&apos;d love to hear about your project and provide help.
-            </p>
+    <>
+      <Suspense fallback={<div className="h-16 bg-gray-200 animate-pulse" />}>
+        <Navbar1 />
+      </Suspense>
 
-            <ul className="mt-12 space-y-8 w-full max-w-md">
-              <li className="flex items-center">
-                <Mail className="text-blue-600 dark:text-blue-400" size={20} />
-                <a href="mailto:danamotech@gmail.com" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
-                  danamotech@gmail.com
-                </a>
-              </li>
-              <li className="flex items-center">
-                <Phone className="text-blue-600 dark:text-blue-400" size={20} />
-                <a href="tel:+254785640048" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
-                  +254785640048
-                </a>
-              </li>
-              <li className="flex items-center">
-                <MapPin className="text-blue-600 dark:text-blue-400" size={20} />
-                <span className="text-black dark:text-white text-sm ml-4">
-                  Nairobi, Kenya
-                </span>
-              </li>
-            </ul>
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-[#1E1E2F] dark:to-[#0e0e15] py-16">
+        <div className="max-w-2xl w-full mx-auto px-4 sm:px-6">
+          <div className="mb-10 text-center">
+            <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+              Account <span className="text-black dark:text-white">Settings</span>
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400">Update your personal information and profile details.</p>
           </div>
 
-          {/* Contact Form */}
-          <div className="flex justify-center w-full">
-            <Card className="w-full max-w-md border-blue-400">
-              <CardHeader>
-                <CardDescription>
-                  {loading
-                    ? "Checking login status..."
-                    : user
-                      ? "Fill out the form and we will get back to you shortly."
-                      : "Please log in to send a message."}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {error && (
-                  <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
-                    <p className="text-red-600 text-sm">{error}</p>
+          {error && <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 rounded-md"><p className="text-red-600 dark:text-red-400 text-sm">{error}</p></div>}
+          {success && <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/30 border-l-4 border-green-500 rounded-md"><p className="text-green-600 dark:text-green-400 text-sm">{success}</p></div>}
+
+          <div className="bg-white dark:bg-[#1E1E2F] p-8 md:p-10 rounded-2xl shadow-xl shadow-blue-500/5 border border-gray-100 dark:border-gray-800">
+            <form className="space-y-6">
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-800 pb-4">Personal Information</h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-gray-700 dark:text-gray-300 font-medium">First Name</Label>
+                    <Input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" required className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700" />
                   </div>
-                )}
-                {success && (
-                  <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
-                    <p className="text-green-600 text-sm">{success}</p>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName" className="text-gray-700 dark:text-gray-300 font-medium">Last Name</Label>
+                    <Input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700" />
                   </div>
-                )}
-                <form id="contact-form" onSubmit={handleSubmit} className="grid w-full gap-4">
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="name" className="text-blue-600 dark:text-blue-400">Name</Label>
-                    <Input
-                      id="name"
-                      placeholder="Your full name"
-                      className="placeholder:text-gray-900 dark:placeholder:text-white"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      disabled={!user || loading || submitting}
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-gray-700 dark:text-gray-300 font-medium">Email Address</Label>
+                    <Input id="email" type="email" value={email} disabled className="rounded-xl bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 opacity-70 cursor-not-allowed" />
+                    <p className="text-xs text-gray-500 mt-1">Contact support to change email.</p>
                   </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="email" className="text-blue-600 dark:text-blue-400">Email</Label>
-                    <Input
-                      type="email"
-                      id="email"
-                      placeholder="you@example.com"
-                      className="placeholder:text-gray-900 dark:placeholder:text-white"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      disabled={!user || loading || submitting}
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-gray-700 dark:text-gray-300 font-medium">Phone Number</Label>
+                    <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+254722991133" className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700" />
                   </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="interest" className="text-blue-600 dark:text-blue-400">I am interested in...</Label>
-                    <Select
-                      value={interest}
-                      onValueChange={setInterest}
-                      disabled={!user || loading || submitting}
-                    >
-                      <SelectTrigger id="interest">
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-100 dark:text-white dark:bg-[#1E1E2F]">
-                        <SelectItem value="web">Web Development</SelectItem>
-                        <SelectItem value="seo">Search Engine Optimization</SelectItem>
-                        <SelectItem value="branding">Branding & UI/UX Design</SelectItem>
-                        <SelectItem value="marketing">Social Media & Digital Marketing</SelectItem>
-                        <SelectItem value="ecommerce">E-Commerce</SelectItem>
-                        <SelectItem value="consulting">IT Consulting and Support</SelectItem>
-                        <SelectItem value="saas">SaaS Product Development</SelectItem>
-                        <SelectItem value="cloud">Cloud & DevOps</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="col-span-1 sm:col-span-2 space-y-2">
+                    <Label htmlFor="bio" className="text-gray-700 dark:text-gray-300 font-medium">Bio / Role</Label>
+                    <Input id="bio" type="text" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="e.g. Senior Developer, Project Manager" className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700" />
                   </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="message" className="text-blue-600 dark:text-blue-400">Message</Label>
-                    <Textarea
-                      id="message"
-                      placeholder="Tell us more about your project..."
-                      rows={4}
-                      className="placeholder:text-gray-900 dark:placeholder:text-white"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      disabled={!user || loading || submitting}
-                    />
-                  </div>
-                </form>
-              </CardContent>
-              <CardFooter className="flex justify-end">
-                {user ? (
-                  <Button asChild>
-                    <button
-                      type="submit"
-                      form="contact-form"
-                      disabled={loading || submitting}
-                      className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white px-4 py-2 rounded-md flex items-center"
-                    >
-                      <Send size={12} className="mr-2 animate-pulse" />
-                      {submitting ? "Sending..." : "Send Message"}
-                    </button>
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                  >
-                    <a href="/login">Log in to Send</a>
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-6 border-t border-gray-100 dark:border-gray-800">
+                <Button
+                  asChild
+                  className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
+                >
+                  <button type="button" onClick={handleSave} disabled={saving}>
+                    {saving ? "Saving..." : "Save Changes"}
+                  </button>
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </section>
+
+      <Suspense fallback={<div className="h-64 bg-gray-200 animate-pulse" />}>
+        <Footer />
+      </Suspense>
+    </>
   );
 }
-
-export default Contact;

@@ -4,6 +4,8 @@ import { TeamCard } from "@/components/TeamCard/TeamCard";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+
 const teamMembers = [
   {
     name: "Daniel Orwenjo",
@@ -33,40 +35,59 @@ const teamMembers = [
     socials: {
       linkedin: "https://linkedin.com/in/alicekim",
       github: "https://github.com/johnsmith",
-
     },
   },
 ]
 
-
-
 export default function OurTeamPage() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
       <Navbar1 />
-      <section className="min-h-screen bg-gradient-to-b from-white to-gray-100  dark:from-[#1E1E2F] dark:to-[#1E1E2F] py-16">
-        <div className="container px-4 mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-blue-600 dark:text-blue-400">
-            Meet <span className="text-black dark:text-white">Our Team</span>
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      
+      <main className="flex-grow">
+        {/* Team Section */}
+        <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full">
+          
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
+              Meet <span className="text-blue-600 dark:text-blue-400">Our Team</span>
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              The brilliant minds driving innovation and building scalable digital solutions at Danamo Tech.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member, i) => (
               <TeamCard key={i} {...member} />
             ))}
           </div>
-          <div className="text-center py-12 bg-gradient-to-b from-white to-gray-100 dark:from-[#1E1E2F] dark:to-[#1E1E2F]  ">
+        </section>
+
+        {/* Corporate CTA Section */}
+        <section className="py-24 bg-gray-50 dark:bg-[#0e0e15] border-t border-gray-100 dark:border-gray-800 text-center px-4">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+              Want to build the future with us?
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+              We are always looking for passionate, creative, and driven individuals to join our growing team.
+            </p>
             <Button
               asChild
               size="lg"
-              className="bg-white px-6 py-3 text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white"
+              className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl group"
             >
-              <a href="/careers">Join Us</a>
+              <a href="/careers" className="flex items-center gap-2">
+                View Open Roles
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </a>
             </Button>
           </div>
+        </section>
+      </main>
 
-        </div>
-      </section>
       <Footer />
-    </>
+    </div>
   )
 }
