@@ -3,79 +3,91 @@
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
 import Link from 'next/link'
-import { Logo } from "@/components/Logo";
+import Image from 'next/image'
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer
-      className="w-full min-h-[400px] px-4 py-10 transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]  flex flex-col items-center justify-center"
-    >
-      <hr className="w-full border-t border-gray-300 dark:border-gray-700 mb-4 pt-4" />
+    <footer className="w-full pt-16 pb-8 transition-colors duration-700 bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] border-t border-gray-200 dark:border-gray-800">
+      <div className="layout w-full max-w-[85rem] mx-auto px-4 md:px-8">
 
-      {/* Top Section: Logo & Links */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-4 gap-10 items-center md:items-start text-center md:text-left">
-        {/* Logo */}
-        <div>
-          <Logo className='text-lg' />
+        {/* Top Section: Logo, Description, Links */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
+
+          {/* Brand & Social Column (Takes up 2 columns on large screens) */}
+          <div className="lg:col-span-2 flex flex-col items-start">
+            <Link href="/" className="mb-6 inline-block">
+              <Image
+                src="/nav-img.jpg"
+                alt="Danamo Tech Logo"
+                width={160}
+                height={45}
+                className="h-10 w-auto object-contain"
+              />
+            </Link>
+            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-sm leading-relaxed">
+              Bridging the technology gap for businesses and startups. We deliver enterprise-grade web, software, and digital solutions.
+            </p>
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-blue-600 hover:border-blue-600 dark:hover:text-blue-400 dark:hover:border-blue-400 transition-all duration-300">
+                <FaFacebookF className="w-4 h-4" />
+              </a>
+              <a href="mailto:hello@danamotech.com" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-red-500 hover:border-red-500 dark:hover:text-red-400 dark:hover:border-red-400 transition-all duration-300">
+                <MdEmail className="w-5 h-5" />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-pink-500 hover:border-pink-500 dark:hover:text-pink-400 dark:hover:border-pink-400 transition-all duration-300">
+                <FaInstagram className="w-4 h-4" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-blue-700 hover:border-blue-700 dark:hover:text-blue-500 dark:hover:border-blue-500 transition-all duration-300">
+                <FaLinkedinIn className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h4 className="font-bold text-sm tracking-wider uppercase mb-6 text-gray-900 dark:text-white">Company</h4>
+            <ul className="space-y-4">
+              <li><Link href="/about" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</Link></li>
+              <li><Link href="/careers" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Careers</Link></li>
+              <li><Link href="/services" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Services</Link></li>
+              <li><Link href="/team" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Our Team</Link></li>
+            </ul>
+          </div>
+
+          {/* Resources Links */}
+          <div>
+            <h4 className="font-bold text-sm tracking-wider uppercase mb-6 text-gray-900 dark:text-white">Resources</h4>
+            <ul className="space-y-4">
+              <li><Link href="/blog" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Blog</Link></li>
+              <li><Link href="/faqs" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQs</Link></li>
+              <li><Link href="/webinars" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Webinars & Events</Link></li>
+              <li><Link href="/help-center" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Help Center</Link></li>
+            </ul>
+          </div>
+
+          {/* Legal Links */}
+          <div>
+            <h4 className="font-bold text-sm tracking-wider uppercase mb-6 text-gray-900 dark:text-white">Legal</h4>
+            <ul className="space-y-4">
+              <li><Link href="/accessibility" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Accessibility</Link></li>
+              <li><Link href="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/cookies" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Cookies Policy</Link></li>
+              <li><Link href="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Terms & Conditions</Link></li>
+            </ul>
+          </div>
         </div>
 
-        {/* Company Links */}
-        <div>
-          <h4 className="font-semibold mb-3 text-black dark:text-blue-400">Company</h4>
-          <ul className="space-y-2 text-md">
-            <li><Link href="/about" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">About</Link></li>
-            <li><Link href="/careers" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">Careers</Link></li>
-            <li><Link href="/services" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">Services</Link></li>
-            <li><Link href="/team" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">Our Team</Link></li>
-          </ul>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            &copy; {currentYear} Danamo Tech. All rights reserved.
+          </p>
         </div>
 
-        {/* Resources Links */}
-        <div>
-          <h4 className="font-semibold mb-3 text-black dark:text-blue-400">Resources</h4>
-          <ul className="space-y-2 text-md">
-            <li><Link href="/blog" className="hover:no-underline hover:text-blue-600 text-gray-800 dark:text-white dark:hover:text-blue-400">Blog</Link></li>
-            <li><Link href="/faqs" className="hover:no-underline hover:text-blue-600 text-gray-800 dark:text-white dark:hover:text-blue-400">FAQs</Link></li>
-            <li><Link href="/webinars" className="hover:no-underline hover:text-blue-600 text-gray-800 dark:text-white dark:hover:text-blue-400">Webinars / Events</Link></li>
-            <li><Link href="/help-center" className="hover:no-underline hover:text-blue-600 text-gray-800 dark:text-white dark:hover:text-blue-400">Help Center</Link></li>
-          </ul>
-        </div>
-
-        {/* Legal Links */}
-        <div>
-          <h4 className="font-semibold mb-3 text-black dark:text-blue-400">Legal</h4>
-          <ul className="space-y-2 text-md">
-            <li><Link href="/accessibility" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">Accessibility</Link></li>
-            <li><Link href="/privacy" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">Privacy Policy</Link></li>
-            <li><Link href="/cookies" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">Cookies Policy</Link></li>
-            <li><Link href="/terms" className="hover:no-underline text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">Terms of Service / Terms & Conditions</Link></li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Social Media Section */}
-      <div className="w-full mt-10 flex flex-col items-center">
-        <h4 className="font-semibold mb-3 text-blue-600 dark:text-blue-400">Connect with us</h4>
-        <div className="flex space-x-4 mb-6">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600">
-            <FaFacebookF className="w-5 h-5" />
-          </a>
-          <a href="mailto:hello@danamotech.com" className="hover:text-red-500">
-            <MdEmail className="w-6 h-6" />
-          </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500">
-            <FaInstagram className="w-5 h-5" />
-          </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
-            <FaLinkedinIn className="w-5 h-5" />
-          </a>
-        </div>
-
-        {/* Separator */}
-        <hr className="w-full border-t border-gray-300 dark:border-gray-700 mb-4" />
-
-        {/* Bottom Text */}
-        <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF]">&copy; 2025 Danamo Tech. All rights reserved.</p>
       </div>
     </footer>
   )

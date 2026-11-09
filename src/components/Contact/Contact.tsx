@@ -85,148 +85,181 @@ function Contact() {
   };
 
   return (
-    <section id="contact" className="w-full py-[15px] scroll-mt-24 transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">      <div className="layout">
-      <div className="grid lg:grid-cols-2 items-center gap-14 py-10">
-        {/* Contact Info */}
-        <div className="flex flex-col items-center lg:items-start">
-          <h1 className="text-4xl font-semibold text-blue-600 dark:text-blue-400">
-            Contact <span className="text-black dark:text-white">Us</span>
-          </h1>
-          <p className="text-lg text-black dark:text-white mt-6 leading-relaxed max-w-xl">
-            Have some big idea or brand to develop and need help? Then reach out we&apos;d love to hear about your project and provide help.
+    <section 
+      id="contact" 
+      className="w-full py-24 scroll-mt-24 transition-colors duration-700 bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] overflow-hidden"
+    >
+      <div className="layout w-full max-w-[85rem] mx-auto px-4 md:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
+            Contact <span className="text-blue-600 dark:text-blue-400">Us</span>
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Have a big idea or brand to develop? Reach out and let&apos;s build something great together.
           </p>
-
-          <ul className="mt-12 space-y-8 w-full max-w-md">
-            <li className="flex items-center">
-              <Mail className="text-blue-600 dark:text-blue-400" size={20} />
-              <a href="mailto:danamotech@gmail.com" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
-                danamotech@gmail.com
-              </a>
-            </li>
-            <li className="flex items-center">
-              <Phone className="text-blue-600 dark:text-blue-400" size={20} />
-              <a href="tel:+254785640048" className="text-black dark:text-white text-sm ml-4 hover:no-underline">
-                +254785640048
-              </a>
-            </li>
-            <li className="flex items-center">
-              <MapPin className="text-blue-600 dark:text-blue-400" size={20} />
-              <span className="text-black dark:text-white text-sm ml-4">
-                Nairobi, Kenya
-              </span>
-            </li>
-          </ul>
         </div>
 
-        {/* Contact Form */}
-        <div className="flex justify-center w-full">
-          <Card className="w-full max-w-md border-blue-400">
-            <CardHeader>
-              <CardDescription>
-                {loading
-                  ? "Checking login status..."
-                  : user
-                    ? "Fill out the form and we will get back to you shortly."
-                    : "Please log in to send a message."}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {error && (
-                <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-md">
-                  <p className="text-red-600 text-sm">{error}</p>
+        <div className="grid lg:grid-cols-2 items-center gap-16 lg:gap-24 py-4">
+          
+          {/* Contact Info */}
+          <div className="flex flex-col items-start lg:pr-10">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+              Let&apos;s discuss your next project.
+            </h3>
+            <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 leading-relaxed max-w-xl">
+              We are ready to help you scale. Whether you need a new website, a custom software solution, or expert IT consulting, our team is here to answer your questions.
+            </p>
+
+            <ul className="space-y-6 w-full max-w-md">
+              <li className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-[#1E1E2F] shadow-sm border border-gray-100 dark:border-gray-800">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-500/10">
+                  <Mail className="text-blue-600 dark:text-blue-400" size={22} />
                 </div>
-              )}
-              {success && (
-                <div className="mb-4 p-3 bg-green-50 border-l-4 border-green-500 rounded-md">
-                  <p className="text-green-600 text-sm">{success}</p>
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Email Us</p>
+                  <a href="mailto:danamotech@gmail.com" className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
+                    danamotech@gmail.com
+                  </a>
                 </div>
-              )}
-              <form id="contact-form" onSubmit={handleSubmit} className="grid w-full gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name" className="text-blue-600 dark:text-blue-400">Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Your full name"
-                    className="placeholder:text-gray-900 dark:placeholder:text-white"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    disabled={!user || loading || submitting}
-                  />
+              </li>
+              
+              <li className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-[#1E1E2F] shadow-sm border border-gray-100 dark:border-gray-800">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-500/10">
+                  <Phone className="text-blue-600 dark:text-blue-400" size={22} />
                 </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="email" className="text-blue-600 dark:text-blue-400">Email</Label>
-                  <Input
-                    type="email"
-                    id="email"
-                    placeholder="you@example.com"
-                    className="placeholder:text-gray-900 dark:placeholder:text-white"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={!user || loading || submitting}
-                  />
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Call Us</p>
+                  <a href="tel:+254785640048" className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
+                    +254 785 640 048
+                  </a>
                 </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="interest" className="text-blue-600 dark:text-blue-400">I am interested in...</Label>
-                  <Select
-                    value={interest}
-                    onValueChange={setInterest}
-                    disabled={!user || loading || submitting}
+              </li>
+
+              <li className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-[#1E1E2F] shadow-sm border border-gray-100 dark:border-gray-800">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-500/10">
+                  <MapPin className="text-blue-600 dark:text-blue-400" size={22} />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Visit Us</p>
+                  <span className="text-gray-900 dark:text-white font-semibold">
+                    Mombasa, Kenya
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Form */}
+          <div className="flex justify-center w-full">
+            <Card className="w-full max-w-xl rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/60 dark:bg-[#1E1E2F]/60 backdrop-blur-sm shadow-2xl shadow-blue-500/5">
+              <CardHeader className="pb-6">
+                <CardDescription className="text-base text-gray-600 dark:text-gray-300">
+                  {loading
+                    ? "Checking login status..."
+                    : user
+                      ? "Fill out the form and we will get back to you shortly."
+                      : "Please log in to send a message."}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {error && (
+                  <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 rounded-md">
+                    <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+                  </div>
+                )}
+                {success && (
+                  <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/30 border-l-4 border-green-500 rounded-md">
+                    <p className="text-green-600 dark:text-green-400 text-sm">{success}</p>
+                  </div>
+                )}
+                <form id="contact-form" onSubmit={handleSubmit} className="grid w-full gap-5">
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="name" className="text-gray-700 dark:text-gray-300 font-medium">Name</Label>
+                    <Input
+                      id="name"
+                      placeholder="Your full name"
+                      className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 placeholder:text-gray-400"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      disabled={!user || loading || submitting}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="email" className="text-gray-700 dark:text-gray-300 font-medium">Email</Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      placeholder="you@example.com"
+                      className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 placeholder:text-gray-400"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={!user || loading || submitting}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="interest" className="text-gray-700 dark:text-gray-300 font-medium">I am interested in...</Label>
+                    <Select
+                      value={interest}
+                      onValueChange={setInterest}
+                      disabled={!user || loading || submitting}
+                    >
+                      <SelectTrigger id="interest" className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+                        <SelectValue placeholder="Select a service" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white dark:bg-[#1E1E2F] rounded-xl border-gray-200 dark:border-gray-700">
+                        <SelectItem value="web">Web Development</SelectItem>
+                        <SelectItem value="seo">Search Engine Optimization</SelectItem>
+                        <SelectItem value="branding">Branding & UI/UX Design</SelectItem>
+                        <SelectItem value="marketing">Social Media & Digital Marketing</SelectItem>
+                        <SelectItem value="ecommerce">E-Commerce</SelectItem>
+                        <SelectItem value="consulting">IT Consulting and Support</SelectItem>
+                        <SelectItem value="saas">SaaS Product Development</SelectItem>
+                        <SelectItem value="cloud">Cloud & DevOps</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="message" className="text-gray-700 dark:text-gray-300 font-medium">Message</Label>
+                    <Textarea
+                      id="message"
+                      placeholder="Tell us more about your project..."
+                      rows={5}
+                      className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 placeholder:text-gray-400 resize-none"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      disabled={!user || loading || submitting}
+                    />
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter className="flex justify-end pt-2 pb-6 px-6">
+                {user ? (
+                  <Button asChild>
+                    <button
+                      type="submit"
+                      form="contact-form"
+                      disabled={loading || submitting}
+                      className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl flex items-center justify-center"
+                    >
+                      <Send size={18} className={`mr-2 ${submitting ? "animate-pulse" : ""}`} />
+                      {submitting ? "Sending..." : "Send Message"}
+                    </button>
+                  </Button>
+                ) : (
+                  <Button
+                    asChild
+                    className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
                   >
-                    <SelectTrigger id="interest">
-                      <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-100 dark:text-white dark:bg-[#1E1E2F]">
-                      <SelectItem value="web">Web Development</SelectItem>
-                      <SelectItem value="seo">Search Engine Optimization</SelectItem>
-                      <SelectItem value="branding">Branding & UI/UX Design</SelectItem>
-                      <SelectItem value="marketing">Social Media & Digital Marketing</SelectItem>
-                      <SelectItem value="ecommerce">E-Commerce</SelectItem>
-                      <SelectItem value="consulting">IT Consulting and Support</SelectItem>
-                      <SelectItem value="saas">SaaS Product Development</SelectItem>
-                      <SelectItem value="cloud">Cloud & DevOps</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="message" className="text-blue-600 dark:text-blue-400">Message</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Tell us more about your project..."
-                    rows={4}
-                    className="placeholder:text-gray-900 dark:placeholder:text-white"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    disabled={!user || loading || submitting}
-                  />
-                </div>
-              </form>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              {user ? (
-                <Button asChild>
-                  <button
-                    type="submit"
-                    form="contact-form"
-                    disabled={loading || submitting}
-                    className="bg-white text-blue-600 border border-blue-600 dark:border-blue-500 transition-colors duration-300 ease-in-out hover:bg-blue-600 hover:text-white dark:bg-gray-900 dark:text-white dark:hover:bg-blue-600 dark:hover:text-white px-4 py-2 rounded-md flex items-center"
-                  >
-                    <Send size={12} className="mr-2 animate-pulse" />
-                    {submitting ? "Sending..." : "Send Message"}
-                  </button>
-                </Button>
-              ) : (
-                <Button
-                  asChild
-                  className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                >
-                  <a href="/login">Log in to Send</a>
-                </Button>
-              )}
-            </CardFooter>
-          </Card>
+                    <a href="/login">Log in to Send</a>
+                  </Button>
+                )}
+              </CardFooter>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
     </section>
   );
 }
