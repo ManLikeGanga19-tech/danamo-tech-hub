@@ -65,6 +65,7 @@ export const Navbar1 = ({
                 { title: "SaaS Product Development", icon: <Package />, description: "Scalable SaaS platforms for your business", url: "/services" },
             ],
         },
+        { title: "Projects", url: "/projects" },
         { title: "Blog", url: "/blog" },
         { title: "About", url: "/about" },
         { title: "Webinars", url: "/webinars" },
@@ -75,7 +76,7 @@ export const Navbar1 = ({
     },
 }: Navbar1Props) => {
     const pathname = usePathname();
-    const { theme, toggleTheme } = useTheme();
+    const { toggleTheme } = useTheme();
     const { user, loading, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -114,11 +115,10 @@ export const Navbar1 = ({
             <NavigationMenuItem key={item.title}>
                 <NavigationMenuLink
                     href={item.url}
-                    className={`group inline-flex h-10 items-center justify-center px-4 py-2 text-sm font-medium transition-colors ${
-                        isActive
-                            ? "text-blue-600 dark:text-blue-400 font-semibold"
-                            : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
-                    }`}
+                    className={`group inline-flex h-10 items-center justify-center px-4 py-2 text-sm font-medium transition-colors ${isActive
+                        ? "text-blue-600 dark:text-blue-400 font-semibold"
+                        : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+                        }`}
                 >
                     {item.title}
                 </NavigationMenuLink>
@@ -148,11 +148,10 @@ export const Navbar1 = ({
                 key={item.title}
                 href={item.url}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block py-4 text-lg font-semibold transition-colors ${
-                    isActive
-                        ? "text-blue-600 dark:text-blue-400"
-                        : "text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
-                }`}
+                className={`block py-4 text-lg font-semibold transition-colors ${isActive
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+                    }`}
             >
                 {item.title}
             </a>
@@ -167,8 +166,7 @@ export const Navbar1 = ({
                     <nav className="hidden lg:flex justify-between items-center">
                         {/* Clickable Desktop Logo */}
                         <Link href="/" className="flex-shrink-0">
-                            <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={140} height={40} className="h-10 w-auto object-contain cursor-pointer" priority />
-                        </Link>
+                            <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={0} height={0} sizes="100vw" className="h-10 w-auto object-contain" priority />                        </Link>
 
                         <div className="flex items-center ml-auto">
                             <NavigationMenu>
@@ -183,7 +181,8 @@ export const Navbar1 = ({
                                 aria-label="Toggle theme"
                                 className="flex items-center justify-center transition-colors duration-300 ease-in-out border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                             >
-                                {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                                <Sun className="hidden dark:block w-4 h-4" />
+                                <Moon className="block dark:hidden w-4 h-4" />
                             </Button>
                             {loading ? null : user ? (
                                 <div className="relative">
@@ -219,11 +218,10 @@ export const Navbar1 = ({
                                             </div>
                                             {profileVerified !== null && (
                                                 <div className="px-4 pt-2 pb-3 border-t border-gray-100 dark:border-gray-700">
-                                                    <div className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-md ${
-                                                        profileVerified
-                                                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                                            : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                                                    }`}>
+                                                    <div className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-md ${profileVerified
+                                                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                                        : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                                                        }`}>
                                                         {profileVerified ? "Verified" : "Not Verified"}
                                                     </div>
                                                 </div>
@@ -249,8 +247,7 @@ export const Navbar1 = ({
                         <div className="flex items-center justify-between">
                             {/* Clickable Mobile Logo */}
                             <Link href="/" className="flex-shrink-0">
-                                <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={140} height={40} className="h-10 w-auto object-contain cursor-pointer" priority />
-                            </Link>
+                                <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={0} height={0} sizes="100vw" className="h-10 w-auto object-contain" priority />                            </Link>
 
                             <div className="flex items-center gap-3">
                                 <Button
@@ -260,7 +257,8 @@ export const Navbar1 = ({
                                     aria-label="Toggle theme"
                                     className="border-gray-200 dark:border-gray-700"
                                 >
-                                    {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                                    <Sun className="hidden dark:block w-4 h-4" />
+                                    <Moon className="block dark:hidden w-4 h-4" />
                                 </Button>
 
                                 <Button

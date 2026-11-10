@@ -7,12 +7,13 @@ from app.core.security import new_session_token, hash_session_token
 from app.db.session import get_db
 from app.models import Session, User
 
-async def create_session(db: AsyncSession, user: User, user_agent: str | None) -> str:
+async def create_session(db: AsyncSession, user: User, user_agent: str | None, custom_ttl: int | None = None) -> str:
     raw = new_session_token()
+    ttl = custom_ttl if custom_ttl else settings.session_ttl_hours
     db.add(Session(
         user_id=user.id,
         token_hash=hash_session_token(raw),
-        expires_at=datetime.now(timezone.utc) + timedelta(hours=settings.session_ttl_hours),
+        expires_at=datetime.now(timezone.utc) + timedelta(hours=ttl),
         user_agent=(user_agent or "")[:255] or None,
     ))
     await db.commit()

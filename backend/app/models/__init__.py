@@ -10,6 +10,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    role: Mapped[str] = mapped_column(String(20), default="user", server_default="user")
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
     hashed_password: Mapped[str | None] = mapped_column(String(255), nullable=True)
     full_name: Mapped[str | None] = mapped_column(String(120))
@@ -23,7 +24,6 @@ class User(Base):
     has_seen_greeting: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-
 class Session(Base):
     __tablename__ = "sessions"
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -101,7 +101,58 @@ class WebinarRegistration(Base):
     __tablename__ = "webinar_registrations"
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    webinar_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("webinars.id", ondelete="CASCADE"), index=True)
     name: Mapped[str] = mapped_column(String(120))
     email: Mapped[str] = mapped_column(String(320))
-    webinar_title: Mapped[str] = mapped_column(String(255))
+    webinar_title: Mapped[str] = mapped_column(String(255)) # Keep this for easy reading
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+class Webinar(Base):
+    __tablename__ = "webinars"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title: Mapped[str] = mapped_column(String(255))
+    description: Mapped[str] = mapped_column(Text)
+    date: Mapped[str] = mapped_column(String(100)) # e.g., "June 15, 2025"
+    time: Mapped[str] = mapped_column(String(100)) # e.g., "3:00 PM GMT"
+    host: Mapped[str] = mapped_column(String(120))
+    image_url: Mapped[str] = mapped_column(String(500))
+    
+    # Links
+    join_url: Mapped[str | None] = mapped_column(String(500), nullable=True) # For live upcoming
+    replay_url: Mapped[str | None] = mapped_column(String(500), nullable=True) # For past
+    
+    # Status: 'upcoming' or 'past'
+    status: Mapped[str] = mapped_column(String(20), default="upcoming")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+class Project(Base):
+    __tablename__ = "projects"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title: Mapped[str] = mapped_column(String(200))
+    slug: Mapped[str] = mapped_column(String(200), unique=True, index=True)
+    category: Mapped[str] = mapped_column(String(80), index=True)
+    description: Mapped[str] = mapped_column(String(500))
+    content: Mapped[str] = mapped_column(Text)
+    
+    client_name: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    client_industry: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    
+    image_url: Mapped[str] = mapped_column(String(500))
+    gallery: Mapped[str | None] = mapped_column(Text, nullable=True)  # JSON string array
+    technologies: Mapped[str | None] = mapped_column(Text, nullable=True)  # JSON string array
+    
+    live_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    featured: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    status: Mapped[str] = mapped_column(String(20), default="draft", server_default="draft")
+    
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+class Partner(Base):
+    __tablename__ = "partners"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name: Mapped[str] = mapped_column(String(120))
+    logo_url: Mapped[str] = mapped_column(String(500))
+    website_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    display_order: Mapped[int] = mapped_column(BigInteger, default=0, server_default="0")
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
