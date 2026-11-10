@@ -1,20 +1,22 @@
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
-  // Check if the body is FormData (e.g., for file uploads like CVs)
   const isFormData = init.body instanceof FormData;
-
-  // If FormData, do NOT set Content-Type. The browser must set it automatically
-  // to include the multipart boundary. Otherwise, default to JSON.
   const headers = isFormData
     ? { ...(init.headers ?? {}) }
     : { "Content-Type": "application/json", ...(init.headers ?? {}) };
 
-  const res = await fetch(`${BASE}${path}`, {
-    ...init,
-    credentials: "include",
-    headers,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      ...init,
+      credentials: "include",
+      headers,
+    });
+  } catch {
+    // Network-level failure: backend down, offline, DNS, CORS, etc.
+    throw new Error("NETWORK_ERROR");
+  }
 
   if (!res.ok) {
     const body = await res.text();

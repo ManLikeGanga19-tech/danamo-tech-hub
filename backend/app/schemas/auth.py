@@ -13,6 +13,7 @@ class LoginIn(BaseModel):
 class UserOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: UUID
+    role: str = "user"
     email: str
     full_name: str | None = None
     avatar_url: str | None = None
@@ -22,6 +23,7 @@ class UserOut(BaseModel):
     phone: str | None = None
     has_seen_welcome: bool = False
     has_seen_greeting: bool = False
+
 
 class ProfileUpdateIn(BaseModel):
     full_name: str | None = Field(default=None, max_length=120)

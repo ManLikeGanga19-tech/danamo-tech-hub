@@ -7,17 +7,19 @@ import About from "@/components/About/About";
 import Contact from "@/components/Contact/Contact";
 import NewsLetter from "@/components/NewsLetter/NewsLetter";
 import Footer from "@/components/Footer/Footer";
+import PartnersSlider from "@/components/Partners/PartnersSlider";
 // announcement bar temporary
-import AnnouncementBar from "@/components/AnnouncementBar";
+// import AnnouncementBar from "@/components/AnnouncementBar";
 
 export default function Home() {
   return (
     <main className=" text-black dark:bg-gray-900 dark:text-white flex flex-col ">
-      <AnnouncementBar/>
+      {/* <AnnouncementBar/> */}
       <Navbar1 />
       <Hero />
       <Services />
       <About />
+      <PartnersSlider />  
       <Contact />
       <NewsLetter />
       <Footer />
