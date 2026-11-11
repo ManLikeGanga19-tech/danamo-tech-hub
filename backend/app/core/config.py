@@ -12,4 +12,8 @@ class Settings(BaseSettings):
     allowed_admin_origin: str = "http://admin.localhost:3000"
     admin_cookie_samesite: str = "lax"
     # allowed_admin_origin: str = "https://admin.danamotech.co.ke"
+    resend_api_key: str = ""
+    resend_from_email: str = "noreply@danamotech.co.ke"
+    admin_notification_email: str = "hello@danamotech.co.ke"
+    frontend_url: str = "https://danamotech.co.ke"
 settings = Settings()

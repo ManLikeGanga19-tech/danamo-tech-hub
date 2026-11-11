@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models import CareerApplication, CvFile
 from app.schemas.forms import SubmissionOut
+from app.core.email import send_application_received, send_application_notification
 
 router = APIRouter(prefix="/careers", tags=["careers"])
 STORAGE_DIR = Path("storage/cvs")
@@ -40,4 +41,17 @@ async def apply(
     db.add(app_row)
     await db.commit()
     await db.refresh(app_row)
+
+    # Send emails (non-blocking to the response if they fail)
+    await send_application_received(
+        name=full_name,
+        email=email,
+        role=role_slug,
+    )
+    await send_application_notification(
+        name=full_name,
+        email=email,
+        role=role_slug,
+        phone=phone,
+    )
     return app_row
