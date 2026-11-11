@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models import Webinar, WebinarRegistration
 from app.schemas.webinars import WebinarOut, WebinarRegisterIn, ReplayUnlockIn
+from app.core.email import send_webinar_registration
 
 router = APIRouter(prefix="/webinars", tags=["webinars"])
 
@@ -31,12 +32,23 @@ async def register_for_webinar(payload: WebinarRegisterIn, db: AsyncSession = De
     db.add(row)
     await db.commit()
 
-    print(f"--- EMAIL SENT TO {payload.email} ---")
-    print(f"Subject: You are registered for {webinar.title}")
-    print(f"Join Link: {webinar.join_url or 'Link will be sent soon'}")
-    print("----------------------------------------")
+    # Send confirmation email with join link.
+    # Wrapped in try/except so a mail failure never breaks the user's registration.
+    try:
+        await send_webinar_registration(
+            name=payload.name,
+            email=payload.email,
+            webinar_title=webinar.title,
+            date=webinar.date,
+            time=webinar.time,
+            join_url=webinar.join_url,
+        )
+    except Exception as e:
+        # Registration already succeeded — log but do not fail the request
+        import logging
+        logging.getLogger(__name__).error(f"[webinar] Email send failed: {e}")
 
-    return {"status": "success", "message": "Registered successfully."}
+    return {"status": "success", "message": "Registered successfully. Check your email."}
 
 
 @router.post("/unlock-replay")
@@ -45,5 +57,8 @@ async def unlock_replay(payload: ReplayUnlockIn, db: AsyncSession = Depends(get_
     if not webinar or not webinar.replay_url:
         raise HTTPException(404, "Replay not available")
 
-    print(f"--- LEAD CAPTURED FOR REPLAY: {payload.email} ---")
+    # Optional: log the lead capture for analytics
+    import logging
+    logging.getLogger(__name__).info(f"[webinar] Replay unlocked for {payload.email}")
+
     return {"status": "success", "replay_url": webinar.replay_url}

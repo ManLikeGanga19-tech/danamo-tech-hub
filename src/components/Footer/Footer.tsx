@@ -1,12 +1,19 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
 import Link from 'next/link'
 import Image from 'next/image'
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  // Start with a static placeholder so SSR and first client render match
+  const [currentYear, setCurrentYear] = useState(2026);
+
+  // Only runs on the client after mount — no hydration mismatch
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer className="w-full pt-16 pb-8 transition-colors duration-700 bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] border-t border-gray-200 dark:border-gray-800">
@@ -64,7 +71,7 @@ export default function Footer() {
             <ul className="space-y-4">
               <li><Link href="/blog" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Blog</Link></li>
               <li><Link href="/faqs" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">FAQs</Link></li>
-              <li><Link href="/webinars" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Webinars & Events</Link></li>
+              <li><Link href="/webinars" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Webinars &amp; Events</Link></li>
               <li><Link href="/help-center" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Help Center</Link></li>
             </ul>
           </div>
