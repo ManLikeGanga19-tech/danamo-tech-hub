@@ -18,8 +18,9 @@ class Settings(BaseSettings):
 
     admin_cookie_name: str = "danamo_admin_session"
     admin_session_ttl_hours: int = 12
-    # Admin UI calls the API through the same-origin Next.js proxy, so "lax" works.
-    admin_cookie_samesite: Literal["lax", "strict", "none"] = "lax"
+    # The admin UI only talks to its own origin (Next.js proxy), so the admin
+    # cookie can be Strict: never sent on any cross-site request.
+    admin_cookie_samesite: Literal["lax", "strict", "none"] = "strict"
 
     # memory:// for local dev; redis://danamo-redis:6379/0 in production
     rate_limit_storage_uri: str = "memory://"

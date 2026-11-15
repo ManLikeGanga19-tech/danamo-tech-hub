@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.security import hash_password, verify_password, hash_session_token, needs_rehash
+from app.core.security import hash_password, verify_login_password, hash_session_token, needs_rehash
 from app.core.session import create_session, set_session_cookie, clear_session_cookie, get_current_user
 from app.core.config import settings
 from app.core.rate_limit import AUTH_LIMIT, limiter
@@ -28,7 +28,7 @@ async def signup(payload: SignupIn, request: Request, response: Response, db: As
 @limiter.limit(AUTH_LIMIT)
 async def login(payload: LoginIn, request: Request, response: Response, db: AsyncSession = Depends(get_db)):
     user = await db.scalar(select(User).where(User.email == payload.email.lower()))
-    if not user or not user.hashed_password or not verify_password(payload.password, user.hashed_password):
+    if not verify_login_password(payload.password, user.hashed_password if user else None):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid email or password")
     if not user.is_active:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Account disabled")

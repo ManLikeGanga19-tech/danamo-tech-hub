@@ -6,14 +6,13 @@ from app.db.session import get_db
 from app.models import CareerApplication, CvFile
 from app.schemas.forms import SubmissionOut
 from app.core.email import send_application_received, send_application_notification
+from app.core.files import CV_TYPES, EXTENSIONS, read_validated_upload
 from app.core.rate_limit import UPLOAD_LIMIT, limiter
 
 router = APIRouter(prefix="/careers", tags=["careers"])
 STORAGE_DIR = Path("storage/cvs")
 STORAGE_DIR.mkdir(parents=True, exist_ok=True)
 MAX_CV_BYTES = 5 * 1024 * 1024
-ALLOWED_TYPES = {"application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"}
-EXT_BY_MIME = {"application/pdf": ".pdf", "application/msword": ".doc", "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx"}
 
 @router.post("/apply", response_model=SubmissionOut, status_code=201)
 @limiter.limit(UPLOAD_LIMIT)
@@ -27,16 +26,12 @@ async def apply(
     cv: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
 ):
-    if cv.content_type not in ALLOWED_TYPES:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "CV must be PDF, DOC, or DOCX")
-    contents = await cv.read()
-    if not contents: raise HTTPException(status.HTTP_400_BAD_REQUEST, "CV file is empty")
-    if len(contents) > MAX_CV_BYTES: raise HTTPException(status.HTTP_400_BAD_REQUEST, "CV must be under 5 MB")
+    contents, mime = await read_validated_upload(cv, CV_TYPES, MAX_CV_BYTES, "CV", "a PDF, DOC, or DOCX file")
 
-    storage_key = f"{uuid.uuid4()}{EXT_BY_MIME[cv.content_type]}"
+    storage_key = f"{uuid.uuid4()}{EXTENSIONS[mime]}"
     (STORAGE_DIR / storage_key).write_bytes(contents)
 
-    cv_row = CvFile(original_filename=(cv.filename or "cv")[:255], storage_key=storage_key, mime_type=cv.content_type, size_bytes=len(contents))
+    cv_row = CvFile(original_filename=(cv.filename or "cv")[:255], storage_key=storage_key, mime_type=mime, size_bytes=len(contents))
     db.add(cv_row)
     await db.flush()
 

@@ -14,6 +14,7 @@ from app.models import (
     WebinarRegistration, NewsletterSubscriber, Project, Partner
 )
 from app.api.deps import get_current_admin
+from app.core.files import EXTENSIONS, IMAGE_TYPES, read_validated_upload
 from app.core.rate_limit import ADMIN_UPLOAD_LIMIT, limiter
 from app.schemas.webinars import WebinarOut
 from app.schemas.projects import ProjectOut, ProjectCreate
@@ -59,7 +60,7 @@ async def get_applications(db: AsyncSession = Depends(get_db), admin: User = Dep
 
 
 @router.get("/cv/{cv_id}")
-async def download_cv(cv_id: str, db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)):
+async def download_cv(cv_id: uuid.UUID, db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)):
     cv = await db.get(CvFile, cv_id)
     if not cv:
         raise HTTPException(404, "CV not found")
@@ -99,25 +100,13 @@ WEBINAR_IMAGES_DIR = Path("storage/webinars")
 WEBINAR_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 
 MAX_IMAGE_BYTES = 5 * 1024 * 1024
-ALLOWED_IMAGE_TYPES = {
-    "image/jpeg": ".jpg",
-    "image/jpg": ".jpg",
-    "image/png": ".png",
-    "image/webp": ".webp",
-}
 
 
 @router.post("/webinars/upload-image")
 @limiter.limit(ADMIN_UPLOAD_LIMIT)
 async def upload_webinar_image(request: Request, file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
-    if file.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(400, "Image must be JPG, PNG, or WebP")
-    contents = await file.read()
-    if not contents:
-        raise HTTPException(400, "Image file is empty")
-    if len(contents) > MAX_IMAGE_BYTES:
-        raise HTTPException(400, "Image must be under 5 MB")
-    ext = ALLOWED_IMAGE_TYPES[file.content_type]
+    contents, mime = await read_validated_upload(file, IMAGE_TYPES, MAX_IMAGE_BYTES, "Image", "a JPG, PNG, or WebP image")
+    ext = EXTENSIONS[mime]
     filename = f"{uuid.uuid4()}{ext}"
     (WEBINAR_IMAGES_DIR / filename).write_bytes(contents)
     return {"url": f"/uploads/webinars/{filename}"}
@@ -215,14 +204,8 @@ async def admin_delete_project(project_id: str, db: AsyncSession = Depends(get_d
 @router.post("/projects/upload-image")
 @limiter.limit(ADMIN_UPLOAD_LIMIT)
 async def upload_project_image(request: Request, file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
-    if file.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(400, "Image must be JPG, PNG, or WebP")
-    contents = await file.read()
-    if not contents:
-        raise HTTPException(400, "Image file is empty")
-    if len(contents) > MAX_IMAGE_BYTES:
-        raise HTTPException(400, "Image must be under 5 MB")
-    ext = ALLOWED_IMAGE_TYPES[file.content_type]
+    contents, mime = await read_validated_upload(file, IMAGE_TYPES, MAX_IMAGE_BYTES, "Image", "a JPG, PNG, or WebP image")
+    ext = EXTENSIONS[mime]
     filename = f"{uuid.uuid4()}{ext}"
     (PROJECT_IMAGES_DIR / filename).write_bytes(contents)
     return {"url": f"/uploads/projects/{filename}"}
@@ -301,14 +284,8 @@ async def admin_delete_partner(partner_id: str, db: AsyncSession = Depends(get_d
 @router.post("/partners/upload-logo")
 @limiter.limit(ADMIN_UPLOAD_LIMIT)
 async def upload_partner_logo(request: Request, file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
-    if file.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(400, "Logo must be JPG, PNG, or WebP")
-    contents = await file.read()
-    if not contents:
-        raise HTTPException(400, "File is empty")
-    if len(contents) > MAX_IMAGE_BYTES:
-        raise HTTPException(400, "File must be under 5 MB")
-    ext = ALLOWED_IMAGE_TYPES[file.content_type]
+    contents, mime = await read_validated_upload(file, IMAGE_TYPES, MAX_IMAGE_BYTES, "Logo", "a JPG, PNG, or WebP image")
+    ext = EXTENSIONS[mime]
     filename = f"{uuid.uuid4()}{ext}"
     (PARTNER_LOGOS_DIR / filename).write_bytes(contents)
     return {"url": f"/uploads/partners/{filename}"}

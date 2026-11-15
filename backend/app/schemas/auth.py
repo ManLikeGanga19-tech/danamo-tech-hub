@@ -31,6 +31,6 @@ class ProfileUpdateIn(BaseModel):
     title: str | None = Field(default=None, max_length=120)
     company: str | None = Field(default=None, max_length=120)
     phone: str | None = Field(default=None, max_length=40)
-    avatar_url: str | None = Field(default=None, max_length=500)
+    avatar_url: str | None = Field(default=None, max_length=500, pattern=r"^https://")
     has_seen_welcome: bool | None = None
     has_seen_greeting: bool | None = None

@@ -3,12 +3,12 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.rate_limit import AUTH_LIMIT, limiter
-from app.core.security import verify_password, hash_session_token
+from app.core.security import verify_login_password, hash_session_token
 from app.core.session import create_session
 from app.db.session import get_db
 from app.models import User, Session
 from app.schemas.auth import LoginIn, UserOut
-from app.api.deps import get_current_admin
+from app.api.deps import ADMIN_ROLES, get_current_admin
 
 router = APIRouter(prefix="/admin/auth", tags=["admin_auth"])
 
@@ -22,10 +22,10 @@ async def admin_login(
 ):
     user = await db.scalar(select(User).where(User.email == payload.email.lower()))
     
-    if not user or not user.hashed_password or not verify_password(payload.password, user.hashed_password):
+    if not verify_login_password(payload.password, user.hashed_password if user else None):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid credentials")
-    
-    if user.role not in ["admin", "superadmin"]:
+
+    if not user.is_active or user.role not in ADMIN_ROLES:
         raise HTTPException(status.HTTP_403_FORBIDDEN, "Access denied. Admin privileges required.")
         
     raw_token = await create_session(db, user, request.headers.get("user-agent"), custom_ttl=settings.admin_session_ttl_hours)

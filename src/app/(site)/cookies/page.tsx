@@ -79,7 +79,7 @@ export default function CookiesPage() {
         </thead>
         <tbody>
           <tr><td><code>danamo_session</code></td><td>Authenticates logged-in public users</td><td>7 days</td><td>HttpOnly</td></tr>
-          <tr><td><code>danamo_admin_session</code></td><td>Authenticates admin users</td><td>12 hours</td><td>HttpOnly, Secure, SameSite=Lax (production)</td></tr>
+          <tr><td><code>danamo_admin_session</code></td><td>Authenticates admin users</td><td>12 hours</td><td>HttpOnly, Secure, SameSite=Strict (production)</td></tr>
           <tr><td><code>theme</code></td><td>Remembers light/dark mode preference</td><td>1 year</td><td>Functional</td></tr>
         </tbody>
       </table>
