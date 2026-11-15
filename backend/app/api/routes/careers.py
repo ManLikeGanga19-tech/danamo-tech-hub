@@ -6,6 +6,8 @@ from app.db.session import get_db
 from app.models import CareerApplication, CvFile
 from app.schemas.forms import SubmissionOut
 from app.core.email import send_application_received, send_application_notification
+from email_validator import EmailNotValidError, validate_email
+
 from app.core.files import CV_TYPES, EXTENSIONS, read_validated_upload
 from app.core.rate_limit import UPLOAD_LIMIT, limiter
 
@@ -26,6 +28,12 @@ async def apply(
     cv: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
 ):
+    # Validate before storing anything: the confirmation email goes to this address.
+    try:
+        email = validate_email(email, check_deliverability=False).normalized.lower()
+    except EmailNotValidError:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "Please enter a valid email address")
+
     contents, mime = await read_validated_upload(cv, CV_TYPES, MAX_CV_BYTES, "CV", "a PDF, DOC, or DOCX file")
 
     storage_key = f"{uuid.uuid4()}{EXTENSIONS[mime]}"
@@ -35,7 +43,7 @@ async def apply(
     db.add(cv_row)
     await db.flush()
 
-    app_row = CareerApplication(full_name=full_name, email=email.lower(), phone=phone, role_slug=role_slug, cover_letter=cover_letter, cv_file_id=cv_row.id, status="received")
+    app_row = CareerApplication(full_name=full_name, email=email, phone=phone, role_slug=role_slug, cover_letter=cover_letter, cv_file_id=cv_row.id, status="received")
     db.add(app_row)
     await db.commit()
     await db.refresh(app_row)

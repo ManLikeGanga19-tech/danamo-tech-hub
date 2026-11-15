@@ -3,7 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models import ContactMessage, ServiceInquiry
 from app.schemas.forms import ContactIn, ServiceInquiryIn, SubmissionOut
-from app.core.email import send_contact_notification
+from app.core.email import (
+    send_contact_notification,
+    send_contact_received,
+    send_service_inquiry_notification,
+    send_service_inquiry_received,
+)
 from app.core.rate_limit import FORM_LIMIT, limiter
 
 router = APIRouter(tags=["forms"])
@@ -17,13 +22,15 @@ async def create_contact(request: Request, payload: ContactIn, db: AsyncSession 
     await db.commit()
     await db.refresh(row)
 
-    # Fire email AFTER commit — if email fails, the message is still saved
+    # Emails are queued after the commit, so the message is saved even if
+    # sending fails.
     await send_contact_notification(
         name=payload.name,
         email=payload.email,
         subject=payload.subject,
         message=payload.message,
     )
+    await send_contact_received(name=payload.name, email=payload.email, subject=payload.subject)
     return row
 
 
@@ -34,4 +41,13 @@ async def create_service_inquiry(request: Request, payload: ServiceInquiryIn, db
     db.add(row)
     await db.commit()
     await db.refresh(row)
+
+    await send_service_inquiry_notification(
+        name=payload.name,
+        email=payload.email,
+        company=payload.company,
+        service=payload.service_slug,
+        message=payload.message,
+    )
+    await send_service_inquiry_received(name=payload.name, email=payload.email, service=payload.service_slug)
     return row

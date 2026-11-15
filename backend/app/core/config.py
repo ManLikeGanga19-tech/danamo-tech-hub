@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     database_url: str
     frontend_origin: str = "http://localhost:3000"
     frontend_url: str = "https://danamotech.co.ke"
+    admin_url: str = "https://admin.danamotech.co.ke"
 
     session_cookie_name: str = "danamo_session"
     session_ttl_hours: int = 168

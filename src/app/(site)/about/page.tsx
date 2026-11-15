@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import AboutClient from "./AboutClient";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About Us | Danamo Tech",
@@ -26,10 +26,7 @@ export default function AboutPage() {
             name: 'Danamo Tech',
             url: SITE_URL,
             logo: `${SITE_URL}/logo.png`,
-            sameAs: [
-              'https://www.facebook.com/danamo',
-              'https://www.linkedin.com/company/danamo-tech',
-            ],
+            sameAs: Object.values(SOCIAL_LINKS).filter(Boolean),
             description: 'Danamo Tech empowers startups and SMEs in Mombasa with affordable and innovative digital solutions.',
           }),
         }}

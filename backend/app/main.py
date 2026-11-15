@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -21,6 +22,10 @@ from app.api.routes import (
 )
 from app.core.config import settings
 from app.core.rate_limit import GlobalRateLimitMiddleware, limiter
+
+# Application logs (e.g. "[email] Sent ...") at INFO on stderr -> docker logs.
+# uvicorn configures only its own loggers, so app.* needs a root handler.
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
 # Largest legitimate request is a 5 MB upload; leave headroom for multipart overhead.
 MAX_REQUEST_BYTES = 6 * 1024 * 1024

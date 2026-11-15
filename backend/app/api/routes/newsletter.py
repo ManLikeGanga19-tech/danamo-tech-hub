@@ -17,8 +17,9 @@ class NewsletterIn(BaseModel):
 @router.post("/newsletter", status_code=201)
 @limiter.limit(FORM_LIMIT)
 async def subscribe(request: Request, payload: NewsletterIn, db: AsyncSession = Depends(get_db)):
+    email = payload.email.lower()
     existing = await db.scalar(
-        select(NewsletterSubscriber).where(NewsletterSubscriber.email == payload.email)
+        select(NewsletterSubscriber).where(NewsletterSubscriber.email == email)
     )
 
     if existing and existing.unsubscribed_at is None:
@@ -27,13 +28,13 @@ async def subscribe(request: Request, payload: NewsletterIn, db: AsyncSession = 
     if existing:
         existing.unsubscribed_at = None
         await db.commit()
+        await send_newsletter_welcome(email)
         return {"status": "resubscribed"}
 
-    db.add(NewsletterSubscriber(email=payload.email))
+    db.add(NewsletterSubscriber(email=email))
     await db.commit()
 
-    # Fire emails
-    await send_newsletter_welcome(payload.email)
-    await send_newsletter_notification(payload.email)
+    await send_newsletter_welcome(email)
+    await send_newsletter_notification(email)
 
     return {"status": "subscribed"}
