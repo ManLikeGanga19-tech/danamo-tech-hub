@@ -83,11 +83,14 @@ function SmoothMarquee({ partners, paused }: { partners: Partner[]; paused: bool
 
 function PartnerLogo({ partner }: { partner: Partner }) {
   const content = (
-    <div className="flex items-center justify-center px-8 h-20 min-w-[140px]">
+    // Client logos are mostly dark-on-light artwork, so in dark mode they sit
+    // on a soft light chip to stay legible; light mode is unchanged.
+    <div className="flex items-center justify-center px-8 h-20 min-w-[140px] dark:bg-gray-100 dark:rounded-xl">
       <img
         src={partner.logo_url}
         alt={partner.name}
-        className="max-h-14 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 dark:invert-0"
+        loading="lazy"
+        className="max-h-14 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 dark:opacity-80 transition-all duration-300"
         style={{ maxWidth: "160px" }}
       />
     </div>
