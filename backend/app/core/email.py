@@ -63,10 +63,11 @@ def _wrap_html(title: str, body_html: str) -> str:
           
           <!-- Header -->
           <tr>
-            <td style="background:linear-gradient(135deg,{BLUE} 0%,#1d4ed8 100%); padding:32px 40px; text-align:center;">
-              <h1 style="margin:0; color:#ffffff; font-size:22px; font-weight:700; letter-spacing:-0.02em;">
-                Danamo <span style="color:#93c5fd;">Tech</span>
-              </h1>
+            <td style="background:#ffffff; padding:28px 40px 24px 40px; text-align:center; border-bottom:3px solid {BLUE};">
+              <a href="{settings.frontend_url}" style="text-decoration:none;">
+                <img src="{settings.frontend_url}/email-logo.jpg" width="220" height="64" alt="Danamo Tech"
+                     style="display:block; margin:0 auto; width:220px; height:64px; border:0; outline:none; color:{DARK}; font-size:22px; font-weight:700;">
+              </a>
             </td>
           </tr>
 
