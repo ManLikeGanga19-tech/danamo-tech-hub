@@ -119,48 +119,48 @@ export default function AdminWebinars() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Webinars</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage your live events and registrations.</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Webinars</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your live events and registrations.</p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="bg-slate-100 dark:bg-slate-800 p-1 rounded-lg flex">
-            <button onClick={() => setActiveTab("events")} className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === "events" ? "bg-white dark:bg-slate-900 shadow text-emerald-600" : "text-slate-500"}`}>Events</button>
-            <button onClick={() => setActiveTab("registrations")} className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === "registrations" ? "bg-white dark:bg-slate-900 shadow text-emerald-600" : "text-slate-500"}`}>Attendees</button>
+          <div className="bg-gray-100 dark:bg-gray-800 p-1 rounded-lg flex">
+            <button onClick={() => setActiveTab("events")} className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === "events" ? "bg-white dark:bg-[#1E1E2F] shadow text-blue-600" : "text-gray-500"}`}>Events</button>
+            <button onClick={() => setActiveTab("registrations")} className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === "registrations" ? "bg-white dark:bg-[#1E1E2F] shadow text-blue-600" : "text-gray-500"}`}>Attendees</button>
           </div>
-          <Button onClick={openCreateModal} className="bg-emerald-600 text-white rounded-lg">
+          <Button onClick={openCreateModal} className="bg-blue-600 text-white rounded-lg">
             <Plus className="w-4 h-4 mr-2" /> Add Event
           </Button>
         </div>
       </div>
 
       {loading ? (
-        <div className="flex justify-center h-64 items-center"><Loader2 className="w-8 h-8 animate-spin text-emerald-600" /></div>
+        <div className="flex justify-center h-64 items-center"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>
       ) : activeTab === "events" ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {webinars.length === 0 ? (
-            <div className="col-span-full p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-              <ImageIcon className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-              <p className="text-slate-500">No webinars yet. Click <strong>Add Event</strong> to create one.</p>
+            <div className="col-span-full p-12 text-center bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800">
+              <ImageIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">No webinars yet. Click <strong>Add Event</strong> to create one.</p>
             </div>
           ) : (
             webinars.map((w) => (
-              <div key={w.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+              <div key={w.id} className="bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
                 {w.image_url && (
-                  <div className="w-full h-40 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                  <div className="w-full h-40 overflow-hidden bg-gray-100 dark:bg-gray-800">
                     <img src={w.image_url} alt={w.title} className="w-full h-full object-cover" />
                   </div>
                 )}
                 <div className="p-6">
-                  <span className={`inline-block px-2 py-1 text-xs font-bold rounded-md mb-3 ${w.status === 'upcoming' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}>{w.status.toUpperCase()}</span>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{w.title}</h3>
-                  <p className="text-sm text-slate-500 mb-3">{w.date} &middot; {w.time}</p>
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                  <span className={`inline-block px-2 py-1 text-xs font-bold rounded-md mb-3 ${w.status === 'upcoming' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'}`}>{w.status.toUpperCase()}</span>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{w.title}</h3>
+                  <p className="text-sm text-gray-500 mb-3">{w.date} &middot; {w.time}</p>
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Calendar className="w-4 h-4" /> {w.host}
                   </div>
                 </div>
-                <div className="px-6 py-3 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                  <span className="text-xs text-slate-500 flex items-center gap-1">
+                <div className="px-6 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
+                  <span className="text-xs text-gray-500 flex items-center gap-1">
                     <LinkIcon className="w-3 h-3" /> {w.join_url || w.replay_url ? "Link attached" : "No link"}
                   </span>
                   <button onClick={() => handleDelete(w.id)} className="text-red-500 hover:text-red-700 p-1" aria-label="Delete webinar">
@@ -172,14 +172,14 @@ export default function AdminWebinars() {
           )}
         </div>
       ) : (
-        <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-          <p className="text-slate-500">The attendees table will render here next.</p>
+        <div className="p-12 text-center bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800">
+          <p className="text-gray-500">The attendees table will render here next.</p>
         </div>
       )}
 
       {/* CREATE MODAL */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-lg bg-white dark:bg-slate-900 rounded-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-lg bg-white dark:bg-[#1E1E2F] rounded-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader><DialogTitle>Create New Webinar</DialogTitle></DialogHeader>
           <form onSubmit={handleCreate} className="space-y-4 mt-2">
             <div>
@@ -217,7 +217,7 @@ export default function AdminWebinars() {
               />
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="mt-2 cursor-pointer rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors overflow-hidden"
+                className="mt-2 cursor-pointer rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors overflow-hidden"
               >
                 {imagePreview ? (
                   <div className="relative">
@@ -230,18 +230,18 @@ export default function AdminWebinars() {
                   </div>
                 ) : (
                   <div className="p-8 text-center">
-                    <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Click to upload image</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">JPG, PNG or WebP &middot; Max 5 MB</p>
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Click to upload image</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">JPG, PNG or WebP &middot; Max 5 MB</p>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+            <div className="grid grid-cols-2 gap-4 border-t border-gray-100 dark:border-gray-800 pt-4">
               <div>
                 <Label>Status</Label>
-                <select value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full mt-1.5 h-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm">
+                <select value={formData.status} onChange={e => setFormData({ ...formData, status: e.target.value })} className="w-full mt-1.5 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm">
                   <option value="upcoming">Upcoming</option>
                   <option value="past">Past</option>
                 </select>
@@ -259,7 +259,7 @@ export default function AdminWebinars() {
               </div>
             )}
 
-            <Button asChild className="w-full bg-emerald-600 text-white rounded-xl py-6 mt-4">
+            <Button asChild className="w-full bg-blue-600 text-white rounded-xl py-6 mt-4">
               <button type="submit" disabled={submitting}>
                 {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Publish Webinar"}
               </button>

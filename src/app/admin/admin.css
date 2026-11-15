@@ -1,19 +1,9 @@
-/* Admin console styles — independent of the public site's globals.css. */
+/* Admin console styles. Visually matches the public site (blue accent,
+   same surfaces) but is loaded independently of the site's globals.css. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light;
-}
-.dark {
-  color-scheme: dark;
-}
-
 body {
-  @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
-}
-
-::selection {
-  @apply bg-emerald-500/30;
+  @apply bg-gray-50 text-gray-900 dark:bg-[#0e0e15] dark:text-white;
 }

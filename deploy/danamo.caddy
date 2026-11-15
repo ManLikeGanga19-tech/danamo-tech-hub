@@ -1,0 +1,47 @@
+# Danamo Tech Hub — Caddy site file.
+# Installed as /opt/caddy-sites/danamo.caddy on the VPS (read by the shared
+# sms-caddy edge). This is Danamo's ONLY file on the edge; never edit other
+# tenants' files. Validate + reload inside the sms-caddy container (needs GO).
+#
+# NOTE (verify in Phase E): upstreams assume sms-caddy can reach the host's
+# 127.0.0.1 (host network mode). If it cannot, switch to the address other
+# tenants' files use.
+
+(danamo_common) {
+	encode zstd gzip
+	request_body {
+		max_size 10MB
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+		-X-Powered-By
+	}
+}
+
+danamotech.co.ke {
+	import danamo_common
+	reverse_proxy 127.0.0.1:3001
+}
+
+www.danamotech.co.ke {
+	redir https://danamotech.co.ke{uri} permanent
+}
+
+admin.danamotech.co.ke {
+	import danamo_common
+	header X-Robots-Tag "noindex, nofollow"
+	reverse_proxy 127.0.0.1:3001
+}
+
+api.danamotech.co.ke {
+	import danamo_common
+	# The admin API is only reachable through the admin console's own
+	# server-side proxy (frontend container -> backend on the private Docker
+	# network), never directly from the internet.
+	@admin_api path /api/v1/admin /api/v1/admin/*
+	respond @admin_api 404
+	reverse_proxy 127.0.0.1:8001
+}

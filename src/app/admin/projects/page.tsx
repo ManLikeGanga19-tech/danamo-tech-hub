@@ -216,52 +216,52 @@ export default function AdminProjects() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Projects</h1>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                         Manage your portfolio of case studies.
                     </p>
                 </div>
-                <Button onClick={openCreateModal} className="bg-emerald-600 text-white rounded-lg">
+                <Button onClick={openCreateModal} className="bg-blue-600 text-white rounded-lg">
                     <Plus className="w-4 h-4 mr-2" /> Add Project
                 </Button>
             </div>
 
             {loading ? (
                 <div className="flex justify-center h-64 items-center">
-                    <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                 </div>
             ) : projects.length === 0 ? (
-                <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-                    <FolderKanban className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">No projects yet</h3>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
+                <div className="p-12 text-center bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800">
+                    <FolderKanban className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No projects yet</h3>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
                         Click <strong>Add Project</strong> to publish your first case study.
                     </p>
                 </div>
             ) : (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {projects.map((p) => (
-                        <div key={p.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
-                            <div className="relative w-full h-40 overflow-hidden bg-slate-100 dark:bg-slate-800">
+                        <div key={p.id} className="bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden shadow-sm">
+                            <div className="relative w-full h-40 overflow-hidden bg-gray-100 dark:bg-gray-800">
                                 {p.image_url && <img src={p.image_url} alt={p.title} className="w-full h-full object-cover" />}
                                 <span className={`absolute top-3 left-3 px-2 py-1 text-xs font-bold rounded-md ${p.status === "published" ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300" : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300"}`}>
                                     {p.status.toUpperCase()}
                                 </span>
                                 {p.featured && (
-                                    <span className="absolute top-3 right-3 px-2 py-1 text-xs font-bold rounded-md bg-emerald-600 text-white">
+                                    <span className="absolute top-3 right-3 px-2 py-1 text-xs font-bold rounded-md bg-blue-600 text-white">
                                         FEATURED
                                     </span>
                                 )}
                             </div>
                             <div className="p-5">
-                                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">
                                     {p.category}
                                 </p>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 truncate">{p.title}</h3>
-                                <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">{p.description}</p>
-                                <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 truncate">{p.title}</h3>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">{p.description}</p>
+                                <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
                                     <div className="flex items-center gap-2">
-                                        <button onClick={() => openEditModal(p)} className="text-slate-500 hover:text-emerald-600 p-1" aria-label="Edit">
+                                        <button onClick={() => openEditModal(p)} className="text-gray-500 hover:text-blue-600 p-1" aria-label="Edit">
                                             <Edit3 className="w-4 h-4" />
                                         </button>
                                     </div>
@@ -277,7 +277,7 @@ export default function AdminProjects() {
 
             {/* CREATE / EDIT MODAL */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="sm:max-w-2xl bg-white dark:bg-slate-900 rounded-2xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="sm:max-w-2xl bg-white dark:bg-[#1E1E2F] rounded-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>{editingProject ? "Edit Project" : "Create New Project"}</DialogTitle>
                     </DialogHeader>
@@ -301,12 +301,12 @@ export default function AdminProjects() {
 
                         <div>
                             <Label>Short Description * (max 500)</Label>
-                            <textarea required rows={2} maxLength={500} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="w-full mt-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm resize-none" />
+                            <textarea required rows={2} maxLength={500} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="w-full mt-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm resize-none" />
                         </div>
 
                         <div>
                             <Label>Full Content * (HTML supported)</Label>
-                            <textarea required rows={6} value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className="w-full mt-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm resize-none font-mono text-xs" placeholder="<p>Your case study...</p>" />
+                            <textarea required rows={6} value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className="w-full mt-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm resize-none font-mono text-xs" placeholder="<p>Your case study...</p>" />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -334,7 +334,7 @@ export default function AdminProjects() {
                         <div>
                             <Label>Cover Image *</Label>
                             <input ref={coverInputRef} type="file" accept="image/*" onChange={handleCoverChange} className="hidden" />
-                            <div onClick={() => coverInputRef.current?.click()} className="mt-2 cursor-pointer rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 overflow-hidden hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                            <div onClick={() => coverInputRef.current?.click()} className="mt-2 cursor-pointer rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 overflow-hidden hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                                 {imagePreview ? (
                                     <div className="relative">
                                         <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover" />
@@ -344,9 +344,9 @@ export default function AdminProjects() {
                                     </div>
                                 ) : (
                                     <div className="p-8 text-center">
-                                        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Click to upload cover image</p>
-                                        <p className="text-xs text-slate-500 mt-1">JPG, PNG or WebP &middot; Max 5 MB</p>
+                                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Click to upload cover image</p>
+                                        <p className="text-xs text-gray-500 mt-1">JPG, PNG or WebP &middot; Max 5 MB</p>
                                     </div>
                                 )}
                             </div>
@@ -369,7 +369,7 @@ export default function AdminProjects() {
                             {gallery.length > 0 && (
                                 <div className="grid grid-cols-4 gap-2 mt-3">
                                     {gallery.map((url) => (
-                                        <div key={url} className="relative group rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700">
+                                        <div key={url} className="relative group rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                                             <img src={url} alt="Gallery" className="w-full h-20 object-cover" />
                                             <button type="button" onClick={() => removeGalleryImage(url)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity" aria-label="Remove">
                                                 <X className="w-3 h-3" />
@@ -380,10 +380,10 @@ export default function AdminProjects() {
                             )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                        <div className="grid grid-cols-2 gap-4 border-t border-gray-100 dark:border-gray-800 pt-4">
                             <div>
                                 <Label>Status</Label>
-                                <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} className="w-full mt-1.5 h-10 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 text-sm">
+                                <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} className="w-full mt-1.5 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm">
                                     <option value="draft">Draft (hidden from public)</option>
                                     <option value="published">Published (visible to public)</option>
                                 </select>
@@ -391,12 +391,12 @@ export default function AdminProjects() {
                             <div className="flex items-end pb-2">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input type="checkbox" checked={formData.featured} onChange={(e) => setFormData({ ...formData, featured: e.target.checked })} className="w-4 h-4 rounded" />
-                                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Featured (top of grid)</span>
+                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Featured (top of grid)</span>
                                 </label>
                             </div>
                         </div>
 
-                        <Button asChild className="w-full bg-emerald-600 text-white rounded-xl py-6 mt-4">
+                        <Button asChild className="w-full bg-blue-600 text-white rounded-xl py-6 mt-4">
                             <button type="submit" disabled={submitting}>
                                 {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : editingProject ? "Save Changes" : "Publish Project"}
                             </button>

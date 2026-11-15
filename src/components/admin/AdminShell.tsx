@@ -41,7 +41,7 @@ function ThemeSwitch() {
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="h-9 w-9 inline-flex items-center justify-center rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-emerald-400 dark:hover:bg-slate-800 transition-colors"
+      className="h-9 w-9 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-gray-800 transition-colors"
     >
       {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
     </button>
@@ -59,26 +59,24 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     }
   }, [loading, user, isLoginPage]);
 
+  // The login page never waits for the session check.
+  if (isLoginPage) return <>{children}</>;
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0e0e15]">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
       </div>
     );
   }
-
-  if (isLoginPage) return <>{children}</>;
   if (!user) return null;
 
   return (
-    <div className="min-h-screen flex">
-      <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed inset-y-0 z-50">
-        <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800">
-          <span className="flex flex-col leading-tight">
-            <span className="text-lg font-bold tracking-wide text-slate-900 dark:text-white">DANAMO</span>
-            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">
-              Console
-            </span>
+    <div className="min-h-screen flex bg-gray-50 dark:bg-[#0e0e15]">
+      <aside className="w-64 bg-white dark:bg-[#1E1E2F] border-r border-gray-200 dark:border-gray-800 flex flex-col fixed inset-y-0 z-50">
+        <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-gray-800">
+          <span className="text-xl font-bold text-gray-900 dark:text-white">
+            Danamo <span className="text-blue-600 dark:text-blue-400">Admin</span>
           </span>
           <ThemeSwitch />
         </div>
@@ -93,8 +91,8 @@ export default function AdminShell({ children }: { children: ReactNode }) {
                 aria-current={isActive ? "page" : undefined}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
-                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+                    ? "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100"
                 }`}
               >
                 <link.icon className="w-5 h-5" />
@@ -104,14 +102,14 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
           <div className="flex items-center gap-3 mb-4 px-2">
-            <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400 flex items-center justify-center font-bold">
               {user.email.charAt(0).toUpperCase()}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-medium text-slate-900 dark:text-white truncate">{user.email}</span>
-              <span className="text-xs text-slate-500 capitalize">{user.role}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white truncate">{user.email}</span>
+              <span className="text-xs text-gray-500 capitalize">{user.role}</span>
             </div>
           </div>
           <button

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { Loader2 } from "lucide-react";
 import { adminFetch } from "@/lib/admin/client";
 import { adminPath } from "@/lib/admin/paths";
-import { Loader2, ShieldAlert } from "lucide-react";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -21,60 +22,88 @@ export default function AdminLogin() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
-      
       window.location.href = adminPath("/");
-      
-    } catch (err: any) {
-      setError(err.message === "UNAUTHORIZED" ? "Invalid credentials or insufficient permissions." : "Login failed.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "";
+      setError(
+        message === "UNAUTHORIZED"
+          ? "Invalid credentials or insufficient permissions."
+          : message.startsWith("API 429")
+            ? "Too many attempts. Please wait a minute and try again."
+            : "Login failed.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950 px-4">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50 dark:from-[#1E1E2F] dark:to-[#0e0e15] px-4">
+      <div className="w-full max-w-md bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-8">
         <div className="flex justify-center mb-6">
-          <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
-            <ShieldAlert className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          {/* The logo artwork has a white background, so it sits on a white
+              plate in dark mode too. */}
+          <div className="rounded-xl bg-white px-4 py-2">
+            <Image
+              src="/nav-img.jpg"
+              alt="Danamo Tech"
+              width={2172}
+              height={724}
+              sizes="220px"
+              className="h-14 w-auto object-contain"
+              priority
+            />
           </div>
         </div>
-        <h1 className="text-2xl font-bold text-center text-slate-900 dark:text-white mb-2">Admin Portal</h1>
-        <p className="text-center text-slate-500 dark:text-slate-400 mb-8 text-sm">
+        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
+          Admin <span className="text-blue-600 dark:text-blue-400">Portal</span>
+        </h1>
+        <p className="text-center text-gray-500 dark:text-gray-400 mb-8 text-sm">
           Authorized personnel only.
         </p>
 
         {error && (
-          <div className="mb-6 p-3 bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 text-red-700 dark:text-red-400 text-sm rounded-r-md">
+          <div
+            role="alert"
+            className="mb-6 p-3 bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 text-red-700 dark:text-red-400 text-sm rounded-r-md"
+          >
             {error}
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+            <label htmlFor="admin-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Email
+            </label>
             <input
+              id="admin-email"
               type="email"
+              autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-600 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-600 outline-none transition-all"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
+            <label htmlFor="admin-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Password
+            </label>
             <input
+              id="admin-password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-600 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-600 outline-none transition-all"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-colors flex justify-center items-center mt-2"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors flex justify-center items-center mt-2 shadow-lg shadow-blue-600/30 disabled:opacity-70"
           >
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
           </button>

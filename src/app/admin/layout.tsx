@@ -16,12 +16,15 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Danamo Console", template: "%s | Danamo Console" },
+  title: { default: "Danamo Admin", template: "%s | Danamo Admin" },
   robots: { index: false, follow: false, nocache: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#020617",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e15" },
+  ],
 };
 
 export default function AdminRootLayout({ children }: { children: ReactNode }) {
