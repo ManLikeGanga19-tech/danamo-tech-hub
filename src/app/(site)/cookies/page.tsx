@@ -10,7 +10,7 @@ export default function CookiesPage() {
     <LegalLayout
       title="Cookies Policy"
       subtitle="What cookies we use, why we use them, and how you can control them under Kenyan data protection law."
-      lastUpdated="10 November 2026"
+      lastUpdated="15 November 2026"
     >
       <p>
         This Cookies Policy explains how Danamo Tech Ltd uses cookies and similar tracking technologies on <strong>danamotech.co.ke</strong>. It should be read together with our <a href="/privacy">Privacy Policy</a>.
@@ -25,6 +25,9 @@ export default function CookiesPage() {
       </p>
 
       <h2>2. Categories of Cookies We Use</h2>
+      <p>
+        We only use <strong>strictly necessary</strong> cookies. We do not use preference, analytics, advertising or marketing cookies.
+      </p>
       <table>
         <thead>
           <tr><th>Category</th><th>Purpose</th><th>Consent Required?</th><th>Examples</th></tr>
@@ -32,42 +35,23 @@ export default function CookiesPage() {
         <tbody>
           <tr>
             <td><strong>Strictly Necessary</strong></td>
-            <td>Essential for the site to function — session management, login, security, load balancing.</td>
+            <td>Essential for the site to function: keeping you signed in and protecting accounts. Set only when you sign in.</td>
             <td><strong>No</strong> (exempt)</td>
             <td><code>danamo_session</code>, <code>danamo_admin_session</code></td>
           </tr>
-          <tr>
-            <td><strong>Preferences</strong></td>
-            <td>Remember your theme (light/dark) and language preferences.</td>
-            <td><strong>Yes</strong> (opt-in)</td>
-            <td><code>theme</code></td>
-          </tr>
-          <tr>
-            <td><strong>Analytics</strong></td>
-            <td>Understand how visitors use the site — page views, session duration, referral source.</td>
-            <td><strong>Yes</strong> (opt-in)</td>
-            <td>Vercel Analytics, Google Analytics (if enabled)</td>
-          </tr>
-          <tr>
-            <td><strong>Marketing</strong></td>
-            <td>Measure the effectiveness of campaigns and, where enabled, personalise advertising.</td>
-            <td><strong>Yes</strong> (opt-in)</td>
-            <td>[Insert if applicable]</td>
-          </tr>
         </tbody>
       </table>
+      <p>
+        Your light/dark theme choice is stored in your browser&apos;s local storage, not in a cookie, and is never sent to us.
+      </p>
 
       <h2>3. How We Obtain Consent</h2>
       <p>
-        In line with <strong>Section 32 of the Act</strong> and the ODPC&apos;s 2024 guidance, our consent mechanism operates as follows:
+        Because we only use strictly necessary cookies, which are exempt from consent, we do not show a cookie consent banner. Visiting the site without signing in sets no cookies at all.
       </p>
-      <ul>
-        <li><strong>No pre-ticked boxes.</strong> Non-essential cookies are blocked until you take an affirmative action to accept them.</li>
-        <li><strong>Granular choice.</strong> You can accept or reject each category (Analytics, Marketing, Preferences) independently — &quot;Accept all&quot; is never the only path.</li>
-        <li><strong>Reject all option.</strong> A &quot;Reject all&quot; button is presented on the same surface as &quot;Accept all&quot;.</li>
-        <li><strong>No scroll-as-consent.</strong> Simply continuing to browse the site does not constitute consent.</li>
-        <li><strong>Withdrawal is as easy as giving.</strong> You can change your preferences at any time via the &quot;Cookie Preferences&quot; link in the footer.</li>
-      </ul>
+      <p>
+        If we ever introduce non-essential cookies, we will first update this policy and ask for your consent in line with <strong>Section 32 of the Act</strong> and the ODPC&apos;s 2024 guidance: no pre-ticked boxes, a &quot;Reject all&quot; option as prominent as &quot;Accept all&quot;, a separate choice per category, no &quot;scroll-as-consent&quot;, and withdrawal as easy as giving consent.
+      </p>
 
       <h2>4. Strictly Necessary Cookies (Exempt from Consent)</h2>
       <p>
@@ -80,18 +64,20 @@ export default function CookiesPage() {
         <tbody>
           <tr><td><code>danamo_session</code></td><td>Authenticates logged-in public users</td><td>7 days</td><td>HttpOnly</td></tr>
           <tr><td><code>danamo_admin_session</code></td><td>Authenticates admin users</td><td>12 hours</td><td>HttpOnly, Secure, SameSite=Strict (production)</td></tr>
-          <tr><td><code>theme</code></td><td>Remembers light/dark mode preference</td><td>1 year</td><td>Functional</td></tr>
         </tbody>
       </table>
 
-      <h2>5. Analytics Cookies</h2>
+      <h2>5. Analytics and Advertising Cookies</h2>
       <p>
-        If you consent, we use analytics cookies to understand how the site is used so we can improve it. We configure our analytics to anonymise IP addresses and do not use analytics data to identify individual visitors. Where analytics data is transferred outside Kenya, we rely on the cross-border transfer mechanisms described in <strong>Section 48 of the Act</strong> — see our <a href="/privacy">Privacy Policy</a>.
+        We do not currently use analytics, advertising or tracking cookies. If we introduce analytics in the future, we will ask for your consent first and update this policy before doing so.
+      </p>
+      <p>
+        Your light/dark theme choice is saved in your browser&apos;s local storage (not a cookie) and never leaves your device.
       </p>
 
       <h2>6. Third-Party Cookies</h2>
       <p>
-        Some cookies are set by third parties we work with, such as hosting and analytics providers. These third parties act as data processors under written agreements and are bound to process data only on our instructions. Where a third party acts as an independent data controller (for example, an embedded video platform), their own privacy and cookie policies apply.
+        We do not allow third parties to set cookies on our site. Links to other websites (for example our clients&apos; sites) are governed by those websites&apos; own cookie policies.
       </p>
 
       <h2>7. Children&apos;s Data</h2>
@@ -100,12 +86,9 @@ export default function CookiesPage() {
       </p>
 
       <h2>8. How to Control Cookies</h2>
-      <p>You can control cookies in three ways:</p>
-      <ul>
-        <li><strong>Our preference centre:</strong> click &quot;Cookie Preferences&quot; in the footer to accept or reject each category.</li>
-        <li><strong>Browser settings:</strong> most browsers allow you to block or delete cookies. See your browser&apos;s help pages (Chrome, Firefox, Safari, Edge).</li>
-        <li><strong>Opt-out tools:</strong> industry opt-out tools such as the Network Advertising Initiative opt-out page and Your Online Choices.</li>
-      </ul>
+      <p>
+        Most browsers allow you to block or delete cookies; see your browser&apos;s help pages (Chrome, Firefox, Safari, Edge). Clearing your browser&apos;s site data also removes the saved theme preference.
+      </p>
       <p>
         Blocking strictly necessary cookies may prevent you from logging in or using parts of the site.
       </p>

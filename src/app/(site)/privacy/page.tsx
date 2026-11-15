@@ -10,7 +10,7 @@ export default function PrivacyPage() {
     <LegalLayout
       title="Privacy Policy"
       subtitle="How we collect, use, and protect your personal data in compliance with the Kenya Data Protection Act, 2019."
-      lastUpdated="10 November 2026"
+      lastUpdated="15 November 2026"
     >
       <p>
         Danamo Tech Ltd (<strong>&quot;Danamo Tech&quot;</strong>, <strong>&quot;we&quot;</strong>, <strong>&quot;us&quot;</strong>, or <strong>&quot;our&quot;</strong>) is a company duly incorporated under the Companies Act, 2015 (No. 17 of 2015) of the Laws of Kenya, with its registered office in Mombasa, Kenya.
@@ -24,10 +24,8 @@ export default function PrivacyPage() {
         <tbody>
           <tr><td><strong>Legal Entity</strong></td><td>Danamo Tech Ltd</td></tr>
           <tr><td><strong>Company Registration No.</strong></td><td>PVT-J61587ER</td></tr>
-          <tr><td><strong>KRA PIN</strong></td><td>P052477504F</td></tr>
           <tr><td><strong>Registered Office</strong></td><td>Airport Road, Mombasa, Kenya</td></tr>
           <tr><td><strong>Data Protection Contact</strong></td><td>privacy@danamotech.co.ke</td></tr>
-          <tr><td><strong>Data Protection Officer</strong></td><td> </td></tr>
         </tbody>
       </table>
 

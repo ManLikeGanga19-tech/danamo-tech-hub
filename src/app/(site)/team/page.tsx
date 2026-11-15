@@ -8,33 +8,11 @@ import { ArrowRight } from "lucide-react";
 
 const teamMembers = [
   {
-    name: "Daniel Orwenjo",
+    name: "Daniel Oganga",
     role: "CEO & Founder",
-    bio: "Visionary leader passionate about building tech for impact.",
-    imageUrl: "/images/jane.jpg",
+    bio: "Founded Danamo Tech in 2024 in Mombasa to give small businesses and startups access to affordable, enterprise-grade software. Leads product and engineering across Danamo's platforms and client work.",
     socials: {
-      linkedin: "https://linkedin.com/in/janedoe",
-      github: "https://github.com/janedoe",
-    },
-  },
-  {
-    name: "John Smith",
-    role: "Lead Developer",
-    bio: "Full-stack engineer with a love for solving tough problems.",
-    imageUrl: "/images/john.jpg",
-    socials: {
-      linkedin: "https://linkedin.com/in/johnsmith",
-      github: "https://github.com/johnsmith",
-    },
-  },
-  {
-    name: "Alice Kim",
-    role: "UI/UX Designer",
-    bio: "Designs delightful experiences with a focus on accessibility.",
-    imageUrl: "/images/alice.jpg",
-    socials: {
-      linkedin: "https://linkedin.com/in/alicekim",
-      github: "https://github.com/johnsmith",
+      github: "https://github.com/ManLikeGanga19-tech",
     },
   },
 ]
@@ -50,14 +28,14 @@ export default function OurTeamPage() {
           
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
-              Meet <span className="text-blue-600 dark:text-blue-400">Our Team</span>
+              Meet <span className="text-blue-600 dark:text-blue-400">The Founder</span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              The brilliant minds driving innovation and building scalable digital solutions at Danamo Tech.
+              The person behind Danamo Tech and the products and platforms we build.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 max-w-sm mx-auto">
             {teamMembers.map((member, i) => (
               <TeamCard key={i} {...member} />
             ))}

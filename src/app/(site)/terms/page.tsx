@@ -10,7 +10,7 @@ export default function TermsPage() {
     <LegalLayout
       title="Terms & Conditions"
       subtitle="The legal terms governing your use of our website and services, governed by the laws of Kenya."
-      lastUpdated="10 November 2026"
+      lastUpdated="15 November 2026"
     >
       <p>
         These Terms &amp; Conditions (&quot;Terms&quot;) constitute a legally binding agreement between you (&quot;you&quot;, &quot;your&quot;) and <strong>Danamo Tech Ltd</strong> (&quot;Danamo Tech&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;), a company incorporated under the Companies Act, 2015 (No. 17 of 2015) of the Laws of Kenya, with its registered office in Mombasa, Kenya.
@@ -24,7 +24,6 @@ export default function TermsPage() {
         <tbody>
           <tr><td><strong>Legal Entity</strong></td><td>Danamo Tech Ltd</td></tr>
           <tr><td><strong>Company Registration No.</strong></td><td>PVT-J61587ER</td></tr>
-          <tr><td><strong>KRA PIN</strong></td><td>P052477504F</td></tr>
           <tr><td><strong>Registered Office</strong></td><td>Airport Road, Mombasa, Kenya</td></tr>
           <tr><td><strong>Contact Email</strong></td><td>legal@danamotech.co.ke</td></tr>
         </tbody>

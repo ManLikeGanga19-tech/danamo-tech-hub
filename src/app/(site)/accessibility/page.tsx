@@ -10,7 +10,7 @@ export default function AccessibilityPage() {
     <LegalLayout
       title="Accessibility Statement"
       subtitle="Our commitment to making our website and services usable by everyone, including persons with disabilities."
-      lastUpdated="10 November 2026"
+      lastUpdated="15 November 2026"
     >
       <p>
         Danamo Tech Ltd is committed to ensuring that our digital properties are accessible to all people, including persons with disabilities. This statement describes our standards, measures, known limitations, and feedback mechanisms.
@@ -78,7 +78,7 @@ export default function AccessibilityPage() {
       </p>
       <ul>
         <li>Some third-party embedded content (for example, YouTube or Vimeo videos) may not fully meet WCAG 2.1 AA. We select accessible providers where possible and provide transcripts on request.</li>
-        <li>PDF documents published before [insert date] may not be fully tagged for screen readers. Accessible versions are available on request.</li>
+        <li>Some PDF documents may not be fully tagged for screen readers. Accessible versions are available on request.</li>
         <li>Legacy blog articles may have images without descriptive alt text. We are retrospectively remediating these.</li>
       </ul>
       <p>
