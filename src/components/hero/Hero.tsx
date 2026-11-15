@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useMounted } from "@/hooks/useMounted";
 import { useTheme } from "next-themes";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,13 +12,9 @@ import heroImgLight from "../../../public/hero-img.jpg";
 import heroImgDark from "../../../public/hero-img-dark.jpg";
 
 const Hero = () => {
-    const [mounted, setMounted] = useState(false);
+    const mounted = useMounted();
     const { resolvedTheme } = useTheme();
 
-    // Prevent hydration mismatch by waiting until mounted
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     // Determine which image to show
     const isDark = mounted && resolvedTheme === "dark";

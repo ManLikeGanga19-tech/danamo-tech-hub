@@ -13,6 +13,7 @@ import Image from "next/image";
 import { CalendarDays, Clock, User, PlayCircle, CheckCircle2, Video, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
+import { errorMessage } from "@/lib/errors";
 
 interface Webinar {
   id: string;
@@ -48,25 +49,20 @@ export default function WebinarsPage() {
 
   // REUSABLE FETCH FUNCTION
     // REUSABLE FETCH FUNCTION
-  const fetchWebinars = useCallback(async (showSpinner = false) => {
-    if (showSpinner) setLoading(true);
-    try {
-      const data = await apiFetch<Webinar[]>("/webinars");
-      setWebinars(data);
-    } catch (err) {
-      // Silently ignore network errors during background polling
-      // (backend may be restarting, user may be offline, etc.)
-      if (err instanceof Error && err.message === "NETWORK_ERROR" && !showSpinner) {
-        return;
-      }
-      // Only log real errors, and only on the initial load
-      if (showSpinner) {
-        console.error("Failed to load webinars:", err);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // `initial` only changes error reporting; loading starts true and is
+  // cleared after the first response.
+  const fetchWebinars = useCallback(
+    (initial = false) =>
+      apiFetch<Webinar[]>("/webinars")
+        .then(setWebinars)
+        .catch((err) => {
+          // Background polls ignore network errors (backend restarting,
+          // user offline); only the initial load reports failures.
+          if (initial) console.error("Failed to load webinars:", err);
+        })
+        .finally(() => setLoading(false)),
+    [],
+  );
 
   // LIVE DATA: Initial fetch + Focus refetch + 60s polling (only when visible)
   useEffect(() => {
@@ -113,8 +109,8 @@ export default function WebinarsPage() {
         body: JSON.stringify({ webinar_id: selectedWebinar?.id, name, email }),
       });
       setSuccess("Registration successful! Check your email for the link.");
-    } catch (err: any) {
-      setError(err.message || "Failed to register.");
+    } catch (err) {
+      setError(errorMessage(err, "Failed to register."));
     } finally { setSubmitting(false); }
   };
 
@@ -127,8 +123,8 @@ export default function WebinarsPage() {
         body: JSON.stringify({ webinar_id: selectedWebinar?.id, email }),
       });
       setReplayUrl(res.replay_url);
-    } catch (err: any) {
-      setError(err.message || "Failed to unlock replay.");
+    } catch (err) {
+      setError(errorMessage(err, "Failed to unlock replay."));
     } finally { setSubmitting(false); }
   };
 
@@ -261,7 +257,7 @@ export default function WebinarsPage() {
           {success ? (
             <div className="py-8 text-center flex flex-col items-center">
               <CheckCircle2 className="w-12 h-12 text-green-500 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">You're on the list!</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">You&apos;re on the list!</h3>
               <p className="text-gray-600 dark:text-gray-400">{success}</p>
             </div>
           ) : (

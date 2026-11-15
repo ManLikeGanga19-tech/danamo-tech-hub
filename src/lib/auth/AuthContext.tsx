@@ -37,15 +37,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(async () => {
-    try {
-      setUser(await apiFetch<AuthUser>("/auth/me"));
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const refresh = useCallback(
+    () =>
+      apiFetch<AuthUser>("/auth/me")
+        .then(setUser, () => setUser(null))
+        .finally(() => setLoading(false)),
+    [],
+  );
 
   const login = useCallback(async (email: string, password: string) => {
     const u = await apiFetch<AuthUser>("/auth/login", {

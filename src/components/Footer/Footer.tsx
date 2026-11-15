@@ -1,19 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 import { MdEmail } from 'react-icons/md'
 import Link from 'next/link'
 import Image from 'next/image'
 
 export default function Footer() {
-  // Start with a static placeholder so SSR and first client render match
-  const [currentYear, setCurrentYear] = useState(2026);
-
-  // Only runs on the client after mount — no hydration mismatch
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="w-full pt-16 pb-8 transition-colors duration-700 bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] border-t border-gray-200 dark:border-gray-800">
@@ -91,7 +84,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            &copy; {currentYear} Danamo Tech. All rights reserved.
+            &copy; <span suppressHydrationWarning>{currentYear}</span> Danamo Tech. All rights reserved.
           </p>
         </div>
 

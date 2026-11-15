@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { errorMessage } from "@/lib/errors";
 
 interface Partner {
   id: string;
@@ -36,19 +37,13 @@ export default function AdminPartners() {
   const [submitting, setSubmitting] = useState(false);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
-  const fetchPartners = async (showSpinner = false) => {
-    if (showSpinner) setLoading(true);
-    try {
-      const data = await adminFetch<Partner[]>("/data/partners");
-      setPartners(data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchPartners = () =>
+      adminFetch<Partner[]>("/data/partners")
+          .then(setPartners)
+          .catch(console.error)
+          .finally(() => setLoading(false));
 
-  useEffect(() => { fetchPartners(true); }, []);
+  useEffect(() => { fetchPartners(); }, []);
 
   const openCreateModal = () => {
     setEditingPartner(null);
@@ -125,9 +120,9 @@ export default function AdminPartners() {
       }
 
       setIsModalOpen(false);
-      fetchPartners(true);
-    } catch (err: any) {
-      alert(err?.message?.replace(/^API \d+: /, "") || "Failed to save partner");
+      fetchPartners();
+    } catch (err) {
+      alert(errorMessage(err, "Failed to save partner"));
     } finally {
       setSubmitting(false);
     }

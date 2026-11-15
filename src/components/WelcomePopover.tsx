@@ -12,25 +12,18 @@ import { apiFetch } from "@/lib/api/client";
 type PopoverState = null | "welcome" | "greeting";
 
 export default function WelcomeCard() {
-  const [show, setShow] = React.useState<PopoverState>(null);
   const { user, loading, refresh } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  // Closed by the user in this session (the server-side flag is also set).
+  const [dismissed, setDismissed] = React.useState(false);
 
-  React.useEffect(() => {
-    if (loading) return;
-    if (!user) { setShow(null); return; }
-    if (pathname !== "/" && pathname !== "/dashboard") { setShow(null); return; }
-
+  let show: PopoverState = null;
+  if (!dismissed && !loading && user && (pathname === "/" || pathname === "/dashboard")) {
     const isProfileIncomplete = !user.full_name;
-    if (isProfileIncomplete && !user.has_seen_welcome) {
-      setShow("welcome");
-    } else if (!isProfileIncomplete && !user.has_seen_greeting) {
-      setShow("greeting");
-    } else {
-      setShow(null);
-    }
-  }, [user, loading, pathname]);
+    if (isProfileIncomplete && !user.has_seen_welcome) show = "welcome";
+    else if (!isProfileIncomplete && !user.has_seen_greeting) show = "greeting";
+  }
 
   const flagSeen = async (key: "has_seen_welcome" | "has_seen_greeting") => {
     try {
@@ -42,7 +35,7 @@ export default function WelcomeCard() {
     } catch (err) {
       console.error("Failed to update user flags:", err);
     } finally {
-      setShow(null);
+      setDismissed(true);
     }
   };
 

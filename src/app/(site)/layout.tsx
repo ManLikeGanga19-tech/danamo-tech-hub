@@ -1,6 +1,4 @@
 import { ReactNode } from "react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import Providers from "./providers";
 import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -141,8 +139,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </a>
           <main id="main-content">{children}</main>
         </Providers>
-        <SpeedInsights />
-        <Analytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

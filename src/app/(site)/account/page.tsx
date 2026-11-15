@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo, lazy, Suspense } from "react";
+import React, { useState, useCallback, lazy, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/lib/auth/AuthContext";
+import { useAuth, type AuthUser } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
 
 const Navbar1 = lazy(() =>
@@ -17,28 +17,52 @@ const Footer = lazy(() => import("@/components/Footer/Footer"));
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^\+?[1-9]\d{1,14}$/;
 
+const LoadingSpinner = (
+  <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
+    <div className="relative flex items-center justify-center">
+      <div className="absolute h-16 w-16 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+      <div className="h-12 w-12 animate-pulse rounded-full bg-blue-600/20"></div>
+    </div>
+  </div>
+);
+
 export default function AccountSettings() {
-  const { user, loading, refresh } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [bio, setBio] = useState("");
+  if (loading) return LoadingSpinner;
+
+  if (!user) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 mt-24 text-center">
+        <p className="text-red-500 mb-4">You must be logged in to view this page.</p>
+        <Button onClick={() => router.push("/login")}>Go to Login</Button>
+      </div>
+    );
+  }
+
+  // Keyed by user so the form starts from that user's saved profile.
+  return <AccountForm key={user.id} user={user} />;
+}
+
+function splitName(fullName: string | null) {
+  const parts = (fullName || "").trim().split(/\s+/);
+  return { first: parts[0] || "", last: parts.slice(1).join(" ") };
+}
+
+function AccountForm({ user }: { user: AuthUser }) {
+  const { refresh } = useAuth();
+  const router = useRouter();
+
+  const [firstName, setFirstName] = useState(() => splitName(user.full_name).first);
+  const [lastName, setLastName] = useState(() => splitName(user.full_name).last);
+  const email = user.email || "";
+  const [phone, setPhone] = useState(user.phone || "");
+  const [bio, setBio] = useState(user.bio || "");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    if (!user) return;
-    const parts = (user.full_name || "").trim().split(/\s+/);
-    setFirstName(parts[0] || "");
-    setLastName(parts.slice(1).join(" ") || "");
-    setEmail(user.email || "");
-    setPhone(user.phone || "");
-    setBio(user.bio || "");
-  }, [user]);
 
   const validateInputs = useCallback(() => {
     if (!firstName.trim()) { setError("First name is required."); return false; }
@@ -69,26 +93,6 @@ export default function AccountSettings() {
       setSaving(false);
     }
   }, [firstName, lastName, phone, bio, validateInputs, refresh, router]);
-
-  const LoadingSpinner = useMemo(() => (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
-      <div className="relative flex items-center justify-center">
-        <div className="absolute h-16 w-16 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
-        <div className="h-12 w-12 animate-pulse rounded-full bg-blue-600/20"></div>
-      </div>
-    </div>
-  ), []);
-
-  if (loading) return LoadingSpinner;
-
-  if (!user) {
-    return (
-      <div className="max-w-2xl mx-auto p-6 mt-24 text-center">
-        <p className="text-red-500 mb-4">You must be logged in to view this page.</p>
-        <Button onClick={() => router.push("/login")}>Go to Login</Button>
-      </div>
-    );
-  }
 
   return (
     <>

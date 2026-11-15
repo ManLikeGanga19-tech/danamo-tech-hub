@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { errorMessage } from "@/lib/errors";
 
 interface Webinar {
   id: string;
@@ -36,8 +37,9 @@ export default function AdminWebinars() {
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Initial load shows the page spinner (loading starts true); refreshes
+  // after edits update the list in place.
   const fetchWebinars = () => {
-    setLoading(true);
     adminFetch<Webinar[]>("/data/webinars")
       .then(setWebinars)
       .catch(console.error)
@@ -99,7 +101,7 @@ export default function AdminWebinars() {
       setIsModalOpen(false);
       fetchWebinars();
     } catch (err) {
-      alert("Failed to create webinar");
+      alert(errorMessage(err, "Failed to create webinar"));
     } finally {
       setSubmitting(false);
     }

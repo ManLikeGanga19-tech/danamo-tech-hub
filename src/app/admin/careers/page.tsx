@@ -55,7 +55,7 @@ export default function CareerApplications() {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch {
       alert("Could not download the CV. It may have been removed from the server.");
     } finally {
       setDownloadingId(null);

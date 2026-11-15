@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { errorMessage } from "@/lib/errors";
 
 interface Subscriber {
     id: string;
@@ -25,19 +26,13 @@ export default function AdminNewsletter() {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState("");
 
-    const fetchSubscribers = async (showSpinner = false) => {
-        if (showSpinner) setLoading(true);
-        try {
-            const data = await adminFetch<Subscriber[]>("/data/newsletter");
-            setSubscribers(data);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const fetchSubscribers = () =>
+        adminFetch<Subscriber[]>("/data/newsletter")
+            .then(setSubscribers)
+            .catch(console.error)
+            .finally(() => setLoading(false));
 
-    useEffect(() => { fetchSubscribers(true); }, []);
+    useEffect(() => { fetchSubscribers(); }, []);
 
     const filtered = useMemo(() => {
         if (!search.trim()) return subscribers;
@@ -57,8 +52,8 @@ export default function AdminNewsletter() {
             setNewEmail("");
             setIsModalOpen(false);
             fetchSubscribers();
-        } catch (err: any) {
-            setError(err?.message?.replace(/^API \d+: /, "") || "Failed to add subscriber");
+        } catch (err) {
+            setError(errorMessage(err, "Failed to add subscriber"));
         } finally {
             setSubmitting(false);
         }

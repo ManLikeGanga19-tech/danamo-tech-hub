@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
     Menu,
@@ -78,6 +78,7 @@ export const Navbar1 = ({
     const pathname = usePathname();
     const { toggleTheme } = useTheme();
     const { user, loading, logout } = useAuth();
+    const router = useRouter();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -85,7 +86,7 @@ export const Navbar1 = ({
         await logout();
         setDropdownOpen(false);
         setIsMobileMenuOpen(false);
-        window.location.href = "/login";
+        router.push("/login");
     };
 
     const toggleDropdown = () => setDropdownOpen(!dropdownOpen);

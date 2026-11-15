@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
@@ -35,7 +35,6 @@ interface Project {
 
 export default function ProjectDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const slug = params?.slug as string;
 
   const [project, setProject] = useState<Project | null>(null);
@@ -214,10 +213,10 @@ export default function ProjectDetailPage() {
                 asChild
                 className="bg-blue-600 text-white hover:bg-blue-700 rounded-xl group"
               >
-                <a href="/#contact" className="flex items-center gap-2">
+                <Link href="/#contact" className="flex items-center gap-2">
                   Get Started
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </Link>
               </Button>
             </div>
           </div>

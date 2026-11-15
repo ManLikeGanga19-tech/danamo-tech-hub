@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useAnimationFrame, useTransform } from "framer-motion";
 import { Handshake } from "lucide-react";
 import { apiFetch } from "@/lib/api/client";

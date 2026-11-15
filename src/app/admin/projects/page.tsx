@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { errorMessage } from "@/lib/errors";
 
 interface Project {
     id: string;
@@ -53,19 +54,13 @@ export default function AdminProjects() {
     const coverInputRef = useRef<HTMLInputElement>(null);
     const galleryInputRef = useRef<HTMLInputElement>(null);
 
-    const fetchProjects = async (showSpinner = false) => {
-        if (showSpinner) setLoading(true);
-        try {
-            const data = await adminFetch<Project[]>("/data/projects");
-            setProjects(data);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const fetchProjects = () =>
+        adminFetch<Project[]>("/data/projects")
+            .then(setProjects)
+            .catch(console.error)
+            .finally(() => setLoading(false));
 
-    useEffect(() => { fetchProjects(true); }, []);
+    useEffect(() => { fetchProjects(); }, []);
 
     const openCreateModal = () => {
         setEditingProject(null);
@@ -193,9 +188,9 @@ export default function AdminProjects() {
             }
 
             setIsModalOpen(false);
-            fetchProjects(true);
-        } catch (err: any) {
-            const msg = err?.message?.replace(/^API \d+: /, "") || "Failed to save project";
+            fetchProjects();
+        } catch (err) {
+            const msg = errorMessage(err, "Failed to save project");
             alert(msg);
         } finally {
             setSubmitting(false);

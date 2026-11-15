@@ -1,12 +1,12 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Copy, Facebook, Linkedin, Tag, User, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Copy, Facebook, Linkedin, Tag, Calendar, Clock } from "lucide-react";
 import { toast } from "sonner";
 
 // 1. The same dummy data from the main blog page
@@ -74,7 +74,6 @@ const dummyBlogs = [
 
 export default function BlogPost() {
   const params = useParams();
-  const router = useRouter();
   
   // Find the specific blog post based on the URL ID
   const blog = dummyBlogs.find((b) => b.id === Number(params.id));

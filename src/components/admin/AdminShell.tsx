@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import {
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin/AdminAuthContext";
 import { adminPath, toAppPath } from "@/lib/admin/paths";
+import { useMounted } from "@/hooks/useMounted";
 
 const sidebarLinks = [
   { name: "Dashboard", path: "/", icon: LayoutDashboard },
@@ -31,8 +32,7 @@ const sidebarLinks = [
 
 function ThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const mounted = useMounted();
   if (!mounted) return <div className="h-9 w-9" />;
 
   const isDark = resolvedTheme === "dark";
