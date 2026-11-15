@@ -1,0 +1,9 @@
+[Unit]
+Description=Danamo edge guard periodic safety-net
+[Timer]
+OnBootSec=60
+OnUnitActiveSec=60
+AccuracySec=10s
+Unit=danamo-edge-guard.service
+[Install]
+WantedBy=timers.target

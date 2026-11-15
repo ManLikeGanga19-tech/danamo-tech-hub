@@ -4,8 +4,10 @@
 #   docker compose run --rm backend alembic upgrade head
 #
 # Services talk to each other by service name on the private "danamo" network.
-# Only frontend and backend are published, and only on 127.0.0.1 — Caddy is
-# the sole public entry point. Postgres and Redis have no host ports.
+# The shared Caddy edge (sms-caddy) reaches frontend/backend by container name
+# over "danamo-edge-net", which only those two services (and sms-caddy) join.
+# Postgres and Redis are on the private network only. The 127.0.0.1 port
+# bindings are for on-server smoke tests, never public.
 
 name: danamo
 
@@ -25,7 +27,7 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:${FRONTEND_HOST_PORT:-3001}:3000"
-    networks: [danamo]
+    networks: [danamo, edge]
     mem_limit: 512m
     read_only: true
     tmpfs:
@@ -53,7 +55,7 @@ services:
       - "127.0.0.1:${BACKEND_HOST_PORT:-8001}:8000"
     volumes:
       - uploads:/app/storage
-    networks: [danamo]
+    networks: [danamo, edge]
     mem_limit: 512m
     read_only: true
     tmpfs: [/tmp]
@@ -101,6 +103,10 @@ services:
 networks:
   danamo:
     name: ${CONTAINER_PREFIX:-danamo}
+  # Danamo's own edge network. sms-caddy is attached to it with
+  # `docker network connect` (and re-attached by danamo-guard.sh).
+  edge:
+    name: ${CONTAINER_PREFIX:-danamo}-edge-net
 
 volumes:
   pgdata:

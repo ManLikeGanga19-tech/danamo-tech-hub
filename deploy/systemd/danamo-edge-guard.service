@@ -1,0 +1,10 @@
+[Unit]
+Description=Danamo shared-Caddy edge self-healing guard
+After=docker.service
+Wants=docker.service
+[Service]
+Type=oneshot
+User=deploy
+Group=deploy
+ExecStart=/opt/caddy-sites/danamo-guard.sh
+Nice=5
