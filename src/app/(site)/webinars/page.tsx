@@ -138,7 +138,7 @@ export default function WebinarsPage() {
       <main className="flex-grow">
         {/* Hero Section */}
         <section className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden flex items-center justify-center text-center px-4">
-          <Image src="/webinars/webinars-bg.jpg" alt="Webinar Hero" fill className="object-cover object-center" priority />
+          <Image src="/webinars/webinars-bg.jpg" alt="Webinar Hero" fill sizes="100vw" className="object-cover object-center" priority />
           <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
           <div className="relative z-10 max-w-4xl px-4">
             <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6 backdrop-blur-md">

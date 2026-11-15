@@ -167,7 +167,7 @@ export const Navbar1 = ({
                     <nav className="hidden lg:flex justify-between items-center">
                         {/* Clickable Desktop Logo */}
                         <Link href="/" className="flex-shrink-0">
-                            <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={0} height={0} sizes="100vw" className="h-10 w-auto object-contain" priority />                        </Link>
+                            <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={120} height={40} sizes="120px" className="h-10 w-auto object-contain" priority />                        </Link>
 
                         <div className="flex items-center ml-auto">
                             <NavigationMenu>
@@ -248,7 +248,7 @@ export const Navbar1 = ({
                         <div className="flex items-center justify-between">
                             {/* Clickable Mobile Logo */}
                             <Link href="/" className="flex-shrink-0">
-                                <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={0} height={0} sizes="100vw" className="h-10 w-auto object-contain" priority />                            </Link>
+                                <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={120} height={40} sizes="120px" className="h-10 w-auto object-contain" priority />                            </Link>
 
                             <div className="flex items-center gap-3">
                                 <Button

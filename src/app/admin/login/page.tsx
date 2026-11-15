@@ -47,8 +47,8 @@ export default function AdminLogin() {
             <Image
               src="/nav-img.jpg"
               alt="Danamo Tech"
-              width={2172}
-              height={724}
+              width={720}
+              height={240}
               sizes="220px"
               className="h-14 w-auto object-contain"
               priority

@@ -22,6 +22,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 function Contact() {
   const [name, setName] = useState("");
@@ -117,8 +118,8 @@ function Contact() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Email Us</p>
-                  <a href="mailto:danamotech@gmail.com" className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
-                    danamotech@gmail.com
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
+                    {CONTACT_EMAIL}
                   </a>
                 </div>
               </li>

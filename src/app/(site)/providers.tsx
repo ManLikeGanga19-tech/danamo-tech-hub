@@ -13,7 +13,7 @@ interface ProvidersProps {
 export default function Providers({ children }: ProvidersProps) {
     return (
         <AuthProvider>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
                 <WelcomeCard />
                 {children}
                 <Toaster richColors position='top-center' />

@@ -178,7 +178,7 @@ export default function LoginForm() {
       </div>
 
       <div className="hidden md:block w-full md:w-1/2 relative">
-        <Image src="/signin-img.jpg" alt="Sign in" fill className="object-cover" priority />
+        <Image src="/signin-img.jpg" alt="Sign in" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" priority />
       </div>
     </section>
   );

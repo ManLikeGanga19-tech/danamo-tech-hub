@@ -7,3 +7,16 @@
 body {
   @apply bg-gray-50 text-gray-900 dark:bg-[#0e0e15] dark:text-white;
 }
+
+/* Theme switch crossfade (see src/hooks/useTheme.ts) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

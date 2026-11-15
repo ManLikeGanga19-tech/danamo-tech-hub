@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/hooks/useTheme";
 import {
   Briefcase,
   FolderKanban,
@@ -31,15 +31,15 @@ const sidebarLinks = [
 ];
 
 function ThemeSwitch() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const mounted = useMounted();
   if (!mounted) return <div className="h-9 w-9" />;
 
-  const isDark = resolvedTheme === "dark";
+  const isDark = theme === "dark";
   return (
     <button
       type="button"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={toggleTheme}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className="h-9 w-9 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-gray-800 transition-colors"
     >

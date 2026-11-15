@@ -1,6 +1,6 @@
 "use client";
 
-import { SITE_URL } from "@/lib/site";
+import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import {
@@ -277,8 +277,8 @@ export default function ServicesPage() {
                 </ul>
                 <div className="p-6 rounded-2xl bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-800 shadow-sm w-full max-w-md">
                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Prefer to email us directly?</p>
-                   <a href="mailto:danamotech@gmail.com" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-2">
-                     danamotech@gmail.com <ArrowRight className="w-4 h-4" />
+                   <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-2">
+                     {CONTACT_EMAIL} <ArrowRight className="w-4 h-4" />
                    </a>
                 </div>
               </div>
