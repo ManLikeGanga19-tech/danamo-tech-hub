@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
+from app.core.rate_limit import AUTH_LIMIT, limiter
 from app.core.security import verify_password, hash_session_token
 from app.core.session import create_session
 from app.db.session import get_db
@@ -12,10 +11,9 @@ from app.schemas.auth import LoginIn, UserOut
 from app.api.deps import get_current_admin
 
 router = APIRouter(prefix="/admin/auth", tags=["admin_auth"])
-limiter = Limiter(key_func=get_remote_address)
 
 @router.post("/login", response_model=UserOut)
-@limiter.limit("5/minute")
+@limiter.limit(AUTH_LIMIT)
 async def admin_login(
     request: Request, 
     response: Response,
@@ -32,13 +30,12 @@ async def admin_login(
         
     raw_token = await create_session(db, user, request.headers.get("user-agent"), custom_ttl=settings.admin_session_ttl_hours)
     
-    # HARDCODED FOR LOCAL DEVELOPMENT
     response.set_cookie(
         key=settings.admin_cookie_name,
         value=raw_token,
         httponly=True,
-        secure=False,
-        samesite="lax",
+        secure=settings.cookie_secure,
+        samesite=settings.admin_cookie_samesite,
         max_age=settings.admin_session_ttl_hours * 3600,
         path="/",
     )
@@ -57,4 +54,9 @@ async def admin_logout(request: Request, response: Response, db: AsyncSession = 
             await db.delete(row)
             await db.commit()
     
-    response.delete_cookie(settings.admin_cookie_name, path="/", samesite="lax", secure=False)
+    response.delete_cookie(
+        settings.admin_cookie_name,
+        path="/",
+        samesite=settings.admin_cookie_samesite,
+        secure=settings.cookie_secure,
+    )

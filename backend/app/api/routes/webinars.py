@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models import Webinar, WebinarRegistration
 from app.schemas.webinars import WebinarOut, WebinarRegisterIn, ReplayUnlockIn
 from app.core.email import send_webinar_registration
+from app.core.rate_limit import FORM_LIMIT, limiter
 
 router = APIRouter(prefix="/webinars", tags=["webinars"])
 
@@ -18,7 +19,8 @@ async def get_webinars(db: AsyncSession = Depends(get_db)):
 
 
 @router.post("/register")
-async def register_for_webinar(payload: WebinarRegisterIn, db: AsyncSession = Depends(get_db)):
+@limiter.limit(FORM_LIMIT)
+async def register_for_webinar(request: Request, payload: WebinarRegisterIn, db: AsyncSession = Depends(get_db)):
     webinar = await db.get(Webinar, payload.webinar_id)
     if not webinar:
         raise HTTPException(404, "Webinar not found")
@@ -52,7 +54,8 @@ async def register_for_webinar(payload: WebinarRegisterIn, db: AsyncSession = De
 
 
 @router.post("/unlock-replay")
-async def unlock_replay(payload: ReplayUnlockIn, db: AsyncSession = Depends(get_db)):
+@limiter.limit(FORM_LIMIT)
+async def unlock_replay(request: Request, payload: ReplayUnlockIn, db: AsyncSession = Depends(get_db)):
     webinar = await db.get(Webinar, payload.webinar_id)
     if not webinar or not webinar.replay_url:
         raise HTTPException(404, "Replay not available")

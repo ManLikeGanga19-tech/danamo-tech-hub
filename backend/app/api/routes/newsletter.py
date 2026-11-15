@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models import NewsletterSubscriber
 from app.core.email import send_newsletter_welcome, send_newsletter_notification
+from app.core.rate_limit import FORM_LIMIT, limiter
 
 router = APIRouter(tags=["newsletter"])
 
@@ -14,7 +15,8 @@ class NewsletterIn(BaseModel):
 
 
 @router.post("/newsletter", status_code=201)
-async def subscribe(payload: NewsletterIn, db: AsyncSession = Depends(get_db)):
+@limiter.limit(FORM_LIMIT)
+async def subscribe(request: Request, payload: NewsletterIn, db: AsyncSession = Depends(get_db)):
     existing = await db.scalar(
         select(NewsletterSubscriber).where(NewsletterSubscriber.email == payload.email)
     )

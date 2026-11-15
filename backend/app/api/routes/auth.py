@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.security import hash_password, verify_password, hash_session_token, needs_rehash
 from app.core.session import create_session, set_session_cookie, clear_session_cookie, get_current_user
 from app.core.config import settings
+from app.core.rate_limit import AUTH_LIMIT, limiter
 from app.db.session import get_db
 from app.models import User, Session
 from app.schemas.auth import SignupIn, LoginIn, UserOut, ProfileUpdateIn
@@ -11,6 +12,7 @@ from app.schemas.auth import SignupIn, LoginIn, UserOut, ProfileUpdateIn
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/signup", response_model=UserOut, status_code=201)
+@limiter.limit(AUTH_LIMIT)
 async def signup(payload: SignupIn, request: Request, response: Response, db: AsyncSession = Depends(get_db)):
     existing = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if existing:
@@ -23,6 +25,7 @@ async def signup(payload: SignupIn, request: Request, response: Response, db: As
     return user
 
 @router.post("/login", response_model=UserOut)
+@limiter.limit(AUTH_LIMIT)
 async def login(payload: LoginIn, request: Request, response: Response, db: AsyncSession = Depends(get_db)):
     user = await db.scalar(select(User).where(User.email == payload.email.lower()))
     if not user or not user.hashed_password or not verify_password(payload.password, user.hashed_password):

@@ -1,11 +1,12 @@
 import uuid
 from pathlib import Path
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
 from app.models import CareerApplication, CvFile
 from app.schemas.forms import SubmissionOut
 from app.core.email import send_application_received, send_application_notification
+from app.core.rate_limit import UPLOAD_LIMIT, limiter
 
 router = APIRouter(prefix="/careers", tags=["careers"])
 STORAGE_DIR = Path("storage/cvs")
@@ -15,7 +16,9 @@ ALLOWED_TYPES = {"application/pdf", "application/msword", "application/vnd.openx
 EXT_BY_MIME = {"application/pdf": ".pdf", "application/msword": ".doc", "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx"}
 
 @router.post("/apply", response_model=SubmissionOut, status_code=201)
+@limiter.limit(UPLOAD_LIMIT)
 async def apply(
+    request: Request,
     full_name: str = Form(..., min_length=1, max_length=120),
     email: str = Form(..., min_length=3, max_length=320),
     phone: str | None = Form(None, max_length=40),

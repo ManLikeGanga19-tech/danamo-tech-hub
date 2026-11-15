@@ -1,58 +1,88 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
-from slowapi.middleware import SlowAPIMiddleware
 from pathlib import Path
 
-from app.core.config import settings
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+
 from app.api.routes import (
-    health, newsletter, auth, forms, careers, webinars,
-    admin_auth, admin_data, projects, partners
+    admin_auth,
+    admin_data,
+    auth,
+    careers,
+    forms,
+    health,
+    newsletter,
+    partners,
+    projects,
+    webinars,
 )
+from app.core.config import settings
+from app.core.rate_limit import GlobalRateLimitMiddleware, limiter
 
+# Largest legitimate request is a 5 MB upload; leave headroom for multipart overhead.
+MAX_REQUEST_BYTES = 6 * 1024 * 1024
 
-limiter = Limiter(key_func=get_remote_address)
-app = FastAPI(title="Danamo Tech Hub API", version="0.1.0")
+# Upload folders that are safe to serve publicly. CVs are deliberately NOT here:
+# they are personal data and only reachable through the admin download endpoint.
+PUBLIC_UPLOAD_DIRS = ("webinars", "projects", "partners")
+
+app = FastAPI(
+    title="Danamo Tech Hub API",
+    version="0.1.0",
+    docs_url=None if settings.is_production else "/docs",
+    redoc_url=None if settings.is_production else "/redoc",
+    openapi_url=None if settings.is_production else "/openapi.json",
+)
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+
+@app.middleware("http")
+async def security_headers_and_size_limit(request: Request, call_next):
+    content_length = request.headers.get("content-length")
+    if content_length and content_length.isdigit() and int(content_length) > MAX_REQUEST_BYTES:
+        return JSONResponse({"detail": "Request body too large"}, status_code=413)
+
+    response = await call_next(request)
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Cross-Origin-Resource-Policy"] = "same-site"
+    return response
+
+
+# Order matters: the last middleware added runs first. CORS must wrap everything
+# so 429 responses still carry CORS headers and the browser can read them.
+app.add_middleware(GlobalRateLimitMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.frontend_origin, settings.allowed_admin_origin],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Accept"],
 )
 
-@app.middleware("http")
-async def add_security_headers(request: Request, call_next):
-    response = await call_next(request)
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-XSS-Protection"] = "1; mode=block"
-    return response
-
-app.add_middleware(SlowAPIMiddleware)
-
-# Create storage folders on startup
+# Uploaded public assets are served at /uploads/<dir>/*
+for sub in PUBLIC_UPLOAD_DIRS:
+    path = Path("storage") / sub
+    path.mkdir(parents=True, exist_ok=True)
+    app.mount(f"/uploads/{sub}", StaticFiles(directory=path), name=f"uploads-{sub}")
 Path("storage/cvs").mkdir(parents=True, exist_ok=True)
-Path("storage/webinars").mkdir(parents=True, exist_ok=True)
 
-# Serve uploaded files at /uploads/*
-app.mount("/uploads", StaticFiles(directory="storage"), name="uploads")
-
-# Routers
-app.include_router(health.router, prefix="/api/v1")
-app.include_router(newsletter.router, prefix="/api/v1")
-app.include_router(auth.router, prefix="/api/v1")
-app.include_router(forms.router, prefix="/api/v1")
-app.include_router(careers.router, prefix="/api/v1")
-app.include_router(webinars.router, prefix="/api/v1")
-app.include_router(admin_auth.router, prefix="/api/v1")
-app.include_router(admin_data.router, prefix="/api/v1")
-app.include_router(projects.router, prefix="/api/v1")
-app.include_router(partners.router, prefix="/api/v1")
+for module in (
+    health,
+    newsletter,
+    auth,
+    forms,
+    careers,
+    webinars,
+    admin_auth,
+    admin_data,
+    projects,
+    partners,
+):
+    app.include_router(module.router, prefix="/api/v1")

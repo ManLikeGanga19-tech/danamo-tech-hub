@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import select, desc, func
@@ -14,6 +14,7 @@ from app.models import (
     WebinarRegistration, NewsletterSubscriber, Project, Partner
 )
 from app.api.deps import get_current_admin
+from app.core.rate_limit import ADMIN_UPLOAD_LIMIT, limiter
 from app.schemas.webinars import WebinarOut
 from app.schemas.projects import ProjectOut, ProjectCreate
 from app.schemas.partners import PartnerOut, PartnerCreate, PartnerUpdate
@@ -107,7 +108,8 @@ ALLOWED_IMAGE_TYPES = {
 
 
 @router.post("/webinars/upload-image")
-async def upload_webinar_image(file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
+@limiter.limit(ADMIN_UPLOAD_LIMIT)
+async def upload_webinar_image(request: Request, file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
     if file.content_type not in ALLOWED_IMAGE_TYPES:
         raise HTTPException(400, "Image must be JPG, PNG, or WebP")
     contents = await file.read()
@@ -211,7 +213,8 @@ async def admin_delete_project(project_id: str, db: AsyncSession = Depends(get_d
 
 
 @router.post("/projects/upload-image")
-async def upload_project_image(file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
+@limiter.limit(ADMIN_UPLOAD_LIMIT)
+async def upload_project_image(request: Request, file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
     if file.content_type not in ALLOWED_IMAGE_TYPES:
         raise HTTPException(400, "Image must be JPG, PNG, or WebP")
     contents = await file.read()
@@ -296,7 +299,8 @@ async def admin_delete_partner(partner_id: str, db: AsyncSession = Depends(get_d
 
 
 @router.post("/partners/upload-logo")
-async def upload_partner_logo(file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
+@limiter.limit(ADMIN_UPLOAD_LIMIT)
+async def upload_partner_logo(request: Request, file: UploadFile = File(...), admin: User = Depends(get_current_admin)):
     if file.content_type not in ALLOWED_IMAGE_TYPES:
         raise HTTPException(400, "Logo must be JPG, PNG, or WebP")
     contents = await file.read()
