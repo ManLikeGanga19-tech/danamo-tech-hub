@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { adminFetch } from "./client";
+import { adminPath } from "./paths";
 
 type AdminUser = { id: string; email: string; full_name: string | null; role: string; };
 type AdminAuthContextValue = { user: AdminUser | null; loading: boolean; logout: () => Promise<void>; };
@@ -21,8 +22,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     await adminFetch("/auth/logout", { method: "POST" });
     setUser(null);
-    const isLocalhost = window.location.hostname === "localhost";
-    window.location.href = isLocalhost ? "/admin/login" : "/login";
+    window.location.href = adminPath("/login");
   };
 
   return (

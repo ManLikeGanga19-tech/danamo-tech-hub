@@ -184,50 +184,50 @@ export default function AdminPartners() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Partners</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Partners</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Manage the logos that appear on the homepage slider.
           </p>
         </div>
-        <Button onClick={openCreateModal} className="bg-blue-600 text-white rounded-lg">
+        <Button onClick={openCreateModal} className="bg-emerald-600 text-white rounded-lg">
           <Plus className="w-4 h-4 mr-2" /> Add Partner
         </Button>
       </div>
 
       {loading ? (
         <div className="flex justify-center h-64 items-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
         </div>
       ) : partners.length === 0 ? (
-        <div className="p-12 text-center bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800">
-          <Handshake className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">No partners yet</h3>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">
+        <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <Handshake className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">No partners yet</h3>
+          <p className="text-slate-500 dark:text-slate-400 text-sm">
             Add your first partner to show them on the homepage.
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
-                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 w-20">Order</th>
-                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Logo</th>
-                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Name</th>
-                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Website</th>
-                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Status</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 w-20">Order</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Logo</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Name</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Website</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Status</th>
+                <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
               {partners.map((p, i) => (
-                <tr key={p.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                <tr key={p.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => moveOrder(p, -1)}
                         disabled={i === 0}
-                        className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="text-slate-400 hover:text-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed"
                         aria-label="Move up"
                       >
                         <ArrowUp className="w-4 h-4" />
@@ -235,7 +235,7 @@ export default function AdminPartners() {
                       <button
                         onClick={() => moveOrder(p, 1)}
                         disabled={i === partners.length - 1}
-                        className="text-gray-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="text-slate-400 hover:text-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed"
                         aria-label="Move down"
                       >
                         <ArrowDown className="w-4 h-4" />
@@ -243,31 +243,31 @@ export default function AdminPartners() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="w-20 h-14 bg-gray-50 dark:bg-gray-800 rounded-md flex items-center justify-center p-2">
+                    <div className="w-20 h-14 bg-slate-50 dark:bg-slate-800 rounded-md flex items-center justify-center p-2">
                       <img src={p.logo_url} alt={p.name} className="max-w-full max-h-full object-contain" />
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{p.name}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  <td className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">{p.name}</td>
+                  <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                     {p.website_url ? (
-                      <a href={p.website_url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 truncate block max-w-xs">
+                      <a href={p.website_url} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-600 truncate block max-w-xs">
                         {p.website_url}
                       </a>
                     ) : (
-                      <span className="text-gray-400 italic">None</span>
+                      <span className="text-slate-400 italic">None</span>
                     )}
                   </td>
                   <td className="px-6 py-4">
                     <button
                       onClick={() => toggleActive(p)}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full ${p.is_active ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"}`}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full ${p.is_active ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"}`}
                     >
                       {p.is_active ? <><Eye className="w-3 h-3" /> Active</> : <><EyeOff className="w-3 h-3" /> Hidden</>}
                     </button>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button onClick={() => openEditModal(p)} className="text-gray-500 hover:text-blue-600 p-1" aria-label="Edit">
+                      <button onClick={() => openEditModal(p)} className="text-slate-500 hover:text-emerald-600 p-1" aria-label="Edit">
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button onClick={() => handleDelete(p.id, p.name)} className="text-red-500 hover:text-red-700 p-1" aria-label="Delete">
@@ -284,7 +284,7 @@ export default function AdminPartners() {
 
       {/* CREATE / EDIT MODAL */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-lg bg-white dark:bg-[#1E1E2F] rounded-2xl">
+        <DialogContent className="sm:max-w-lg bg-white dark:bg-slate-900 rounded-2xl">
           <DialogHeader>
             <DialogTitle>{editingPartner ? "Edit Partner" : "Add Partner"}</DialogTitle>
           </DialogHeader>
@@ -303,7 +303,7 @@ export default function AdminPartners() {
             <div>
               <Label>Logo *</Label>
               <input ref={logoInputRef} type="file" accept="image/*" onChange={handleLogoChange} className="hidden" />
-              <div onClick={() => logoInputRef.current?.click()} className="mt-2 cursor-pointer rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 overflow-hidden hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <div onClick={() => logoInputRef.current?.click()} className="mt-2 cursor-pointer rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 overflow-hidden hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                 {logoPreview ? (
                   <div className="relative p-6 flex items-center justify-center h-32">
                     <img src={logoPreview} alt="Preview" className="max-h-24 max-w-full object-contain" />
@@ -313,9 +313,9 @@ export default function AdminPartners() {
                   </div>
                 ) : (
                   <div className="p-8 text-center">
-                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Click to upload logo</p>
-                    <p className="text-xs text-gray-500 mt-1">PNG with transparent background recommended</p>
+                    <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Click to upload logo</p>
+                    <p className="text-xs text-slate-500 mt-1">PNG with transparent background recommended</p>
                   </div>
                 )}
               </div>
@@ -329,12 +329,12 @@ export default function AdminPartners() {
               <div className="flex items-end pb-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={formData.is_active} onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })} className="w-4 h-4 rounded" />
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show on site</span>
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Show on site</span>
                 </label>
               </div>
             </div>
 
-            <Button asChild className="w-full bg-blue-600 text-white rounded-xl py-6 mt-4">
+            <Button asChild className="w-full bg-emerald-600 text-white rounded-xl py-6 mt-4">
               <button type="submit" disabled={submitting}>
                 {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : editingPartner ? "Save Changes" : "Add Partner"}
               </button>

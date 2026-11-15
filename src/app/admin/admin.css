@@ -1,0 +1,19 @@
+/* Admin console styles — independent of the public site's globals.css. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+}
+
+::selection {
+  @apply bg-emerald-500/30;
+}

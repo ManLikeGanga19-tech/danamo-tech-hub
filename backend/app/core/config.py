@@ -10,7 +10,6 @@ class Settings(BaseSettings):
 
     database_url: str
     frontend_origin: str = "http://localhost:3000"
-    allowed_admin_origin: str = "http://admin.localhost:3000"
     frontend_url: str = "https://danamotech.co.ke"
 
     session_cookie_name: str = "danamo_session"

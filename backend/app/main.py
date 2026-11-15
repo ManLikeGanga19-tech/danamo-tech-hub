@@ -60,7 +60,9 @@ async def security_headers_and_size_limit(request: Request, call_next):
 app.add_middleware(GlobalRateLimitMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_origin, settings.allowed_admin_origin],
+    # Only the public site calls the API cross-origin. The admin console goes
+    # through its own same-origin proxy and needs no CORS access.
+    allow_origins=[settings.frontend_origin],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Accept"],

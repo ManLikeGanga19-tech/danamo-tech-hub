@@ -18,7 +18,6 @@ import {
     Zap,
     ArrowRight
 } from "lucide-react"
-import "../../app/globals.css"
 
 interface Service {
     title: string

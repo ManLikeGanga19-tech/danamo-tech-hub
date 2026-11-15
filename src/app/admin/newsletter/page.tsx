@@ -98,8 +98,8 @@ export default function AdminNewsletter() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Newsletter Subscribers</h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Newsletter Subscribers</h1>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                         Manage your email list. {subscribers.length} total subscribers.
                     </p>
                 </div>
@@ -110,7 +110,7 @@ export default function AdminNewsletter() {
                             <Download className="w-4 h-4 mr-2" /> Export CSV
                         </button>
                     </Button>
-                    <Button asChild onClick={() => { setIsModalOpen(true); setError(""); setNewEmail(""); }} className="bg-blue-600 text-white rounded-lg">
+                    <Button asChild onClick={() => { setIsModalOpen(true); setError(""); setNewEmail(""); }} className="bg-emerald-600 text-white rounded-lg">
                         <button type="button">
                             <Plus className="w-4 h-4 mr-2" /> Add Subscriber
                         </button>
@@ -121,7 +121,7 @@ export default function AdminNewsletter() {
             {/* Search */}
             {subscribers.length > 0 && (
                 <div className="relative max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
                     <Input
                         placeholder="Search by email..."
                         value={search}
@@ -131,18 +131,18 @@ export default function AdminNewsletter() {
                 </div>
             )}
 
-            <div className="bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
                 {loading ? (
-                    <div className="p-12 text-center"><Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" /></div>
+                    <div className="p-12 text-center"><Loader2 className="w-8 h-8 animate-spin text-emerald-600 mx-auto" /></div>
                 ) : filtered.length === 0 ? (
                     <div className="p-12 text-center flex flex-col items-center">
-                        <div className="w-16 h-16 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
-                            <Mail className="w-8 h-8 text-gray-400" />
+                        <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                            <Mail className="w-8 h-8 text-slate-400" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">
+                        <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-1">
                             {search ? "No matches found" : "No subscribers yet"}
                         </h3>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm">
+                        <p className="text-slate-500 dark:text-slate-400 text-sm">
                             {search ? `No emails match "${search}"` : "Subscribe to the newsletter on the public site to see them here."}
                         </p>
                     </div>
@@ -150,23 +150,23 @@ export default function AdminNewsletter() {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
-                                <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
-                                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Email</th>
-                                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Status</th>
-                                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Subscribed</th>
-                                    <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
+                                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+                                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Email</th>
+                                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Status</th>
+                                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Subscribed</th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
                                 {filtered.map((s) => (
-                                    <tr key={s.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">{s.email}</td>
+                                    <tr key={s.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <td className="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">{s.email}</td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex px-2.5 py-0.5 text-xs font-medium rounded-full ${s.confirmed ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300" : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300"}`}>
                                                 {s.confirmed ? "Confirmed" : "Pending"}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                        <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                                             {new Date(s.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                                         </td>
                                         <td className="px-6 py-4 text-right">
@@ -184,7 +184,7 @@ export default function AdminNewsletter() {
 
             {/* ADD MODAL */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogContent className="sm:max-w-md bg-white dark:bg-[#1E1E2F] rounded-2xl">
+                <DialogContent className="sm:max-w-md bg-white dark:bg-slate-900 rounded-2xl">
                     <DialogHeader>
                         <DialogTitle>Add Subscriber Manually</DialogTitle>
                     </DialogHeader>
@@ -194,7 +194,7 @@ export default function AdminNewsletter() {
                             <Input type="email" required value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className="rounded-xl h-12 mt-1.5" placeholder="user@example.com" />
                         </div>
                         {error && <p className="text-sm text-red-600">{error}</p>}
-                        <Button asChild className="w-full bg-blue-600 text-white rounded-xl py-6">
+                        <Button asChild className="w-full bg-emerald-600 text-white rounded-xl py-6">
                             <button type="submit" disabled={submitting}>
                                 {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Add Subscriber"}
                             </button>

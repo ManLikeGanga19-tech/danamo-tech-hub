@@ -7,6 +7,10 @@ const BACKEND_INTERNAL_URL = process.env.BACKEND_INTERNAL_URL ?? "http://localho
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Two root layouts ((site) and admin) need a standalone 404 page.
+  experimental: {
+    globalNotFound: true,
+  },
   poweredByHeader: false,
   async rewrites() {
     return [
