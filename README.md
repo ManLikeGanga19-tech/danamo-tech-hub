@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Danamo Tech Hub
 
-## Getting Started
+Website, admin console and API for **[Danamo Tech](https://danamotech.co.ke)** — a technology
+company headquartered in Mombasa, Kenya, founded in 2024 to bridge the technology gap for small
+businesses and startups with affordable web, software and digital solutions.
 
-First, run the development server:
+| | URL |
+|---|---|
+| Public site | https://danamotech.co.ke |
+| Admin console | https://admin.danamotech.co.ke |
+| API | https://api.danamotech.co.ke/api/v1/health |
+
+## What's in this repo
+
+| Path | What |
+|---|---|
+| `src/app/(site)/` | Public website (Next.js App Router): services, projects and case studies, careers, webinars, blog, legal pages |
+| `src/app/admin/` | Admin console — a separate root layout and theme, served on `admin.` by `src/proxy.ts` |
+| `backend/` | FastAPI API: contact and inquiry forms, careers with CV upload, newsletter, webinars, projects, partners, admin auth |
+| `deploy/` | Production Docker Compose stack, Caddy site block, edge guard and runbook |
+| `.github/workflows/` | Builds and publishes the frontend and backend images to GHCR |
+
+## Stack
+
+- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS, Radix UI
+- **Backend:** FastAPI, SQLAlchemy 2 (async), Alembic, PostgreSQL 16, Redis (rate limiting)
+- **Email:** Resend (transactional confirmations and team notifications)
+- **Infrastructure:** Docker Compose behind Caddy (automatic HTTPS), images on GHCR
+
+Security highlights: per-IP rate limiting on every API route (stricter on auth, forms and
+uploads), uploads validated by file signature, CVs never publicly served, Argon2 password
+hashing, httpOnly `Secure` `SameSite=Strict` admin sessions, and an admin console that is
+unreachable from the public domain.
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Database
+cd backend && docker compose up -d          # Postgres for development
+
+# API (http://localhost:8000)
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+cp .env.example .env                        # set DATABASE_URL etc.
+.venv/bin/alembic upgrade head
+.venv/bin/uvicorn app.main:app --reload
+
+# Website + admin (http://localhost:3000, admin at http://admin.localhost:3000)
+cd .. && npm install && npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create an admin account:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd backend && .venv/bin/python -m app.cli.create_admin --email you@example.com
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Checks: `npm run lint`, `npm run typecheck`, `npm run build`.
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Every push to `main` builds `ghcr.io/manlikeganga19-tech/danamo-{frontend,backend}` tagged
+`sha-<commit>`. Production pins a tag in `/opt/danamo/.env`; see
+[deploy/README.md](deploy/README.md) for first deploy, updates, rollback and the shared-edge setup.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+hello@danamotech.co.ke · Mombasa, Kenya
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© Danamo Tech. All rights reserved.
