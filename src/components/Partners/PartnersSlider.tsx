@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useAnimationFrame, useTransform } from "framer-motion";
 import { Handshake } from "lucide-react";
 import { apiFetch } from "@/lib/api/client";
 
@@ -12,10 +11,14 @@ interface Partner {
   website_url: string | null;
 }
 
+// Each half of the track holds at least this many logos, so one half is always
+// wider than the widest screen and the loop never shows an empty gap.
+const MIN_ITEMS_PER_HALF = 12;
+const SECONDS_PER_ITEM = 3.5;
+
 export default function PartnersSlider() {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     apiFetch<Partner[]>("/partners")
@@ -24,11 +27,11 @@ export default function PartnersSlider() {
       .finally(() => setLoading(false));
   }, []);
 
-  // If no partners, render nothing
   if (loading || partners.length === 0) return null;
 
-  // Duplicate for seamless loop
-  const loopItems = [...partners, ...partners];
+  const repeats = Math.max(1, Math.ceil(MIN_ITEMS_PER_HALF / partners.length));
+  const half = Array.from({ length: repeats }, () => partners).flat();
+  const duration = `${half.length * SECONDS_PER_ITEM}s`;
 
   return (
     <section className="w-full py-16 bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] border-y border-gray-100 dark:border-gray-800 overflow-hidden">
@@ -42,12 +45,16 @@ export default function PartnersSlider() {
         </h2>
       </div>
 
-      <div
-        className="relative w-full"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <SmoothMarquee partners={loopItems} paused={isHovered} />
+      <div className="partners-marquee relative w-full overflow-hidden" role="region" aria-label="Our partners">
+        {/*
+          Two identical halves; the track moves left by exactly one half, then
+          the animation restarts at the identical position, so the loop is
+          seamless. Pure CSS transform: GPU-composited, no per-frame JS.
+        */}
+        <div className="partners-marquee__track flex w-max" style={{ animationDuration: duration }}>
+          <LogoGroup partners={half} uniqueCount={partners.length} />
+          <LogoGroup partners={half} uniqueCount={partners.length} hidden />
+        </div>
 
         {/* Edge fades */}
         <div className="pointer-events-none absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent dark:from-[#0e0e15] z-10" />
@@ -57,31 +64,25 @@ export default function PartnersSlider() {
   );
 }
 
-function SmoothMarquee({ partners, paused }: { partners: Partner[]; paused: boolean }) {
-  const baseX = useMotionValue(0);
-  const x = useTransform(baseX, (v) => `${v}%`);
-
-  useAnimationFrame((t, delta) => {
-    if (paused) return;
-    // Slow drift: roughly 1.5% per second
-    const moveBy = -(delta / 1000) * 1.5;
-    let newX = baseX.get() + moveBy;
-    if (newX <= -50) newX = 0;
-    baseX.set(newX);
-  });
-
+function LogoGroup({ partners, uniqueCount, hidden = false }: { partners: Partner[]; uniqueCount: number; hidden?: boolean }) {
   return (
-    <div className="overflow-hidden w-full">
-      <motion.div className="flex gap-16 items-center w-max px-8" style={{ x, willChange: "transform" }}>
-        {partners.map((p, i) => (
-          <PartnerLogo key={`${p.id}-${i}`} partner={p} />
-        ))}
-      </motion.div>
-    </div>
+    // pr-16 matches gap-16 so the spacing across the seam is identical
+    <ul className="flex shrink-0 items-center gap-16 pr-16" aria-hidden={hidden || undefined}>
+      {partners.map((p, i) => {
+        // Only the first copy of each logo is announced and focusable; the
+        // repeats exist purely to fill the loop.
+        const primary = !hidden && i < uniqueCount;
+        return (
+          <li key={`${p.id}-${i}`} aria-hidden={primary ? undefined : true}>
+            <PartnerLogo partner={p} focusable={primary} />
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
-function PartnerLogo({ partner }: { partner: Partner }) {
+function PartnerLogo({ partner, focusable }: { partner: Partner; focusable: boolean }) {
   const content = (
     // Client logos are mostly dark-on-light artwork, so in dark mode they sit
     // on a soft light chip to stay legible; light mode is unchanged.
@@ -98,7 +99,13 @@ function PartnerLogo({ partner }: { partner: Partner }) {
 
   if (partner.website_url) {
     return (
-      <a href={partner.website_url} target="_blank" rel="noopener noreferrer" aria-label={partner.name}>
+      <a
+        href={partner.website_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={partner.name}
+        tabIndex={focusable ? undefined : -1}
+      >
         {content}
       </a>
     );

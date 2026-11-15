@@ -45,3 +45,20 @@ html {
     animation: none;
   }
 }
+
+/* Partners strip: seamless infinite marquee (see PartnersSlider.tsx) */
+@keyframes partners-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.partners-marquee__track {
+  animation: partners-marquee 42s linear infinite;
+  will-change: transform;
+}
+.partners-marquee:hover .partners-marquee__track,
+.partners-marquee:focus-within .partners-marquee__track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .partners-marquee__track { animation: none; }
+}
