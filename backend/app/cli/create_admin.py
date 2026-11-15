@@ -27,6 +27,11 @@ def read_password(from_stdin: bool) -> str:
     if from_stdin:
         password = sys.stdin.readline().rstrip("\n")
     else:
+        if not sys.stdin.isatty():
+            sys.exit(
+                "No interactive terminal for the password prompt. Run this from a real "
+                "terminal (ssh -t ...), or pipe the password in with --password-stdin."
+            )
         password = getpass.getpass("Password: ")
         if password != getpass.getpass("Repeat password: "):
             sys.exit("Passwords do not match.")
