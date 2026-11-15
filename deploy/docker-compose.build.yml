@@ -1,0 +1,13 @@
+# Local override: build images from source instead of pulling from GHCR.
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://api.danamotech.co.ke/api/v1}
+        BACKEND_INTERNAL_URL: http://backend:8000
+  backend:
+    build:
+      context: ../backend

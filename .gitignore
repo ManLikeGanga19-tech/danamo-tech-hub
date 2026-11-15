@@ -50,3 +50,4 @@ venv/
 
 # backend runtime uploads (CVs, images) — never commit
 /backend/storage/
+!.env.example

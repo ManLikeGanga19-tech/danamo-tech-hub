@@ -1,0 +1,107 @@
+# Danamo Tech Hub — production stack (lives at /opt/danamo on the VPS).
+#
+#   docker compose pull && docker compose up -d
+#   docker compose run --rm backend alembic upgrade head
+#
+# Services talk to each other by service name on the private "danamo" network.
+# Only frontend and backend are published, and only on 127.0.0.1 — Caddy is
+# the sole public entry point. Postgres and Redis have no host ports.
+
+name: danamo
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  frontend:
+    image: ${FRONTEND_IMAGE:-ghcr.io/manlikeganga19-tech/danamo-frontend}:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_PREFIX:-danamo}-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${FRONTEND_HOST_PORT:-3001}:3000"
+    networks: [danamo]
+    mem_limit: 512m
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/.next/cache
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    logging: *logging
+
+  backend:
+    image: ${BACKEND_IMAGE:-ghcr.io/manlikeganga19-tech/danamo-backend}:${IMAGE_TAG:-latest}
+    container_name: ${CONTAINER_PREFIX:-danamo}-backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+asyncpg://danamo:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/danamo_prod
+      RATE_LIMIT_STORAGE_URI: redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${BACKEND_HOST_PORT:-8001}:8000"
+    volumes:
+      - uploads:/app/storage
+    networks: [danamo]
+    mem_limit: 512m
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    logging: *logging
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: ${CONTAINER_PREFIX:-danamo}-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: danamo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: danamo_prod
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [danamo]
+    mem_limit: 512m
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U danamo -d danamo_prod"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging: *logging
+
+  redis:
+    image: redis:7-alpine
+    container_name: ${CONTAINER_PREFIX:-danamo}-redis
+    restart: unless-stopped
+    # Only holds rate-limit counters: no persistence, bounded memory.
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    networks: [danamo]
+    mem_limit: 96m
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    logging: *logging
+
+networks:
+  danamo:
+    name: ${CONTAINER_PREFIX:-danamo}
+
+volumes:
+  pgdata:
+  uploads:

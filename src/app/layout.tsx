@@ -4,10 +4,13 @@ import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import Providers from "@/app/providers";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 
-const inter = Inter({
-  subsets: ["latin"],
+// Inter (variable, latin subset), self-hosted so builds never depend on
+// fonts.googleapis.com. License: SIL Open Font License 1.1.
+const inter = localFont({
+  src: "./fonts/inter-latin-var.woff2",
+  weight: "100 900",
   display: "swap",
   variable: "--font-inter",
 });
