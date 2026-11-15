@@ -5,6 +5,7 @@ import { MdEmail } from 'react-icons/md'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CONTACT_EMAIL, SOCIAL_LINKS } from '@/lib/site'
+import { openCookiePreferences } from '@/lib/consent'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -83,6 +84,7 @@ export default function Footer() {
               <li><Link href="/accessibility" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Accessibility</Link></li>
               <li><Link href="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Privacy Policy</Link></li>
               <li><Link href="/cookies" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Cookies Policy</Link></li>
+              <li><button type="button" onClick={openCookiePreferences} className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Cookie Preferences</button></li>
               <li><Link href="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Terms &amp; Conditions</Link></li>
             </ul>
           </div>

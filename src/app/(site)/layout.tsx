@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import Providers from "./providers";
+import CookieConsent from "@/components/consent/CookieConsent";
+import GoogleAnalytics from "@/components/consent/GoogleAnalytics";
 import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 import localFont from "next/font/local";
@@ -138,6 +140,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
             Skip to main content
           </a>
           <main id="main-content">{children}</main>
+          <CookieConsent />
+          <GoogleAnalytics />
         </Providers>
         <script
           type="application/ld+json"

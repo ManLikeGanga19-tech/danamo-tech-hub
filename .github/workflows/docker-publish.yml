@@ -91,6 +91,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=https://api.danamotech.co.ke/api/v1
             BACKEND_INTERNAL_URL=http://backend:8000
+            NEXT_PUBLIC_GA_ID=${{ vars.NEXT_PUBLIC_GA_ID }}
           cache-from: type=gha,scope=${{ matrix.image }}
           cache-to: type=gha,mode=max,scope=${{ matrix.image }}
           provenance: false

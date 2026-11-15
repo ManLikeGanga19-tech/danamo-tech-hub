@@ -13,8 +13,12 @@ WORKDIR /app
 # BACKEND_INTERNAL_URL into the rewrite manifest).
 ARG NEXT_PUBLIC_API_URL=https://api.danamotech.co.ke/api/v1
 ARG BACKEND_INTERNAL_URL=http://backend:8000
+# Optional GA4 measurement ID (G-XXXXXXX). Analytics stays off when empty and
+# only loads after the visitor consents in the cookie banner.
+ARG NEXT_PUBLIC_GA_ID=
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
     BACKEND_INTERNAL_URL=$BACKEND_INTERNAL_URL \
+    NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
     NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

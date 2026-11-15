@@ -25,9 +25,6 @@ export default function CookiesPage() {
       </p>
 
       <h2>2. Categories of Cookies We Use</h2>
-      <p>
-        We only use <strong>strictly necessary</strong> cookies. We do not use preference, analytics, advertising or marketing cookies.
-      </p>
       <table>
         <thead>
           <tr><th>Category</th><th>Purpose</th><th>Consent Required?</th><th>Examples</th></tr>
@@ -39,19 +36,35 @@ export default function CookiesPage() {
             <td><strong>No</strong> (exempt)</td>
             <td><code>danamo_session</code>, <code>danamo_admin_session</code></td>
           </tr>
+          <tr>
+            <td><strong>Analytics</strong></td>
+            <td>Understand how visitors use the site (pages viewed, visit length, referring site) so we can improve it.</td>
+            <td><strong>Yes</strong> (opt-in)</td>
+            <td>Google Analytics 4: <code>_ga</code>, <code>_ga_*</code></td>
+          </tr>
+          <tr>
+            <td><strong>Marketing</strong></td>
+            <td>Measure the effectiveness of our campaigns and, where used, show relevant ads on other sites.</td>
+            <td><strong>Yes</strong> (opt-in)</td>
+            <td>Google advertising signals (only if you allow marketing)</td>
+          </tr>
         </tbody>
       </table>
       <p>
-        Your light/dark theme choice is stored in your browser&apos;s local storage, not in a cookie, and is never sent to us.
+        Your light/dark theme choice and your cookie choice are stored in your browser&apos;s local storage, not sent to us.
       </p>
 
       <h2>3. How We Obtain Consent</h2>
       <p>
-        Because we only use strictly necessary cookies, which are exempt from consent, we do not show a cookie consent banner. Visiting the site without signing in sets no cookies at all.
+        When you first visit, a banner asks for your choice. In line with <strong>Section 32 of the Act</strong> and the ODPC&apos;s 2024 guidance:
       </p>
-      <p>
-        If we ever introduce non-essential cookies, we will first update this policy and ask for your consent in line with <strong>Section 32 of the Act</strong> and the ODPC&apos;s 2024 guidance: no pre-ticked boxes, a &quot;Reject all&quot; option as prominent as &quot;Accept all&quot;, a separate choice per category, no &quot;scroll-as-consent&quot;, and withdrawal as easy as giving consent.
-      </p>
+      <ul>
+        <li><strong>Off by default.</strong> Analytics and marketing cookies are not set, and the analytics script is not even loaded, until you opt in.</li>
+        <li><strong>Equal choice.</strong> &quot;Reject all&quot; and &quot;Accept all&quot; are shown side by side with the same prominence.</li>
+        <li><strong>Granular choice.</strong> &quot;Customize&quot; lets you allow analytics and marketing separately.</li>
+        <li><strong>No scroll-as-consent.</strong> Continuing to browse is not consent.</li>
+        <li><strong>Easy to withdraw.</strong> Change your choice at any time with &quot;Cookie Preferences&quot; in the footer. Withdrawing analytics consent stops analytics and deletes its cookies.</li>
+      </ul>
 
       <h2>4. Strictly Necessary Cookies (Exempt from Consent)</h2>
       <p>
@@ -69,15 +82,12 @@ export default function CookiesPage() {
 
       <h2>5. Analytics and Advertising Cookies</h2>
       <p>
-        We do not currently use analytics, advertising or tracking cookies. If we introduce analytics in the future, we will ask for your consent first and update this policy before doing so.
-      </p>
-      <p>
-        Your light/dark theme choice is saved in your browser&apos;s local storage (not a cookie) and never leaves your device.
+        If you allow analytics, we use <strong>Google Analytics 4</strong> to understand how the site is used. Google Analytics 4 does not log or store IP addresses, and we do not use analytics data to identify individual visitors. If you also allow marketing, Google may use the data to measure and personalise advertising. Without your consent none of this runs.
       </p>
 
       <h2>6. Third-Party Cookies</h2>
       <p>
-        We do not allow third parties to set cookies on our site. Links to other websites (for example our clients&apos; sites) are governed by those websites&apos; own cookie policies.
+        With your consent, Google (as our analytics and advertising provider) sets the cookies listed above and acts as our data processor. Google may transfer data outside Kenya under appropriate safeguards. No other third parties set cookies on our site. Links to other websites are governed by those sites&apos; own cookie policies.
       </p>
 
       <h2>7. Children&apos;s Data</h2>
@@ -86,9 +96,11 @@ export default function CookiesPage() {
       </p>
 
       <h2>8. How to Control Cookies</h2>
-      <p>
-        Most browsers allow you to block or delete cookies; see your browser&apos;s help pages (Chrome, Firefox, Safari, Edge). Clearing your browser&apos;s site data also removes the saved theme preference.
-      </p>
+      <ul>
+        <li><strong>Cookie Preferences:</strong> use the &quot;Cookie Preferences&quot; link in the footer to accept or reject each category at any time.</li>
+        <li><strong>Browser settings:</strong> most browsers let you block or delete cookies; see your browser&apos;s help pages (Chrome, Firefox, Safari, Edge).</li>
+        <li><strong>Google&apos;s opt-out:</strong> you can also install the Google Analytics Opt-out Browser Add-on.</li>
+      </ul>
       <p>
         Blocking strictly necessary cookies may prevent you from logging in or using parts of the site.
       </p>
