@@ -1,24 +1,18 @@
 import { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 
+// Served on the public host. The admin host answers /robots.txt itself
+// (Disallow: /) in src/proxy.ts.
 export default function robots(): MetadataRoute.Robots {
-    const baseUrl = "https://danamo-tech.co.ke";
-
     return {
         rules: [
             {
                 userAgent: "*",
                 allow: "/",
-            },
-            {
-                userAgent: "Googlebot-Image",
-                allow: ["/"],
-            },
-            {
-                userAgent: "Googlebot-News",
-                allow: ["/"],
+                disallow: ["/account", "/login", "/signup", "/api/"],
             },
         ],
-        sitemap: `${baseUrl}/sitemap.xml`,
-        host: baseUrl,
+        sitemap: `${SITE_URL}/sitemap.xml`,
+        host: SITE_URL,
     };
 }

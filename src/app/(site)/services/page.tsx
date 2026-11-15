@@ -1,5 +1,6 @@
 "use client";
 
+import { SITE_URL } from "@/lib/site";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import {
@@ -32,8 +33,8 @@ const structuredData = {
   provider: {
     "@type": "Organization",
     name: "Danamo Tech Hub",
-    url: "https://www.danamo-tech.co.ke",
-    logo: "https://www.danamo-tech.co.ke/logo.png",
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.png`,
   },
   areaServed: {
     "@type": "Place",

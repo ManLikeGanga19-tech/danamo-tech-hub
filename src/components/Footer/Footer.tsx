@@ -42,7 +42,7 @@ export default function Footer() {
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-blue-600 hover:border-blue-600 dark:hover:text-blue-400 dark:hover:border-blue-400 transition-all duration-300">
                 <FaFacebookF className="w-4 h-4" />
               </a>
-              <a href="mailto:hello@danamotech.com" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-red-500 hover:border-red-500 dark:hover:text-red-400 dark:hover:border-red-400 transition-all duration-300">
+              <a href="mailto:hello@danamotech.co.ke" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-red-500 hover:border-red-500 dark:hover:text-red-400 dark:hover:border-red-400 transition-all duration-300">
                 <MdEmail className="w-5 h-5" />
               </a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:text-pink-500 hover:border-pink-500 dark:hover:text-pink-400 dark:hover:border-pink-400 transition-all duration-300">

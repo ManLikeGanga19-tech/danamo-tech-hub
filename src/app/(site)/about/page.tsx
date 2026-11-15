@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import AboutClient from "./AboutClient";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About Us | Danamo Tech",
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Danamo Tech",
     description: "Empowering startups and SMEs with enterprise-grade digital solutions.",
-    url: "https://danamo-tech.co.ke/about",
-    images: [{ url: "https://danamo-tech.co.ke/about-bg.jpg" }],
+    url: `${SITE_URL}/about`,
+    images: [{ url: `${SITE_URL}/about-bg.jpg` }],
   },
 };
 
@@ -23,8 +24,8 @@ export default function AboutPage() {
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'Danamo Tech',
-            url: 'https://danamo-tech.co.ke',
-            logo: 'https://danamo-tech.co.ke/logo.png',
+            url: SITE_URL,
+            logo: `${SITE_URL}/logo.png`,
             sameAs: [
               'https://www.facebook.com/danamo',
               'https://www.linkedin.com/company/danamo-tech',

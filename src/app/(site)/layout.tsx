@@ -3,6 +3,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import Providers from "./providers";
+import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 import localFont from "next/font/local";
 
@@ -15,8 +16,6 @@ const inter = localFont({
   variable: "--font-inter",
 });
 
-const SITE_URL = "https://www.danamo-tech.co.ke";
-const SITE_NAME = "Danamo-Tech";
 const SITE_DESCRIPTION =
   "Explore cutting-edge tutorials, opinions, and innovations from Danamo's team of developers, designers, and engineers.";
 
@@ -69,7 +68,6 @@ export const metadata: Metadata = {
     title: "Danamo - Tech Insights & Innovation",
     description: SITE_DESCRIPTION,
     images: ["/logo.png"],
-    creator: "@yourtwitterhandle",
   },
   robots: {
     index: true,
@@ -109,14 +107,9 @@ const structuredData = {
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
   description: SITE_DESCRIPTION,
-  sameAs: [
-    "https://twitter.com/yourhandle",
-    "https://linkedin.com/company/yourcompany",
-    "https://github.com/yourorg",
-  ],
   contactPoint: {
     "@type": "ContactPoint",
-    email: "contact@danamo-tech.co.ke",
+    email: CONTACT_EMAIL,
     contactType: "Customer Service",
   },
 };
@@ -134,9 +127,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           content="8qSi6rQ_CKWZRfvonMwGlEV0ZdTwDupn4FTocPbFufw"
         />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
       </head>
       <body
         className={`${inter.className} min-h-screen antialiased bg-white text-black dark:bg-black dark:text-white`}
