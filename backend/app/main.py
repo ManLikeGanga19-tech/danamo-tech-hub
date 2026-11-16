@@ -45,11 +45,16 @@ PUBLIC_UPLOAD_DIRS = ("webinars", "projects", "partners", "blog")
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     # Imported here so the email/database modules load after logging is set up.
+    from app.services.newsletter import newsletter_loop
     from app.services.webinars import reminder_loop
 
-    task = asyncio.create_task(reminder_loop()) if settings.webinar_reminders_enabled else None
+    tasks = []
+    if settings.webinar_reminders_enabled:
+        tasks.append(asyncio.create_task(reminder_loop()))
+    if settings.newsletter_updates_on:
+        tasks.append(asyncio.create_task(newsletter_loop()))
     yield
-    if task:
+    for task in tasks:
         task.cancel()
         with suppress(asyncio.CancelledError):
             await task

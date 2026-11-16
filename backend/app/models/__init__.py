@@ -1,3 +1,4 @@
+import secrets
 import uuid
 from datetime import datetime
 from sqlalchemy import String, Text, Boolean, DateTime, ForeignKey, BigInteger, UniqueConstraint, func
@@ -72,6 +73,8 @@ class NewsletterSubscriber(Base):
     confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     unsubscribed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # Secret per subscriber for the one-click unsubscribe link in every email.
+    unsubscribe_token: Mapped[str] = mapped_column(String(64), unique=True, default=lambda: secrets.token_urlsafe(32))
 
 class CvFile(Base):
     __tablename__ = "cv_files"
@@ -211,3 +214,29 @@ class JobOpening(Base):
     posted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class NewsletterAnnouncement(Base):
+    """One "new on Danamo Tech" email to all subscribers, queued when something is published.
+
+    Unique per (kind, ref_id) so republishing never emails subscribers twice.
+    """
+
+    __tablename__ = "newsletter_announcements"
+    __table_args__ = (UniqueConstraint("kind", "ref_id", name="uq_newsletter_announcements_kind_ref"),)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    kind: Mapped[str] = mapped_column(String(20))  # blog | webinar | job | project
+    ref_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True))
+    title: Mapped[str] = mapped_column(String(255))
+    summary: Mapped[str] = mapped_column(Text)
+    path: Mapped[str] = mapped_column(String(300))  # site path, e.g. /blog/my-post
+    image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    status: Mapped[str] = mapped_column(String(20), default="queued", server_default="queued", index=True)  # queued | sending | sent | cancelled | failed
+    send_after: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    # Resume point: subscribers are emailed in id order; the last one done is kept here.
+    cursor: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    sent_count: Mapped[int] = mapped_column(BigInteger, default=0, server_default="0")
+    note: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

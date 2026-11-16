@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { adminFetch } from "@/lib/admin/client";
+import UpdatesPanel from "./UpdatesPanel";
 import { Loader2, Mail, Plus, Trash2, Download, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -176,6 +177,8 @@ export default function AdminNewsletter() {
                     </div>
                 )}
             </div>
+
+            <UpdatesPanel />
 
             {/* ADD MODAL */}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>

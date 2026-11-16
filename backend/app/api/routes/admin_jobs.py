@@ -12,6 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_current_admin
 from app.db.session import get_db
 from app.models import CareerApplication, CvFile, JobOpening, User
+from app.services.newsletter import queue_announcement
 from app.schemas.jobs import (
     AdminJobOpeningOut,
     ApplicationOut,
@@ -40,6 +41,15 @@ def _apply(row: JobOpening, payload: JobOpeningIn) -> None:
         row.posted_at = datetime.now(timezone.utc)
 
 
+async def _announce(db: AsyncSession, row: JobOpening) -> None:
+    if row.status == "open":
+        await queue_announcement(
+            db, kind="job", ref_id=row.id,
+            title=f"{row.title} ({row.employment_type}, {row.location})",
+            summary=row.summary, path=f"/careers/{row.slug}",
+        )
+
+
 async def _out(db: AsyncSession, row: JobOpening) -> AdminJobOpeningOut:
     count = await db.scalar(select(func.count(CareerApplication.id)).where(CareerApplication.job_id == row.id))
     return AdminJobOpeningOut.with_count(row, count or 0)
@@ -62,6 +72,7 @@ async def admin_create_job(payload: JobOpeningIn, db: AsyncSession = Depends(get
     db.add(row)
     await _commit(db)
     await db.refresh(row)
+    await _announce(db, row)
     return await _out(db, row)
 
 
@@ -70,9 +81,12 @@ async def admin_update_job(job_id: uuid.UUID, payload: JobOpeningIn, db: AsyncSe
     row = await db.get(JobOpening, job_id)
     if not row:
         raise HTTPException(404, "Role not found")
+    was_posted = row.posted_at is not None
     _apply(row, payload)
     await _commit(db)
     await db.refresh(row)
+    if not was_posted:  # first time the role opens; edits never re-announce
+        await _announce(db, row)
     return await _out(db, row)
 
 

@@ -16,6 +16,7 @@ from app.core.rate_limit import ADMIN_UPLOAD_LIMIT, limiter
 from app.db.session import get_db
 from app.models import BlogPost, User
 from app.schemas.blog import BlogPostIn, BlogPostOut, estimate_read_minutes
+from app.services.newsletter import queue_announcement
 
 router = APIRouter(prefix="/admin/data/blog", tags=["admin_blog"])
 
@@ -32,6 +33,14 @@ def _apply(row: BlogPost, payload: BlogPostIn) -> None:
     row.read_minutes = estimate_read_minutes(payload.content)
     if payload.status == "published" and row.published_at is None:
         row.published_at = datetime.now(timezone.utc)
+
+
+async def _announce(db: AsyncSession, row: BlogPost) -> None:
+    if row.status == "published":
+        await queue_announcement(
+            db, kind="blog", ref_id=row.id, title=row.title, summary=row.excerpt,
+            path=f"/blog/{row.slug}", image_url=row.cover_image_url,
+        )
 
 
 async def _commit(db: AsyncSession) -> None:
@@ -55,6 +64,7 @@ async def admin_create_post(payload: BlogPostIn, db: AsyncSession = Depends(get_
     db.add(row)
     await _commit(db)
     await db.refresh(row)
+    await _announce(db, row)
     return BlogPostOut.from_model(row)
 
 
@@ -63,9 +73,12 @@ async def admin_update_post(post_id: uuid.UUID, payload: BlogPostIn, db: AsyncSe
     row = await db.get(BlogPost, post_id)
     if not row:
         raise HTTPException(404, "Article not found")
+    was_published = row.published_at is not None
     _apply(row, payload)
     await _commit(db)
     await db.refresh(row)
+    if not was_published:  # first publish only; edits never re-announce
+        await _announce(db, row)
     return BlogPostOut.from_model(row)
 
 

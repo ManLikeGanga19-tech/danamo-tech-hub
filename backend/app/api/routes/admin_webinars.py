@@ -20,6 +20,7 @@ from app.schemas.webinars import (
     display_time,
     is_finished,
 )
+from app.services.newsletter import queue_announcement
 from app.services.webinars import email_join_link_to_attendees
 
 router = APIRouter(prefix="/admin/data/webinars", tags=["admin_webinars"])
@@ -30,6 +31,15 @@ def _apply(row: Webinar, payload: WebinarIn) -> None:
         setattr(row, key, value)
     row.date = display_date(payload.starts_at)
     row.time = display_time(payload.starts_at)
+
+
+async def _announce(db: AsyncSession, row: Webinar) -> None:
+    if not is_finished(row):
+        await queue_announcement(
+            db, kind="webinar", ref_id=row.id, title=row.title,
+            summary=f"{row.date} at {row.time}, hosted by {row.host}. {row.description}",
+            path="/webinars", image_url=row.image_url,
+        )
 
 
 async def _counts(db: AsyncSession) -> dict[tuple[uuid.UUID, str], int]:
@@ -70,6 +80,7 @@ async def admin_create_webinar(payload: WebinarIn, db: AsyncSession = Depends(ge
     db.add(row)
     await db.commit()
     await db.refresh(row)
+    await _announce(db, row)
     return _out(row, {})
 
 

@@ -358,7 +358,23 @@ async def send_webinar_reminder(name: str, email: str, webinar_title: str, date:
 
 # ─── NEWSLETTER ───────────────────────────────────────────────────
 
-async def send_newsletter_welcome(email: str) -> bool:
+def unsubscribe_page_url(token: str) -> str:
+    return f"{settings.frontend_url}/newsletter/unsubscribe?token={token}"
+
+
+def unsubscribe_one_click_url(token: str) -> str:
+    return f"{settings.api_public_url}/api/v1/newsletter/unsubscribe?token={token}"
+
+
+def _unsubscribe_footer(token: str) -> str:
+    return _p(
+        f'You are receiving this because you subscribed at danamotech.co.ke. '
+        f'<a href="{_e(unsubscribe_page_url(token))}" style="color:{GRAY}; text-decoration:underline;">Unsubscribe</a>',
+        "24px 0 0 0",
+    ).replace("font-size:15px", "font-size:12px")
+
+
+async def send_newsletter_welcome(email: str, token: str | None = None) -> bool:
     """Confirm a new newsletter subscription."""
     body = (
         _h2("You're subscribed")
@@ -368,8 +384,9 @@ async def send_newsletter_welcome(email: str) -> bool:
             "from the Danamo Tech team. We only send when we have something genuinely worth your time."
         )
         + _p(f'To explore what we do, visit <a href="{settings.frontend_url}/projects" style="color:{BLUE}; font-weight:600;">our projects</a>.')
-        + _p("Didn't subscribe? Just reply to this email and we'll remove you.", "16px 0 0 0")
+        + _p("We'll email you when we publish new articles, webinars, case studies and open roles.", "16px 0 0 0")
         + _signoff()
+        + (_unsubscribe_footer(token) if token else _p("Didn't subscribe? Just reply to this email and we'll remove you.", "16px 0 0 0"))
     )
     return await _send(email, "Welcome to the Danamo Tech Newsletter", _wrap_html("Subscription confirmed", body), reply_to=settings.admin_notification_email)
 
@@ -382,3 +399,71 @@ async def send_newsletter_notification(email: str) -> bool:
         + _p(f"Manage your subscriber list in the {_admin_link('/newsletter')}.", "0")
     )
     return await _send(settings.admin_notification_email, "New newsletter subscriber", _wrap_html("New subscriber", body))
+
+
+# ─── NEWSLETTER UPDATES ("new on Danamo Tech") ────────────────────
+
+UPDATE_LABELS = {
+    "blog": ("New article", "Read the article"),
+    "webinar": ("New webinar", "See the webinar and register"),
+    "job": ("We're hiring", "View the role"),
+    "project": ("New case study", "Read the case study"),
+}
+
+
+def newsletter_update_message(*, to: str, token: str, kind: str, title: str, summary: str, path: str, image_url: str | None) -> dict:
+    """Build one subscriber's email (Resend params) for a new item on the site."""
+    label, cta = UPDATE_LABELS.get(kind, ("New on Danamo Tech", "Read more"))
+    url = f"{settings.frontend_url}{path}"
+    image = ""
+    if image_url:
+        src = image_url if image_url.startswith("https://") else f"{settings.frontend_url}{image_url}"
+        image = (
+            f'<a href="{_e(url)}"><img src="{_e(src)}" alt="" width="536" '
+            'style="display:block; width:100%; max-width:536px; height:auto; border-radius:8px; margin:0 0 20px 0;"></a>'
+        )
+    body = (
+        f'<p style="margin:0 0 8px 0; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:{BLUE};">{_e(label)}</p>'
+        + _h2(_e(title))
+        + image
+        + _p(_e(summary))
+        + '<div style="margin:28px 0;">'
+        f'<a href="{_e(url)}" style="display:inline-block; background:{BLUE}; color:#ffffff; text-decoration:none; padding:14px 28px; border-radius:8px; font-weight:600; font-size:15px;">{_e(cta)}</a>'
+        "</div>"
+        + _signoff()
+        + _unsubscribe_footer(token)
+    )
+    return {
+        "from": f"Danamo Tech <{settings.resend_from_email}>",
+        "to": [to],
+        "subject": _subject(f"{label}: {title}"),
+        "html": _wrap_html(label, body),
+        "reply_to": settings.admin_notification_email,
+        # One-click unsubscribe (RFC 8058), required by Gmail and Yahoo for bulk mail.
+        "headers": {
+            "List-Unsubscribe": f"<{unsubscribe_one_click_url(token)}>, <mailto:{settings.admin_notification_email}?subject=unsubscribe>",
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        },
+    }
+
+
+def _send_batch_blocking(messages: list[dict]) -> None:
+    resend.Batch.send(messages)
+
+
+async def send_batch(messages: list[dict]) -> bool:
+    """Send up to 100 emails in one Resend call and WAIT for the result.
+
+    Unlike _send (fire-and-forget), the caller needs to know whether the batch
+    went out, so it can record progress and resume after a failure.
+    """
+    if not settings.resend_api_key:
+        logger.warning("[email] RESEND_API_KEY missing - skipped newsletter batch of %d", len(messages))
+        return False
+    try:
+        await asyncio.to_thread(_send_batch_blocking, messages)
+        logger.info("[email] Sent newsletter batch of %d (%r)", len(messages), messages[0]["subject"] if messages else "")
+        return True
+    except Exception as exc:
+        logger.error("[email] Newsletter batch of %d failed: %s", len(messages), exc)
+        return False

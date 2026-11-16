@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     frontend_origin: str = "http://localhost:3000"
     frontend_url: str = "https://danamotech.co.ke"
     admin_url: str = "https://admin.danamotech.co.ke"
+    # Public API base, used for one-click unsubscribe links in emails.
+    api_public_url: str = "https://api.danamotech.co.ke"
 
     session_cookie_name: str = "danamo_session"
     session_ttl_hours: int = 168
@@ -34,9 +36,22 @@ class Settings(BaseSettings):
     webinar_reminders_enabled: bool = True
     webinar_reminder_interval_seconds: int = 300
 
+    # "New on Danamo Tech" newsletter emails, sent when something is published.
+    # Default (unset): on in production, off in development so local testing
+    # never emails real subscribers. Set NEWSLETTER_UPDATES_ENABLED to override.
+    newsletter_updates_enabled: bool | None = None
+    # Grace period to fix or unpublish an item before subscribers are emailed.
+    newsletter_send_delay_minutes: int = 10
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"
+
+    @property
+    def newsletter_updates_on(self) -> bool:
+        if self.newsletter_updates_enabled is None:
+            return self.is_production
+        return self.newsletter_updates_enabled
 
 
 settings = Settings()
