@@ -1,163 +1,20 @@
-"use client";
-
-import { useState, useRef } from "react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Laptop, TrendingUp, Users, MapPin, Briefcase, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/lib/auth/AuthContext";
-import { apiFetch } from "@/lib/api/client";
-import Image from "next/image";
+import { jobs } from "@/lib/jobs";
 
-const jobListings = [
-  {
-    title: "Frontend Developer",
-    type: "Full-time",
-    location: "Remote",
-    description: "Build responsive, enterprise-grade web apps with React, Next.js, and Tailwind CSS.",
-  },
-  {
-    title: "Backend Engineer",
-    type: "Full-time",
-    location: "Mombasa, Kenya",
-    description: "Design scalable APIs, manage databases, and build robust infrastructure using Python or Node.js.",
-  },
-  {
-    title: "UI/UX Designer",
-    type: "Part-time",
-    location: "Remote",
-    description: "Craft intuitive, accessible, and visually stunning user experiences for our clients.",
-  },
-];
+export const metadata: Metadata = {
+  title: "Careers",
+  description:
+    "Join Danamo Tech in Mombasa, Kenya. See open software engineering and design roles, read the full job descriptions and apply online.",
+  alternates: { canonical: "/careers" },
+};
 
 export default function CareersPage() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<null | typeof jobListings[0]>(null);
-  const [cvError, setCvError] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const { user, loading: authLoading } = useAuth();
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [coverLetter, setCoverLetter] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const loading = authLoading || submitting;
-
-  const openModal = (job: typeof jobListings[0]) => {
-    setSelectedJob(job);
-    setIsOpen(true);
-    setName("");
-    setEmail("");
-    setCoverLetter("");
-    setSelectedFile(null);
-    setCvError("");
-    setError("");
-    setSuccess("");
-  };
-
-  const closeModal = () => {
-    setSelectedJob(null);
-    setIsOpen(false);
-    setName("");
-    setEmail("");
-    setCoverLetter("");
-    setSelectedFile(null);
-    setCvError("");
-    setError("");
-    setSuccess("");
-  };
-
-  // FIX: Changed to HTMLDivElement because the onClick is on a <div>
-  const handleCvClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.type !== "application/pdf") {
-      setCvError("Only PDF files are allowed.");
-      setSelectedFile(null);
-      e.target.value = "";
-    } else if (file.size > 5 * 1024 * 1024) {
-      setCvError("File size must be less than 5MB.");
-      setSelectedFile(null);
-      e.target.value = "";
-    } else {
-      setCvError("");
-      setSelectedFile(file);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
-    setSubmitting(true);
-
-    if (!user) {
-      setError("Please log in to apply.");
-      setSubmitting(false);
-      return;
-    }
-
-    if (!name || !email || !coverLetter || !selectedFile || !selectedJob) {
-      setError("All fields and CV are required.");
-      setSubmitting(false);
-      return;
-    }
-
-    try {
-      const fd = new FormData();
-      fd.append("full_name", name);
-      fd.append("email", email);
-      fd.append("role_slug", selectedJob.title);
-      fd.append("cover_letter", coverLetter);
-      fd.append("cv", selectedFile);
-
-      await apiFetch("/careers/apply", { method: "POST", body: fd });
-
-      setSuccess("Application submitted successfully!");
-      setName("");
-      setEmail("");
-      setCoverLetter("");
-      setSelectedFile(null);
-      setTimeout(() => {
-        setIsOpen(false);
-        setSuccess("");
-      }, 3000);
-    } catch (err: unknown) {
-      let msg = "Failed to submit application.";
-      if (err instanceof Error) {
-        const raw = err.message.replace(/^API \d+: /, "");
-        try {
-          const parsed = JSON.parse(raw);
-          if (typeof parsed?.detail === "string") msg = parsed.detail;
-          else msg = raw || msg;
-        } catch {
-          msg = raw || msg;
-        }
-      }
-      setError(msg);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
       <Navbar1 />
@@ -217,8 +74,8 @@ export default function CareersPage() {
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {jobListings.map((job, idx) => (
-                <div key={idx} className="group relative flex flex-col bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 p-8">
+              {jobs.map((job) => (
+                <div key={job.slug} className="group relative flex flex-col bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 p-8">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 rounded-full px-3 py-1">
                       <Briefcase className="w-3 h-3 mr-1.5" /> {job.type}
@@ -229,18 +86,26 @@ export default function CareersPage() {
                   </div>
 
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {job.title}
+                    <Link href={`/careers/${job.slug}`}>{job.title}</Link>
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 text-sm mb-8 flex-grow leading-relaxed">
-                    {job.description}
+                    {job.summary}
                   </p>
 
-                  <Button
-                    onClick={() => openModal(job)}
-                    className="w-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500 dark:hover:text-white transition-colors duration-300 rounded-xl"
-                  >
-                    Apply for this Role
-                  </Button>
+<div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href={`/careers/${job.slug}`}
+                      className="flex-1 inline-flex items-center justify-center rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold py-2.5 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                    >
+                      View Role
+                    </Link>
+                    <Link
+                      href={`/careers/${job.slug}#apply`}
+                      className="flex-1 inline-flex items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2.5 transition-colors"
+                    >
+                      Apply for this Role
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
@@ -290,142 +155,17 @@ export default function CareersPage() {
               We&apos;re always looking for passionate and creative individuals to join our mission.
             </p>
             <Button
-              onClick={() => openModal(jobListings[0])}
+              asChild
               size="lg"
               className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
             >
-              Apply Now
+              <a href="#openings">See Open Roles</a>
             </Button>
           </div>
         </section>
       </main>
 
       <Footer />
-
-      {/* Premium Apply Modal */}
-      <Dialog open={isOpen} onOpenChange={(open) => { if (!open) closeModal(); }}>
-        <DialogContent className="sm:max-w-xl bg-white dark:bg-[#1E1E2F] border-gray-100 dark:border-gray-800 rounded-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="mb-4">
-            <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
-              Apply for {selectedJob?.title}
-            </DialogTitle>
-            <DialogDescription className="text-base text-gray-700 dark:text-gray-300">
-              {loading ? (
-                "Checking login status..."
-              ) : user ? (
-                <>
-                  <span className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 rounded-full px-3 py-1 mt-2 mr-2">
-                    <Briefcase className="w-3 h-3 mr-1.5" /> {selectedJob?.type}
-                  </span>
-                  <span className="inline-flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1 mt-2">
-                    <MapPin className="w-3 h-3 mr-1.5" /> {selectedJob?.location}
-                  </span>
-                  <span className="block mt-4 text-sm">{selectedJob?.description}</span>
-                </>
-              ) : (
-                "Please log in to submit an application."
-              )}
-            </DialogDescription>
-          </DialogHeader>
-
-          {error && (
-            <div className="mb-4 p-4 bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 rounded-md">
-              <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
-            </div>
-          )}
-          {success && (
-            <div className="mb-4 p-4 bg-green-50 dark:bg-green-950/30 border-l-4 border-green-500 rounded-md">
-              <p className="text-green-600 dark:text-green-400 text-sm">{success}</p>
-            </div>
-          )}
-
-          {user ? (
-            <form id="application-form" onSubmit={handleSubmit} className="space-y-4 mt-2">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
-                <Input
-                  type="text"
-                  placeholder="Your Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  className="w-full rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 h-12"
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
-                <Input
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 h-12"
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Cover Letter</label>
-                <Textarea
-                  rows={4}
-                  placeholder="Tell us why you're a great fit..."
-                  value={coverLetter}
-                  onChange={(e) => setCoverLetter(e.target.value)}
-                  required
-                  className="w-full rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 resize-none"
-                  disabled={loading}
-                />
-              </div>
-
-              {/* Upload CV */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Resume / CV (PDF only, max 5MB)</label>
-                <div
-                  onClick={handleCvClick}
-                  className="flex items-center justify-between w-full p-4 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors"
-                >
-                  <span className="text-sm text-gray-700 dark:text-gray-300 truncate pr-4">
-                    {selectedFile ? selectedFile.name : "Click to upload your CV"}
-                  </span>
-                  {/* FIX: Used asChild to prevent TypeScript 'type' error */}
-                  <Button asChild variant="outline" size="sm" className="rounded-lg pointer-events-none">
-                    <button type="button">Browse</button>
-                  </Button>
-                </div>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept="application/pdf"
-                  style={{ display: "none" }}
-                />
-                {cvError && (
-                  <p className="text-red-600 mt-1 text-sm">{cvError}</p>
-                )}
-              </div>
-
-              <Button
-                asChild
-                className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 rounded-xl py-6 mt-4"
-              >
-                <button type="submit" form="application-form" disabled={loading}>
-                  {loading ? "Submitting..." : "Submit Application"}
-                </button>
-              </Button>
-            </form>
-          ) : (
-            <Button
-              asChild
-              className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 rounded-xl py-6 mt-4"
-            >
-              <a href="/login">Log in to Apply</a>
-            </Button>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
