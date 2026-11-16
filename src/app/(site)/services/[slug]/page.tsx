@@ -7,7 +7,7 @@ import Footer from "@/components/Footer/Footer";
 import { ServiceIcon } from "@/components/services/ServiceIcon";
 import { caseStudies, getService, services, type ServiceSection } from "@/lib/services";
 import { jsonLd, pageMetadata } from "@/lib/seo";
-import { SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,7 +21,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return { title: "Service not found", robots: { index: false } };
-  return pageMetadata({ title: service.seoTitle, description: service.seoDescription, path: `/services/${service.slug}` });
+  // Absolute title: the /services layout sets a plain title, which stops the
+  // site-wide "%s | Danamo Tech" template reaching pages below it.
+  return pageMetadata({
+    title: `${service.seoTitle} | ${SITE_NAME}`,
+    absoluteTitle: true,
+    description: service.seoDescription,
+    path: `/services/${service.slug}`,
+  });
 }
 
 function Section({ section }: { section: ServiceSection }) {
