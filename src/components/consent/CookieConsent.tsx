@@ -92,7 +92,7 @@ export default function CookieConsent() {
                 </div>
                 <div>
                   <h2 className="text-base font-bold text-gray-900 dark:text-white mb-1">We value your privacy</h2>
-                  <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                  <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
                     We use necessary cookies to run this site. With your permission we&apos;d also use analytics and
                     marketing cookies to understand how the site is used and improve it. You can change your choice
                     at any time. See our{" "}
@@ -123,7 +123,7 @@ export default function CookieConsent() {
         <DialogContent className="sm:max-w-lg bg-white dark:bg-[#1E1E2F] rounded-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl text-gray-900 dark:text-white">Cookie preferences</DialogTitle>
-            <DialogDescription className="text-gray-600 dark:text-gray-300">
+            <DialogDescription className="text-gray-700 dark:text-gray-300">
               Choose which cookies we may use. Your choice applies to this browser and you can change it any time from
               &quot;Cookie Preferences&quot; in the footer.
             </DialogDescription>
@@ -140,7 +140,7 @@ export default function CookieConsent() {
                       <label htmlFor={id} className="font-semibold text-gray-900 dark:text-white">
                         {c.title}
                       </label>
-                      <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{c.text}</p>
+                      <p className="mt-1 text-sm text-gray-700 dark:text-gray-300">{c.text}</p>
                     </div>
                     <button
                       id={id}

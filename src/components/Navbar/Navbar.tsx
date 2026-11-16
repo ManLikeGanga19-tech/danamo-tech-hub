@@ -4,8 +4,6 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
     Menu,
-    Moon,
-    Sun,
     Zap,
     Brush,
     ServerCog,
@@ -30,7 +28,6 @@ import {
     NavigationMenuList,
     NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { useTheme } from "@/hooks/useTheme";
 import { useState } from "react";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/AuthContext";
@@ -76,7 +73,6 @@ export const Navbar1 = ({
     },
 }: Navbar1Props) => {
     const pathname = usePathname();
-    const { toggleTheme } = useTheme();
     const { user, loading, logout } = useAuth();
     const router = useRouter();
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -167,7 +163,7 @@ export const Navbar1 = ({
                     <nav className="hidden lg:flex justify-between items-center">
                         {/* Clickable Desktop Logo */}
                         <Link href="/" className="flex-shrink-0">
-                            <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={120} height={40} sizes="120px" className="h-10 w-auto object-contain" priority />                        </Link>
+                            <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={120} height={40} sizes="120px" className="object-contain" priority />                        </Link>
 
                         <div className="flex items-center ml-auto">
                             <NavigationMenu>
@@ -175,16 +171,6 @@ export const Navbar1 = ({
                             </NavigationMenu>
                         </div>
                         <div className="flex items-center gap-6 ml-4">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={toggleTheme}
-                                aria-label="Toggle theme"
-                                className="flex items-center justify-center transition-colors duration-300 ease-in-out border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
-                            >
-                                <Sun className="hidden dark:block w-4 h-4" />
-                                <Moon className="block dark:hidden w-4 h-4" />
-                            </Button>
                             {loading ? null : user ? (
                                 <div className="relative">
                                     <button
@@ -248,19 +234,9 @@ export const Navbar1 = ({
                         <div className="flex items-center justify-between">
                             {/* Clickable Mobile Logo */}
                             <Link href="/" className="flex-shrink-0">
-                                <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={120} height={40} sizes="120px" className="h-10 w-auto object-contain" priority />                            </Link>
+                                <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={120} height={40} sizes="120px" className="object-contain" priority />                            </Link>
 
                             <div className="flex items-center gap-3">
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={toggleTheme}
-                                    aria-label="Toggle theme"
-                                    className="border-gray-200 dark:border-gray-700"
-                                >
-                                    <Sun className="hidden dark:block w-4 h-4" />
-                                    <Moon className="block dark:hidden w-4 h-4" />
-                                </Button>
 
                                 <Button
                                     variant="outline"
@@ -302,10 +278,10 @@ export const Navbar1 = ({
                                 {/* Drawer Header */}
                                 <div className="flex items-center justify-between mb-8">
                                     <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                                        <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={140} height={40} className="h-10 w-auto object-contain cursor-pointer" />
+                                        <Image src="/nav-img.jpg" alt="Danamo Tech Logo" width={120} height={40} sizes="120px" className="object-contain cursor-pointer" />
                                     </Link>
                                     <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)}>
-                                        <X className="w-6 h-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" />
+                                        <X className="w-6 h-6 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" />
                                     </Button>
                                 </div>
 
@@ -322,7 +298,7 @@ export const Navbar1 = ({
                                                 <Image src={avatarSrc} alt="Avatar" width={48} height={48} className="rounded-full border-2 border-blue-600 object-cover" />
                                                 <div className="flex flex-col">
                                                     <span className="font-semibold text-gray-900 dark:text-white">{user.full_name || "User"}</span>
-                                                    <span className="text-sm text-gray-500">{user.email}</span>
+                                                    <span className="text-sm text-gray-600">{user.email}</span>
                                                 </div>
                                             </div>
                                             <Button asChild variant="ghost" className="w-full justify-start h-12 text-base text-gray-700 dark:text-gray-300">
@@ -365,7 +341,7 @@ function SubMenuLink({ item }: { item: MenuItem }) {
                     {item.title}
                 </span>
                 {item.description && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                    <span className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
                         {item.description}
                     </span>
                 )}

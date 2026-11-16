@@ -2,31 +2,19 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMounted } from "@/hooks/useMounted";
-import { useTheme } from "next-themes";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Import both images so Next.js optimizes and blurs them automatically
-import heroImgLight from "../../../public/hero-img.jpg";
-import heroImgDark from "../../../public/hero-img-dark.jpg";
+// Static import so Next.js optimizes the image and generates the blur placeholder
+import heroImage from "../../../public/hero-img.jpg";
 
 const Hero = () => {
-    const mounted = useMounted();
-    const { resolvedTheme } = useTheme();
-
-
-    // Determine which image to show
-    const isDark = mounted && resolvedTheme === "dark";
-    const heroImage = isDark ? heroImgDark : heroImgLight;
-
     return (
         <section className="relative w-full min-h-[85vh] flex items-center overflow-hidden transition-colors duration-700 bg-gray-100 dark:bg-gray-900">
             
             {/* Background Image & Overlay */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    key={isDark ? "dark" : "light"}
                     src={heroImage}
                     alt="Danamo Tech Digital Innovation"
                     fill
@@ -35,8 +23,9 @@ const Hero = () => {
                     sizes="100vw"
                     className="object-cover object-center"
                 />
-                {/* Overlay: light white wash in light mode, dark wash in dark mode */}
-                <div className="absolute inset-0 bg-white/60 dark:bg-black/70 transition-colors duration-700" />
+                {/* Shade only behind the text (left on desktop) so the photo stays vivid;
+                    on phones, where text covers the image, a lighter even tint. */}
+                <div className="absolute inset-0 bg-white/55 dark:bg-black/55 lg:bg-transparent lg:dark:bg-transparent lg:bg-gradient-to-r lg:from-white/90 lg:via-white/55 lg:to-transparent lg:dark:from-black/85 lg:dark:via-black/50 lg:dark:to-transparent" />
                 {/* Subtle bottom gradient to blend into next section */}
                 <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-gray-50 dark:to-[#0e0e15]" />
             </div>

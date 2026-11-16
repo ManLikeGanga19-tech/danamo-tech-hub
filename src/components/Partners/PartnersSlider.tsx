@@ -84,14 +84,13 @@ function LogoGroup({ partners, uniqueCount, hidden = false }: { partners: Partne
 
 function PartnerLogo({ partner, focusable }: { partner: Partner; focusable: boolean }) {
   const content = (
-    // Client logos are mostly dark-on-light artwork, so in dark mode they sit
-    // on a soft light chip to stay legible; light mode is unchanged.
-    <div className="flex items-center justify-center px-8 h-20 min-w-[140px] dark:bg-gray-100 dark:rounded-xl">
+    // Greyscale logos that colour in on hover.
+    <div className="flex items-center justify-center px-8 h-20 min-w-[140px]">
       <img
         src={partner.logo_url}
         alt={partner.name}
         loading="lazy"
-        className="max-h-14 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 dark:opacity-80 transition-all duration-300"
+        className="max-h-14 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
         style={{ maxWidth: "160px" }}
       />
     </div>

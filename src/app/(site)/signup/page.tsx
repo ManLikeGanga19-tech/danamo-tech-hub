@@ -125,7 +125,7 @@ export default function SignUp() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    className="text-gray-600 hover:text-gray-600 focus:outline-none"
                     disabled={submitting}
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
@@ -164,7 +164,7 @@ export default function SignUp() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    className="text-gray-600 hover:text-gray-600 focus:outline-none"
                     disabled={submitting}
                     aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                   >
@@ -196,7 +196,7 @@ export default function SignUp() {
 
           {/* TODO: Re-enable Google signup once backend Google flow is implemented */}
 
-          <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-8 text-center text-sm text-gray-700 dark:text-gray-300">
             Already have an account?{" "}
             <a
               href="/login"

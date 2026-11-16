@@ -93,7 +93,7 @@ export default function HelpCenterPage() {
             priority
             quality={85}
           />
-          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+          <div className="absolute inset-0 hero-scrim" />
         </div>
 
         <div className="relative z-10 max-w-3xl px-4 w-full">
@@ -103,13 +103,13 @@ export default function HelpCenterPage() {
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-white tracking-tight">
             How can we <span className="text-blue-500">help you today?</span>
           </h1>
-          <p className="text-lg text-gray-300 mb-10">
+          <p className="text-lg text-gray-100 mb-10">
             Find answers, guides, and resources to help you use our platform effectively.
           </p>
           
           {/* Premium Search Bar */}
           <div className="relative max-w-xl mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={20} />
             <Input
               placeholder="Search help topics..."
               value={searchQuery}
@@ -124,7 +124,7 @@ export default function HelpCenterPage() {
       <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Browse by Topic</h2>
-          <p className="text-gray-600 dark:text-gray-400">Select a category to find the help you need.</p>
+          <p className="text-gray-700 dark:text-gray-300">Select a category to find the help you need.</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {helpCategories.map((cat, i) => (
@@ -137,7 +137,7 @@ export default function HelpCenterPage() {
                   {cat.title}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0 text-gray-600 dark:text-gray-400 leading-relaxed">
+              <CardContent className="p-0 text-gray-700 dark:text-gray-300 leading-relaxed">
                 {cat.description}
               </CardContent>
             </Card>
@@ -156,7 +156,7 @@ export default function HelpCenterPage() {
           </div>
           
           {filteredFAQs.length === 0 ? (
-            <p className="text-center text-gray-500 dark:text-gray-400 py-12 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800">
+            <p className="text-center text-gray-600 dark:text-gray-300 py-12 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800">
               No results found for &quot;{searchQuery}&quot;
             </p>
           ) : (
@@ -180,7 +180,7 @@ export default function HelpCenterPage() {
                       <span className={`text-lg font-semibold pr-4 ${isOpen ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white'}`}>
                         {item.question}
                       </span>
-                      <div className={`flex-none flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-500'}`}>
+                      <div className={`flex-none flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600'}`}>
                         <motion.div
                           animate={{ rotate: isOpen ? 180 : 0 }}
                           transition={{ duration: 0.3 }}
@@ -199,7 +199,7 @@ export default function HelpCenterPage() {
                           transition={{ duration: 0.3, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="px-6 pb-6 pt-0 text-gray-600 dark:text-gray-300 leading-relaxed">
+                          <div className="px-6 pb-6 pt-0 text-gray-700 dark:text-gray-300 leading-relaxed">
                             {item.answer}
                           </div>
                         </motion.div>
@@ -217,7 +217,7 @@ export default function HelpCenterPage() {
       <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full text-center">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Still Need Help?</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mb-10">
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-10">
             If you can&apos;t find what you&apos;re looking for, our support team is ready to assist you.
           </p>
           <Button

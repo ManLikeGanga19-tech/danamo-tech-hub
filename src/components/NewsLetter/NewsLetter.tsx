@@ -51,7 +51,7 @@ export default function Newsletter() {
           <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
             Subscribe to our <span className="text-blue-600 dark:text-blue-400">Newsletter</span>
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
             Get the latest updates on cutting-edge tech innovations, product launches, and exclusive insights straight to your inbox.
           </p>
         </div>
@@ -64,7 +64,7 @@ export default function Newsletter() {
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                 Stay ahead of the curve.
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-8">
+              <p className="text-gray-700 dark:text-gray-300 mb-8">
                 Join our community of innovators and business leaders.
               </p>
 
@@ -118,7 +118,7 @@ export default function Newsletter() {
                     </Button>
                   )}
                 </form>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                <p className="text-xs text-gray-600 dark:text-gray-300 mt-2">
                   We care about your data in our privacy policy.
                 </p>
               </div>
@@ -133,7 +133,7 @@ export default function Newsletter() {
               </div>
               <div>
                 <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Weekly articles</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   Explore curated articles on tech trends, software tips, and startup strategies delivered weekly.
                 </p>
               </div>
@@ -145,7 +145,7 @@ export default function Newsletter() {
               </div>
               <div>
                 <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No spam, ever.</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   Your time is valuable. We send only high-quality updates when it matters most.
                 </p>
               </div>

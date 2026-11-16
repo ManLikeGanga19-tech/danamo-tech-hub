@@ -61,7 +61,7 @@ export default function ProjectsPage() {
               className="object-cover object-center"
               priority
             />
-            <div className="absolute inset-0 bg-black/60 dark:bg-black/75" />
+            <div className="absolute inset-0 hero-scrim" />
           </div>
           <div className="relative z-10 max-w-4xl px-4">
             <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6 backdrop-blur-md">
@@ -70,7 +70,7 @@ export default function ProjectsPage() {
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">
               Our <span className="text-blue-500">Work</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto">
               Real projects, real results. Explore how we have helped businesses transform their digital presence.
             </p>
           </div>
@@ -85,12 +85,12 @@ export default function ProjectsPage() {
           ) : projects.length === 0 ? (
             <div className="text-center py-16 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 max-w-2xl mx-auto">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FolderKanban className="w-8 h-8 text-gray-400" />
+                <FolderKanban className="w-8 h-8 text-gray-600" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                 Projects coming soon
               </h2>
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-gray-600 dark:text-gray-300">
                 We&apos;re curating our best work to share with you. Check back soon.
               </p>
             </div>
@@ -143,7 +143,7 @@ export default function ProjectsPage() {
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                         {project.title}
                       </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-grow line-clamp-3">
+                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-6 flex-grow line-clamp-3">
                         {project.description}
                       </p>
                       <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
@@ -159,7 +159,7 @@ export default function ProjectsPage() {
 
               {filteredProjects.length === 0 && (
                 <div className="text-center py-16">
-                  <p className="text-gray-500 dark:text-gray-400">
+                  <p className="text-gray-600 dark:text-gray-300">
                     No projects in this category yet.
                   </p>
                 </div>
@@ -174,7 +174,7 @@ export default function ProjectsPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Have a project in mind?
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
               Let&apos;s turn your idea into your next case study.
             </p>
             <Button

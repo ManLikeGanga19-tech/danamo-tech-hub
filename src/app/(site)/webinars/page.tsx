@@ -139,7 +139,7 @@ export default function WebinarsPage() {
         {/* Hero Section */}
         <section className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden flex items-center justify-center text-center px-4">
           <Image src="/webinars/webinars-bg.jpg" alt="Webinar Hero" fill sizes="100vw" className="object-cover object-center" priority />
-          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+          <div className="absolute inset-0 hero-scrim" />
           <div className="relative z-10 max-w-4xl px-4">
             <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6 backdrop-blur-md">
               Live Learning
@@ -147,7 +147,7 @@ export default function WebinarsPage() {
             <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
               Join Our Upcoming <span className="text-blue-500">Tech Webinars</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto">
               Master the latest technologies, ask questions live, and accelerate your career with our expert-led sessions.
             </p>
           </div>
@@ -157,7 +157,7 @@ export default function WebinarsPage() {
         <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Upcoming Webinars</h2>
-            <p className="text-gray-600 dark:text-gray-400">Secure your spot for our next live sessions.</p>
+            <p className="text-gray-700 dark:text-gray-300">Secure your spot for our next live sessions.</p>
           </div>
 
           {loading ? (
@@ -166,7 +166,7 @@ export default function WebinarsPage() {
             </div>
           ) : upcoming.length === 0 ? (
             <div className="text-center py-12 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800">
-              <p className="text-gray-500 dark:text-gray-400">No upcoming webinars scheduled. Check back soon!</p>
+              <p className="text-gray-600 dark:text-gray-300">No upcoming webinars scheduled. Check back soon!</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -182,9 +182,9 @@ export default function WebinarsPage() {
                   </CardHeader>
                   <CardContent className="p-6 pt-4">
                     <div className="space-y-3 mb-6">
-                      <p className="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"><CalendarDays className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.date}</p>
-                      <p className="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"><Clock className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.time}</p>
-                      <p className="flex items-center text-sm text-gray-600 dark:text-gray-300 font-medium"><User className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.host}</p>
+                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><CalendarDays className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.date}</p>
+                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><Clock className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.time}</p>
+                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><User className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.host}</p>
                     </div>
                     <Button onClick={() => handleRegisterClick(webinar)} className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-xl py-6">
                       Register Now
@@ -201,7 +201,7 @@ export default function WebinarsPage() {
           <div className="max-w-[85rem] mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Past Webinars</h2>
-              <p className="text-gray-600 dark:text-gray-400">Catch up on our previous sessions at your own pace.</p>
+              <p className="text-gray-700 dark:text-gray-300">Catch up on our previous sessions at your own pace.</p>
             </div>
             
             {loading ? (
@@ -210,7 +210,7 @@ export default function WebinarsPage() {
               </div>
             ) : past.length === 0 ? (
               <div className="text-center py-12 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800">
-                <p className="text-gray-500 dark:text-gray-400">No past webinars available yet.</p>
+                <p className="text-gray-600 dark:text-gray-300">No past webinars available yet.</p>
               </div>
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -226,8 +226,8 @@ export default function WebinarsPage() {
                       <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">{webinar.title}</CardTitle>
                     </CardHeader>
                     <CardContent className="p-6 pt-4">
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{webinar.date}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 font-medium mb-6">Host: {webinar.host}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{webinar.date}</p>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 font-medium mb-6">Host: {webinar.host}</p>
                       <Button onClick={() => handleReplayClick(webinar)} variant="outline" className="w-full border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl py-6">
                         Watch Replay
                       </Button>
@@ -249,7 +249,7 @@ export default function WebinarsPage() {
         <DialogContent className="sm:max-w-md bg-white dark:bg-[#1E1E2F] border-gray-100 dark:border-gray-800 rounded-2xl">
           <DialogHeader className="mb-4">
             <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">Register for Webinar</DialogTitle>
-            <DialogDescription className="text-gray-600 dark:text-gray-400">
+            <DialogDescription className="text-gray-700 dark:text-gray-300">
               You are registering for: <strong className="text-blue-600 dark:text-blue-400">{selectedWebinar?.title}</strong>
             </DialogDescription>
           </DialogHeader>
@@ -258,7 +258,7 @@ export default function WebinarsPage() {
             <div className="py-8 text-center flex flex-col items-center">
               <CheckCircle2 className="w-12 h-12 text-green-500 mb-4" />
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">You&apos;re on the list!</h3>
-              <p className="text-gray-600 dark:text-gray-400">{success}</p>
+              <p className="text-gray-700 dark:text-gray-300">{success}</p>
             </div>
           ) : (
             <form onSubmit={submitRegistration} className="space-y-4">
@@ -286,7 +286,7 @@ export default function WebinarsPage() {
         <DialogContent className="sm:max-w-md bg-white dark:bg-[#1E1E2F] border-gray-100 dark:border-gray-800 rounded-2xl">
           <DialogHeader className="mb-4">
             <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">Unlock Webinar Replay</DialogTitle>
-            <DialogDescription className="text-gray-600 dark:text-gray-400">
+            <DialogDescription className="text-gray-700 dark:text-gray-300">
               Enter your email to watch the recording of <strong>{selectedWebinar?.title}</strong>.
             </DialogDescription>
           </DialogHeader>

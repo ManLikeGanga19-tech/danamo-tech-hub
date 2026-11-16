@@ -114,7 +114,7 @@ export default function AccessibilityPage() {
       </p>
 
       <hr />
-      <p className="text-sm italic text-gray-500 dark:text-gray-400">
+      <p className="text-sm italic text-gray-600 dark:text-gray-300">
         This Accessibility Statement is drafted to align with the Constitution of Kenya, 2010 (Arts. 27 and 54), the Persons with Disabilities Act, 2003, the Kenya Information and Communications Act (Cap 411A), the Access to Information Act, 2016 (s. 5(2)), and WCAG 2.1 Level AA. It should be reviewed by a qualified Kenyan advocate before publication and updated whenever the Site materially changes.
       </p>
     </LegalLayout>

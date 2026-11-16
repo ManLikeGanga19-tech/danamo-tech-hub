@@ -185,7 +185,7 @@ export default function TermsPage() {
       </p>
 
       <hr />
-      <p className="text-sm italic text-gray-500 dark:text-gray-400">
+      <p className="text-sm italic text-gray-600 dark:text-gray-300">
         These Terms &amp; Conditions are drafted to align with the Consumer Protection Act, 2012 (Cap 501), the Kenya Information and Communications Act (Cap 411A), the Business Laws (Amendment) Act, 2020, and the Data Protection Act, 2019. They must be reviewed by a qualified Kenyan advocate before publication, and updated whenever your services or the applicable law change.
       </p>
     </LegalLayout>

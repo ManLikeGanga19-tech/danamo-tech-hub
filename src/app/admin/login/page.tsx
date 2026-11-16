@@ -41,19 +41,15 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50 dark:from-[#1E1E2F] dark:to-[#0e0e15] px-4">
       <div className="w-full max-w-md bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-8">
         <div className="flex justify-center mb-6">
-          {/* The logo artwork has a white background, so it sits on a white
-              plate in dark mode too. */}
-          <div className="rounded-xl bg-white px-4 py-2">
-            <Image
-              src="/nav-img.jpg"
-              alt="Danamo Tech"
-              width={720}
-              height={240}
-              sizes="220px"
-              className="h-14 w-auto object-contain"
-              priority
-            />
-          </div>
+          <Image
+            src="/nav-img.jpg"
+            alt="Danamo Tech"
+            width={168}
+            height={56}
+            sizes="168px"
+            className="object-contain"
+            priority
+          />
         </div>
         <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
           Admin <span className="text-blue-600 dark:text-blue-400">Portal</span>

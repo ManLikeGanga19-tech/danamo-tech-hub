@@ -56,7 +56,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ name, role, bio, imageUrl, s
 
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">{name}</h3>
             <p className="text-blue-600 dark:text-blue-400 text-sm font-semibold mb-4">{role}</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-grow">{bio}</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-6 flex-grow">{bio}</p>
             
             {/* Corporate Social Buttons */}
             <div className="flex gap-3 mt-auto">
@@ -66,7 +66,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ name, role, bio, imageUrl, s
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${name} on LinkedIn`}
-                        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:text-blue-400 dark:hover:bg-blue-900/30 transition-all duration-300"
+                        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-blue-600 hover:bg-blue-50 dark:hover:text-blue-400 dark:hover:bg-blue-900/30 transition-all duration-300"
                     >
                         <Linkedin className="w-4 h-4" />
                     </a>
@@ -77,7 +77,7 @@ export const TeamCard: React.FC<TeamCardProps> = ({ name, role, bio, imageUrl, s
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`${name} on GitHub`}
-                        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:text-white dark:hover:bg-gray-700 transition-all duration-300"
+                        className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:text-gray-900 hover:bg-gray-200 dark:hover:text-white dark:hover:bg-gray-700 transition-all duration-300"
                     >
                         <Github className="w-4 h-4" />
                     </a>

@@ -67,7 +67,7 @@ export default function ProjectDetailPage() {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
               Project not found
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 mb-8">
+            <p className="text-gray-600 dark:text-gray-300 mb-8">
               This case study may have been removed or is not published yet.
             </p>
             <Button asChild className="bg-blue-600 text-white rounded-xl">
@@ -91,9 +91,9 @@ export default function ProjectDetailPage() {
             <img
               src={project.image_url}
               alt={project.title}
-              className="w-full h-full object-cover opacity-70"
+              className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-50 via-black/60 to-black/40 dark:from-[#0e0e15] dark:via-black/70 dark:to-black/40" />
+            <div className="hero-shade absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
           </div>
 
           <div className="relative z-10 max-w-4xl mx-auto w-full">
@@ -136,7 +136,7 @@ export default function ProjectDetailPage() {
                     <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
                       <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                       Client
                     </span>
                   </div>
@@ -151,7 +151,7 @@ export default function ProjectDetailPage() {
                     <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
                       <Building2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                       Industry
                     </span>
                   </div>
@@ -195,7 +195,7 @@ export default function ProjectDetailPage() {
 
           {/* Back CTA */}
           <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-gray-600 dark:text-gray-400 font-medium">
+            <p className="text-gray-700 dark:text-gray-300 font-medium">
               Want a similar result for your business?
             </p>
             <div className="flex gap-3">

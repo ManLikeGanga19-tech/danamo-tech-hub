@@ -49,7 +49,7 @@ export default function LegalLayout({ title, subtitle, lastUpdated, children }: 
             {/* Sidebar */}
             <aside className="lg:sticky lg:top-24 lg:self-start">
               <div className="bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300 mb-4">
                   Legal Documents
                 </h3>
                 <nav className="space-y-1">
@@ -65,7 +65,7 @@ export default function LegalLayout({ title, subtitle, lastUpdated, children }: 
                   ))}
                 </nav>
                 <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                  <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
                     Questions about our legal policies?{" "}
                     <Link href="/#contact" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                       Contact us <ArrowRight className="inline w-3 h-3" />

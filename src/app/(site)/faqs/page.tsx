@@ -132,7 +132,7 @@ const FaqPage = () => {
             className="object-cover object-center"
             priority
           />
-          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+          <div className="absolute inset-0 hero-scrim" />
         </div>
         <div className="relative z-10 max-w-3xl px-4">
           <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6 backdrop-blur-md">
@@ -141,7 +141,7 @@ const FaqPage = () => {
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-white tracking-tight">
             Frequently Asked <span className="text-blue-500">Questions</span>
           </h1>
-          <p className="text-lg text-gray-300">
+          <p className="text-lg text-gray-100">
             Answers to common questions about our services, process, and platform.
           </p>
         </div>
@@ -178,7 +178,7 @@ const FaqPage = () => {
                     <span className={`text-lg font-semibold pr-4 ${isOpen ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white'}`}>
                       {faq.question}
                     </span>
-                    <div className={`flex-none flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-500'}`}>
+                    <div className={`flex-none flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600'}`}>
                       <motion.div
                         animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.3 }}
@@ -197,7 +197,7 @@ const FaqPage = () => {
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         className="overflow-hidden"
                       >
-                        <div className="px-6 pb-6 pt-0 text-gray-600 dark:text-gray-300 leading-relaxed">
+                        <div className="px-6 pb-6 pt-0 text-gray-700 dark:text-gray-300 leading-relaxed">
                           {faq.answer}
                         </div>
                       </motion.div>

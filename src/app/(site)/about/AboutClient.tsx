@@ -76,7 +76,7 @@ const AccordionCard = React.memo(
               {card.title}
             </h2>
           </div>
-          <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-500'}`}>
+          <div className={`flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600'}`}>
             {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </div>
         </div>
@@ -91,7 +91,7 @@ const AccordionCard = React.memo(
               className="overflow-hidden"
               id={`card-content-${index}`}
             >
-              <p className="pt-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed pl-0 md:pl-12">
+              <p className="pt-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed pl-0 md:pl-12">
                 {card.content}
               </p>
             </motion.div>
@@ -128,13 +128,13 @@ export default function AboutClient() {
             sizes="100vw"
             className="object-cover object-center"
           />
-          <div className="bg-black/60 absolute inset-0 z-0"></div>
+          <div className="hero-scrim absolute inset-0 z-0"></div>
 
           <div className="z-10 max-w-4xl relative px-4">
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">
               About <span className="text-blue-500">Danamo Tech</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto">
               Empowering Startups and Small Businesses with Enterprise-Grade Digital Solutions.
             </p>
           </div>
@@ -149,7 +149,7 @@ export default function AboutClient() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Driving Digital Innovation
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
               We don&apos;t just write code; we build scalable infrastructure that drives your business forward.
             </p>
           </div>

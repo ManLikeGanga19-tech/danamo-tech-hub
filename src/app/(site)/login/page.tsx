@@ -119,7 +119,7 @@ export default function LoginForm() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                    className="text-gray-600 hover:text-gray-600 focus:outline-none"
                     disabled={submitting}
                   >
                     {showPassword ? (
@@ -158,7 +158,7 @@ export default function LoginForm() {
 
           {/* TODO: Re-enable Google OAuth once backend Google flow is implemented */}
           {/* <div className="mt-6 text-center">
-            <p className="text-gray-600 dark:text-gray-300 text-sm">Or sign in with</p>
+            <p className="text-gray-700 dark:text-gray-300 text-sm">Or sign in with</p>
           </div>
           <div className="mt-3">
             <Button asChild className="w-full ...">
@@ -167,7 +167,7 @@ export default function LoginForm() {
           </div> */}
 
           <div className="mt-6 text-center text-sm">
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-gray-700 dark:text-gray-300">
               Don&apos;t have an account?{" "}
               <a href="/signup" className="font-medium text-blue-600 hover:text-blue-400">
                 Sign up

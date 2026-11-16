@@ -160,7 +160,7 @@ export default function PrivacyPage() {
       </ul>
 
       <hr />
-      <p className="text-sm italic text-gray-500 dark:text-gray-400">
+      <p className="text-sm italic text-gray-600 dark:text-gray-300">
         This Privacy Policy is drafted to align with the Kenya Data Protection Act, 2019, the Data Protection (General) Regulations, 2021, and the Data Protection (Registration of Data Controllers and Data Processors) Regulations, 2021. It should be reviewed by a qualified Kenyan advocate before publication and at least annually thereafter.
       </p>
     </LegalLayout>

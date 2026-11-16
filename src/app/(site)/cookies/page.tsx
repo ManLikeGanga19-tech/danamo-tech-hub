@@ -116,7 +116,7 @@ export default function CookiesPage() {
       </p>
 
       <hr />
-      <p className="text-sm italic text-gray-500 dark:text-gray-400">
+      <p className="text-sm italic text-gray-600 dark:text-gray-300">
         This Cookies Policy is drafted to align with the Kenya Data Protection Act, 2019 (ss. 25, 30, 32, 48) and the ODPC Guidance Note on Digital Marketing and Behavioural Advertising (2024). It should be reviewed by a qualified Kenyan advocate before publication.
       </p>
     </LegalLayout>

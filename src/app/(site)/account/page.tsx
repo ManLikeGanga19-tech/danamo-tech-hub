@@ -106,7 +106,7 @@ function AccountForm({ user }: { user: AuthUser }) {
             <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
               Account <span className="text-black dark:text-white">Settings</span>
             </h1>
-            <p className="text-gray-500 dark:text-gray-400">Update your personal information and profile details.</p>
+            <p className="text-gray-600 dark:text-gray-300">Update your personal information and profile details.</p>
           </div>
 
           {error && <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border-l-4 border-red-500 rounded-md"><p className="text-red-600 dark:text-red-400 text-sm">{error}</p></div>}
@@ -129,7 +129,7 @@ function AccountForm({ user }: { user: AuthUser }) {
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-gray-700 dark:text-gray-300 font-medium">Email Address</Label>
                     <Input id="email" type="email" value={email} disabled className="rounded-xl bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 opacity-70 cursor-not-allowed" />
-                    <p className="text-xs text-gray-500 mt-1">Contact support to change email.</p>
+                    <p className="text-xs text-gray-600 mt-1">Contact support to change email.</p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="text-gray-700 dark:text-gray-300 font-medium">Phone Number</Label>

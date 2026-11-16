@@ -174,7 +174,7 @@ export default function CareersPage() {
               priority
               quality={85}
             />
-            <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+            <div className="absolute inset-0 hero-scrim" />
           </div>
           <div className="relative z-10 max-w-4xl px-4">
             <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6 backdrop-blur-md">
@@ -183,7 +183,7 @@ export default function CareersPage() {
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">
               Build the Future <span className="text-blue-500">With Us</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+            <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto mb-10">
               Help us build the future of tech at Danamo. Discover open roles and shape the world with your skills.
             </p>
             <Button
@@ -202,7 +202,7 @@ export default function CareersPage() {
         {/* Culture Section */}
         <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Our Culture</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             At Danamo Tech, we value collaboration, creativity, and a constant drive to improve.
             Every team member is empowered to make a difference and contribute to our mission of bridging the technology gap.
           </p>
@@ -213,7 +213,7 @@ export default function CareersPage() {
           <div className="max-w-[85rem] mx-auto px-4 md:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Open Positions</h2>
-              <p className="text-gray-600 dark:text-gray-400">Find your next role and grow with us.</p>
+              <p className="text-gray-700 dark:text-gray-300">Find your next role and grow with us.</p>
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -223,7 +223,7 @@ export default function CareersPage() {
                     <span className="flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 rounded-full px-3 py-1">
                       <Briefcase className="w-3 h-3 mr-1.5" /> {job.type}
                     </span>
-                    <span className="flex items-center text-xs font-semibold text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1">
+                    <span className="flex items-center text-xs font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1">
                       <MapPin className="w-3 h-3 mr-1.5" /> {job.location}
                     </span>
                   </div>
@@ -231,7 +231,7 @@ export default function CareersPage() {
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {job.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-8 flex-grow leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-300 text-sm mb-8 flex-grow leading-relaxed">
                     {job.description}
                   </p>
 
@@ -251,7 +251,7 @@ export default function CareersPage() {
         <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Why Join Us?</h2>
-            <p className="text-gray-600 dark:text-gray-400">We take care of our team so they can take care of the future.</p>
+            <p className="text-gray-700 dark:text-gray-300">We take care of our team so they can take care of the future.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {[
@@ -276,7 +276,7 @@ export default function CareersPage() {
                   {perk.icon}
                 </div>
                 <h4 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">{perk.title}</h4>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{perk.description}</p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{perk.description}</p>
               </div>
             ))}
           </div>
@@ -286,7 +286,7 @@ export default function CareersPage() {
         <section className="py-20 bg-gradient-to-b from-transparent to-gray-100 dark:to-[#1E1E2F] text-center px-4">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Ready to make an impact?</h2>
-            <p className="mb-8 text-lg text-gray-600 dark:text-gray-400">
+            <p className="mb-8 text-lg text-gray-700 dark:text-gray-300">
               We&apos;re always looking for passionate and creative individuals to join our mission.
             </p>
             <Button
@@ -309,7 +309,7 @@ export default function CareersPage() {
             <DialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
               Apply for {selectedJob?.title}
             </DialogTitle>
-            <DialogDescription className="text-base text-gray-600 dark:text-gray-400">
+            <DialogDescription className="text-base text-gray-700 dark:text-gray-300">
               {loading ? (
                 "Checking login status..."
               ) : user ? (
@@ -317,7 +317,7 @@ export default function CareersPage() {
                   <span className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 rounded-full px-3 py-1 mt-2 mr-2">
                     <Briefcase className="w-3 h-3 mr-1.5" /> {selectedJob?.type}
                   </span>
-                  <span className="inline-flex items-center text-sm font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1 mt-2">
+                  <span className="inline-flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1 mt-2">
                     <MapPin className="w-3 h-3 mr-1.5" /> {selectedJob?.location}
                   </span>
                   <span className="block mt-4 text-sm">{selectedJob?.description}</span>
@@ -387,7 +387,7 @@ export default function CareersPage() {
                   onClick={handleCvClick}
                   className="flex items-center justify-between w-full p-4 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer transition-colors"
                 >
-                  <span className="text-sm text-gray-600 dark:text-gray-400 truncate pr-4">
+                  <span className="text-sm text-gray-700 dark:text-gray-300 truncate pr-4">
                     {selectedFile ? selectedFile.name : "Click to upload your CV"}
                   </span>
                   {/* FIX: Used asChild to prevent TypeScript 'type' error */}

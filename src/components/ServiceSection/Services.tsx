@@ -86,7 +86,7 @@ const ServiceCard = memo(({ service, index }: { service: Service; index: number 
                 <CardTitle id={`service-${index}`} className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     {service.title}
                 </CardTitle>
-                <CardDescription className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <CardDescription className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                     {service.description}
                 </CardDescription>
             </div>
@@ -111,7 +111,7 @@ export default function Services() {
                     >
                         Our <span className="text-blue-600 dark:text-blue-400">Services</span>
                     </h2>
-                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                    <p className="text-lg text-gray-700 dark:text-gray-300">
                         Enterprise-grade digital solutions designed to scale your business, streamline operations, and drive innovation.
                     </p>
                 </div>

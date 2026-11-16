@@ -30,7 +30,7 @@ export default function OurTeamPage() {
             <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
               Meet <span className="text-blue-600 dark:text-blue-400">The Founder</span>
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
               The person behind Danamo Tech and the products and platforms we build.
             </p>
           </div>
@@ -48,7 +48,7 @@ export default function OurTeamPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Want to build the future with us?
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-8">
               We are always looking for passionate, creative, and driven individuals to join our growing team.
             </p>
             <Button

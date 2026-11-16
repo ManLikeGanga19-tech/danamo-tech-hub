@@ -62,3 +62,14 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .partners-marquee__track { animation: none; }
 }
+
+/* Image heroes: darken just enough behind centred text, keep the photo vivid
+   at the edges (replaces flat 60-75% black overlays). */
+.hero-scrim {
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.58) 0%, rgba(0, 0, 0, 0.42) 45%, rgba(0, 0, 0, 0.18) 100%);
+}
+/* Legible white text on photos without washing the photo out: any hero whose
+   overlay is .hero-scrim or .hero-shade gets a soft shadow on its text. */
+:is(section, div):has(> .hero-scrim, > div > .hero-scrim, > .hero-shade, > div > .hero-shade) :is(h1, h2, p) {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 2px 16px rgba(0, 0, 0, 0.35);
+}

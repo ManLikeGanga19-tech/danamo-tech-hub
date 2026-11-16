@@ -193,7 +193,7 @@ export default function ServicesPage() {
               priority
               quality={85}
             />
-            <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+            <div className="absolute inset-0 hero-scrim" />
           </div>
           <div className="relative z-10 max-w-4xl px-4">
             <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold mb-6">
@@ -202,7 +202,7 @@ export default function ServicesPage() {
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">
               Our <span className="text-blue-500">Services</span>
             </h1>
-            <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto">
+            <p className="text-gray-100 text-lg md:text-xl max-w-2xl mx-auto">
               Explore how Danamo Tech Hub can accelerate your business growth with scalable digital infrastructure.
             </p>
           </div>
@@ -217,7 +217,7 @@ export default function ServicesPage() {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               What We Do Best
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
               Select a service below to start an inquiry. Our team is ready to help you build, scale, and innovate.
             </p>
           </div>
@@ -236,7 +236,7 @@ export default function ServicesPage() {
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {service.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     {service.desc}
                   </p>
                 </div>
@@ -260,7 +260,7 @@ export default function ServicesPage() {
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                   Ready to start your project?
                 </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed max-w-lg">
+                <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 leading-relaxed max-w-lg">
                   Tell us about your goals and challenges. We&apos;ll review your inquiry and get back to you within 24 hours with a tailored strategy.
                 </p>
                 <ul className="space-y-4 mb-8">
@@ -276,7 +276,7 @@ export default function ServicesPage() {
                   ))}
                 </ul>
                 <div className="p-6 rounded-2xl bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-800 shadow-sm w-full max-w-md">
-                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Prefer to email us directly?</p>
+                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">Prefer to email us directly?</p>
                    <a href={`mailto:${CONTACT_EMAIL}`} className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-2">
                      {CONTACT_EMAIL} <ArrowRight className="w-4 h-4" />
                    </a>
@@ -287,7 +287,7 @@ export default function ServicesPage() {
               <div className="w-full">
                 <Card className="w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1E1E2F] shadow-2xl shadow-blue-500/5">
                   <CardHeader className="pb-6">
-                    <CardDescription className="text-base text-gray-600 dark:text-gray-300">
+                    <CardDescription className="text-base text-gray-700 dark:text-gray-300">
                       {loading
                         ? "Checking login status..."
                         : user

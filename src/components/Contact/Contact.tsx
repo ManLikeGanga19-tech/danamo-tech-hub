@@ -96,7 +96,7 @@ function Contact() {
           <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
             Contact <span className="text-blue-600 dark:text-blue-400">Us</span>
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
             Have a big idea or brand to develop? Reach out and let&apos;s build something great together.
           </p>
         </div>
@@ -107,7 +107,7 @@ function Contact() {
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Let&apos;s discuss your next project.
             </h3>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 leading-relaxed max-w-xl">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-10 leading-relaxed max-w-xl">
               We are ready to help you scale. Whether you need a new website, a custom software solution, or expert IT consulting, our team is here to answer your questions.
             </p>
 
@@ -117,7 +117,7 @@ function Contact() {
                   <Mail className="text-blue-600 dark:text-blue-400" size={22} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Email Us</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Email Us</p>
                   <a href={`mailto:${CONTACT_EMAIL}`} className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
                     {CONTACT_EMAIL}
                   </a>
@@ -129,7 +129,7 @@ function Contact() {
                   <Phone className="text-blue-600 dark:text-blue-400" size={22} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Call Us</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Call Us</p>
                   <a href="tel:+254785640048" className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
                     +254 785 640 048
                   </a>
@@ -141,7 +141,7 @@ function Contact() {
                   <MapPin className="text-blue-600 dark:text-blue-400" size={22} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Visit Us</p>
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Visit Us</p>
                   <span className="text-gray-900 dark:text-white font-semibold">
                     Mombasa, Kenya
                   </span>
@@ -153,7 +153,7 @@ function Contact() {
           <div className="flex justify-center w-full">
             <Card className="w-full max-w-xl rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/60 dark:bg-[#1E1E2F]/60 backdrop-blur-sm shadow-2xl shadow-blue-500/5">
               <CardHeader className="pb-6">
-                <CardDescription className="text-base text-gray-600 dark:text-gray-300">
+                <CardDescription className="text-base text-gray-700 dark:text-gray-300">
                   {loading
                     ? "Checking login status..."
                     : user

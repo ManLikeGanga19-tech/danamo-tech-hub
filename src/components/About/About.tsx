@@ -28,7 +28,8 @@ const AboutUs = () => {
                     className="object-cover object-center"
                 />
                 {/* Consistent dark overlay */}
-                <div className="absolute inset-0 bg-black/70" />
+                {/* Darker on the text side (left), clear on the right so the photo stays vivid */}
+                <div className="hero-shade absolute inset-0 bg-black/55 lg:bg-transparent lg:bg-gradient-to-r lg:from-black/75 lg:via-black/45 lg:to-black/10" />
             </div>
 
             {/* Content */}
