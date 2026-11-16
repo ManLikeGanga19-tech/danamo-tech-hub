@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { absoluteUrl, coverSrc, formatDate, getPublishedPost } from "@/lib/blog";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import ShareButtons from "./ShareButtons";
+import MarkdownContent from "@/components/markdown/MarkdownContent";
 
 export const revalidate = 60;
 
@@ -121,25 +120,13 @@ export default async function BlogPostPage({ params }: Props) {
                          prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
                          prose-p:text-gray-800 dark:prose-p:text-gray-200 prose-p:leading-relaxed
                          prose-li:text-gray-800 dark:prose-li:text-gray-200
-                         prose-a:text-blue-700 dark:prose-a:text-blue-300 prose-img:rounded-xl"
+                         prose-a:text-blue-700 dark:prose-a:text-blue-300 prose-img:rounded-xl
+                         prose-code:before:content-none prose-code:after:content-none prose-code:font-medium
+                         prose-code:text-[0.9em] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md
+                         prose-code:bg-gray-100 prose-code:text-gray-900 dark:prose-code:bg-gray-800 dark:prose-code:text-gray-100
+                         prose-th:text-left prose-table:text-base"
             >
-              {/* Markdown is rendered without raw HTML, so content can't inject scripts */}
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  a: ({ href, children }) => {
-                    const external = href?.startsWith("http") && !href.startsWith(SITE_URL);
-                    return (
-                      <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-                        {children}
-                      </a>
-                    );
-                  },
-                  img: ({ src, alt }) => <img src={typeof src === "string" ? src : ""} alt={alt ?? ""} loading="lazy" />,
-                }}
-              >
-                {post.content}
-              </ReactMarkdown>
+              <MarkdownContent>{post.content}</MarkdownContent>
             </div>
 
             <div className="mt-16 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">

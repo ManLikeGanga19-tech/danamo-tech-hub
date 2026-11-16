@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { Edit3, Eye, EyeOff, FileText, ImageIcon, Loader2, Plus, Trash2, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { adminFetch } from "@/lib/admin/client";
+import MarkdownContent from "@/components/markdown/MarkdownContent";
 import { errorMessage } from "@/lib/errors";
 import type { BlogPost } from "@/lib/blog";
 
@@ -325,8 +324,8 @@ export default function AdminBlog() {
                   <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">Markdown: <code>{MARKDOWN_HELP}</code></p>
                 </>
               ) : (
-                <div className="mt-1.5 min-h-[20rem] rounded-xl border border-gray-200 dark:border-gray-700 p-5 prose dark:prose-invert prose-blue max-w-none">
-                  {form.content.trim() ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{form.content}</ReactMarkdown> : <p className="text-gray-500">Nothing to preview yet.</p>}
+                <div className="mt-1.5 min-h-[20rem] rounded-xl border border-gray-200 dark:border-gray-700 p-5 prose dark:prose-invert prose-blue max-w-none prose-code:before:content-none prose-code:after:content-none prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:bg-gray-100 dark:prose-code:bg-gray-800">
+                  {form.content.trim() ? <MarkdownContent>{form.content}</MarkdownContent> : <p className="text-gray-500">Nothing to preview yet.</p>}
                 </div>
               )}
             </div>

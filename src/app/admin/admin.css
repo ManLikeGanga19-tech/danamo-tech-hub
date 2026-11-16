@@ -20,3 +20,36 @@ body {
     animation: none;
   }
 }
+
+/* ── Code blocks in articles (MarkdownContent + CodeBlock) ──────────
+   Syntax colours are applied on the server by rehype-highlight; this
+   palette (GitHub dark style) keeps every token above 4.5:1 contrast
+   on the #0d1117 panel, in light and dark site themes alike. */
+.code-block pre code { background: transparent; padding: 0; font-size: inherit; color: inherit; }
+.code-block .hljs-comment,
+.code-block .hljs-quote { color: #8b949e; font-style: italic; }
+.code-block .hljs-keyword,
+.code-block .hljs-selector-tag,
+.code-block .hljs-built_in,
+.code-block .hljs-type { color: #ff7b72; }
+.code-block .hljs-string,
+.code-block .hljs-regexp,
+.code-block .hljs-addition { color: #a5d6ff; }
+.code-block .hljs-number,
+.code-block .hljs-literal,
+.code-block .hljs-symbol,
+.code-block .hljs-bullet { color: #79c0ff; }
+.code-block .hljs-title,
+.code-block .hljs-title.function_,
+.code-block .hljs-section { color: #d2a8ff; }
+.code-block .hljs-attr,
+.code-block .hljs-attribute,
+.code-block .hljs-variable,
+.code-block .hljs-template-variable,
+.code-block .hljs-params { color: #ffa657; }
+.code-block .hljs-meta,
+.code-block .hljs-name,
+.code-block .hljs-tag { color: #7ee787; }
+.code-block .hljs-deletion { color: #ffa198; }
+.code-block .hljs-emphasis { font-style: italic; }
+.code-block .hljs-strong { font-weight: 700; }
