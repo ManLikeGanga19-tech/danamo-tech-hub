@@ -58,12 +58,19 @@ const AccordionCard = React.memo(
     return (
       <div
         onClick={handleClick}
-        className={`group cursor-pointer p-6 md:p-8 border rounded-2xl transition-all duration-300 ${
+        className={`group cursor-pointer p-6 md:p-8 border rounded-2xl transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
           isOpen 
             ? 'border-blue-600 dark:border-blue-500 shadow-lg shadow-blue-500/10 bg-white dark:bg-[#1E1E2F]' 
             : 'border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 bg-white/60 dark:bg-[#1E1E2F]/60 backdrop-blur-sm'
         }`}
         role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
         aria-expanded={isOpen}
         aria-controls={`card-content-${index}`}
       >

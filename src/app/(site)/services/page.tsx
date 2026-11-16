@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
 import Image from 'next/image';
@@ -116,6 +116,18 @@ export default function ServicesPage() {
 
   // Preserve original behavior: `loading` covered both auth-check AND submit
   const loading = authLoading || submitting;
+
+  // Home page service cards link here with ?service=<value> to preselect it.
+  // Read after mount (the page is statically rendered without the query).
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("service");
+    if (!wanted || !services.some((s) => s.value === wanted)) return;
+    const frame = requestAnimationFrame(() => {
+      setSelectedService(wanted);
+      formSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   const handleCardClick = (value: string) => {
     setSelectedService(value);
@@ -226,20 +238,26 @@ export default function ServicesPage() {
             {services.map((service, idx) => (
               <article
                 key={idx}
-                onClick={() => handleCardClick(service.value)}
-                className="group relative cursor-pointer bg-white dark:bg-[#1E1E2F] rounded-2xl p-8 flex flex-col items-start gap-4 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-700"
+                className="group relative bg-white dark:bg-[#1E1E2F] rounded-2xl p-8 flex flex-col items-start gap-4 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-700 focus-within:ring-2 focus-within:ring-blue-500"
               >
                 <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 group-hover:scale-110 transition-transform duration-300">
                   {service.icon}
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {service.title}
+                    {/* Stretched button: the whole card starts an inquiry for this service */}
+                    <button type="button" onClick={() => handleCardClick(service.value)} className="text-left after:absolute after:inset-0 after:content-[''] focus:outline-none">
+                      {service.title}
+                    </button>
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     {service.desc}
                   </p>
                 </div>
+                <span className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
+                  Start an inquiry
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                </span>
                 {/* Bottom accent line */}
                 <div className="absolute bottom-0 left-0 h-1 w-0 bg-blue-600 dark:bg-blue-400 transition-all duration-500 group-hover:w-full rounded-b-2xl" />
               </article>

@@ -1,15 +1,14 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Newsletter from '@/components/NewsLetter/NewsLetter';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Copy, Tag, LucideBookOpen } from 'lucide-react';
+import { ArrowRight, Search, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { toast } from 'sonner';
 import { coverSrc, formatDate, type BlogSummary } from '@/lib/blog';
 
 export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
@@ -24,21 +23,6 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
       blog.tags.some(tag => tag.toLowerCase().includes(query))
     )
   }, [searchQuery, posts])
-
-  const handleCopyLink = useCallback((slug: string) => {
-    const url = `${window.location.origin}/blog/${slug}`
-    navigator.clipboard.writeText(url).then(() => {
-      toast.success("Link copied to clipboard!", {
-        className: 'bg-blue-600 text-white border-none shadow-lg',
-        duration: 3000,
-      })
-    }).catch(() => {
-      toast.error("Failed to copy link", {
-        className: 'bg-red-500 text-white border-none shadow-lg',
-        duration: 3000,
-      })
-    })
-  }, [])
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -99,16 +83,16 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
             {filteredBlogs.map((blog) => (
               <article
                 key={blog.slug}
-                className="group relative flex flex-col bg-white dark:bg-[#1E1E2F] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1"
+                className="group relative flex flex-col bg-white dark:bg-[#1E1E2F] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200 dark:hover:border-blue-900 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-500"
               >
-                <Link href={`/blog/${blog.slug}`} className="relative block w-full h-56 overflow-hidden" tabIndex={-1} aria-hidden="true">
+                <div className="relative w-full h-56 overflow-hidden">
                   <img
                     src={coverSrc(blog)}
                     alt=""
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                </Link>
+                </div>
 
                 <div className="p-6 flex flex-col flex-grow">
                   {blog.tags.length > 0 && (
@@ -125,7 +109,10 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
                   )}
 
                   <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors line-clamp-2">
-                    <Link href={`/blog/${blog.slug}`}>{blog.title}</Link>
+                    {/* Stretched link: the whole card opens the article */}
+                    <Link href={`/blog/${blog.slug}`} className="after:absolute after:inset-0 after:content-[''] focus:outline-none">
+                      {blog.title}
+                    </Link>
                   </h2>
                   <p className="text-sm text-gray-700 dark:text-gray-300 mb-6 line-clamp-3 flex-grow">
                     {blog.excerpt}
@@ -137,24 +124,10 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
                     {" "}• {blog.read_minutes} min read
                   </div>
 
-                  <div className="flex items-center justify-between gap-3 mt-auto">
-                    <Button
-                      asChild
-                      className="flex-1 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white dark:bg-blue-500/15 dark:text-blue-300 dark:hover:bg-blue-500 dark:hover:text-white transition-colors duration-300 rounded-xl"
-                    >
-                      <Link href={`/blog/${blog.slug}`} aria-label={`Read ${blog.title}`}>
-                        <LucideBookOpen className="w-4 h-4 mr-2" aria-hidden="true" /> Read Article
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="flex-none px-4 rounded-xl border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
-                      onClick={() => handleCopyLink(blog.slug)}
-                      aria-label={`Copy link to ${blog.title}`}
-                    >
-                      <Copy className="w-4 h-4" aria-hidden="true" />
-                    </Button>
-                  </div>
+                  <span className="mt-auto inline-flex items-center gap-2 font-semibold text-blue-700 dark:text-blue-300">
+                    Read article
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                  </span>
                 </div>
               </article>
             ))}

@@ -3,43 +3,52 @@
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, MessageSquare, Search, ShieldCheck, Wallet, Wrench, Zap, ChevronDown, HelpCircle } from 'lucide-react';
+import { ArrowRight, Briefcase, FolderKanban, Search, ShieldCheck, Video, Zap, ChevronDown, HelpCircle } from 'lucide-react';
+import Link from 'next/link';
+import { CONTACT_EMAIL } from '@/lib/site';
 import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
+// Each topic card links to the page that answers it.
 const helpCategories = [
   {
-    title: 'Getting Started',
+    title: 'Start a Project',
+    href: '/services',
     icon: <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    description: 'Learn how to set up your account and get going quickly.',
+    description: 'See what we build and send us an inquiry for your website, app or system.',
   },
   {
-    title: 'Account & Security',
+    title: 'Our Work',
+    href: '/projects',
+    icon: <FolderKanban className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+    description: 'Browse case studies and the products we have built and run.',
+  },
+  {
+    title: 'Frequently Asked Questions',
+    href: '/faqs',
+    icon: <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+    description: 'Timelines, pricing, support after launch and how we work.',
+  },
+  {
+    title: 'Webinars & Learning',
+    href: '/webinars',
+    icon: <Video className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+    description: 'Register for live sessions or watch past webinar replays.',
+  },
+  {
+    title: 'Careers',
+    href: '/careers',
+    icon: <Briefcase className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+    description: 'Open roles at Danamo Tech and how to apply.',
+  },
+  {
+    title: 'Privacy & Your Data',
+    href: '/privacy',
     icon: <ShieldCheck className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    description: 'Manage your password, privacy settings, and more.',
-  },
-  {
-    title: 'Plans & Billing',
-    icon: <Wallet className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    description: 'Understand pricing, billing, invoices, and upgrades.',
-  },
-  {
-    title: 'Technical Support',
-    icon: <Wrench className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    description: 'Get help with technical issues or error messages.',
-  },
-  {
-    title: 'Products & Features',
-    icon: <MessageSquare className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    description: 'Guides and tutorials for using our tools and features.',
-  },
-  {
-    title: 'Announcements',
-    icon: <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    description: 'Stay updated with platform changes and news.',
+    description: 'How we collect, use and protect your personal data.',
   },
 ];
 
@@ -56,7 +65,7 @@ const faqData = [
   },
   {
     question: 'How do I contact support?',
-    answer: 'You can reach our support team via the contact form below or by emailing support@yourdomain.com.',
+    answer: `Message us on WhatsApp using the button below, use the contact form on our home page, or email ${CONTACT_EMAIL}.`,
   },
   {
     question: 'Do you offer custom development or use templates?',
@@ -124,23 +133,33 @@ export default function HelpCenterPage() {
       <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Browse by Topic</h2>
-          <p className="text-gray-700 dark:text-gray-300">Select a category to find the help you need.</p>
+          <p className="text-gray-700 dark:text-gray-300">Pick a topic to go straight to the right page.</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {helpCategories.map((cat, i) => (
-            <Card key={i} className="group p-8 flex flex-col items-start gap-4 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 group-hover:scale-110 transition-transform duration-300">
-                {cat.icon}
-              </div>
-              <CardHeader className="p-0">
-                <CardTitle className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {cat.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0 text-gray-700 dark:text-gray-300 leading-relaxed">
-                {cat.description}
-              </CardContent>
-            </Card>
+          {helpCategories.map((cat) => (
+            <Link
+              key={cat.href}
+              href={cat.href}
+              className="group rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            >
+              <Card className="h-full p-8 flex flex-col items-start gap-4 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm group-hover:shadow-xl group-hover:shadow-blue-500/10 group-hover:border-blue-200 dark:group-hover:border-blue-900 transition-all duration-300 group-hover:-translate-y-1">
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
+                  {cat.icon}
+                </div>
+                <CardHeader className="p-0">
+                  <CardTitle className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {cat.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-gray-700 dark:text-gray-300 leading-relaxed flex-grow">
+                  {cat.description}
+                </CardContent>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
+                  Go to {cat.title.toLowerCase()}
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                </span>
+              </Card>
+            </Link>
           ))}
         </div>
       </section>
