@@ -3,9 +3,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import { Laptop, TrendingUp, Users, MapPin, Briefcase, ArrowRight } from "lucide-react";
+import { Laptop, TrendingUp, Users, MapPin, Briefcase, ArrowRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { jobs } from "@/lib/jobs";
+import { CONTACT_EMAIL } from "@/lib/site";
+import { getOpenJobs } from "@/lib/jobs";
 
 export const metadata: Metadata = {
   title: "Careers",
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/careers" },
 };
 
-export default function CareersPage() {
+export const revalidate = 60;
+
+export default async function CareersPage() {
+  const jobs = await getOpenJobs();
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
       <Navbar1 />
@@ -73,42 +77,49 @@ export default function CareersPage() {
               <p className="text-gray-700 dark:text-gray-300">Find your next role and grow with us.</p>
             </div>
 
+            {jobs.length === 0 ? (
+              <div className="max-w-xl mx-auto text-center p-10 bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800">
+                <Briefcase className="w-10 h-10 mx-auto mb-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No open roles right now</h3>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">
+                  We&apos;re not hiring for a specific role at the moment, but we&apos;re always happy to hear from talented people.
+                </p>
+                <a href={`mailto:${CONTACT_EMAIL}?subject=Career%20enquiry`} className="inline-flex items-center gap-2 font-semibold text-blue-700 dark:text-blue-300 hover:underline">
+                  <Mail className="w-4 h-4" aria-hidden="true" /> {CONTACT_EMAIL}
+                </a>
+              </div>
+            ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {jobs.map((job) => (
-                <div key={job.slug} className="group relative flex flex-col bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 p-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 rounded-full px-3 py-1">
-                      <Briefcase className="w-3 h-3 mr-1.5" /> {job.type}
+                <Link
+                  key={job.slug}
+                  href={`/careers/${job.slug}`}
+                  className="group relative flex flex-col bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200 dark:hover:border-blue-900 transition-all duration-300 hover:-translate-y-1 p-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                >
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    <span className="flex items-center text-xs font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 rounded-full px-3 py-1">
+                      <Briefcase className="w-3 h-3 mr-1.5" aria-hidden="true" /> {job.employment_type}
                     </span>
                     <span className="flex items-center text-xs font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1">
-                      <MapPin className="w-3 h-3 mr-1.5" /> {job.location}
+                      <MapPin className="w-3 h-3 mr-1.5" aria-hidden="true" /> {job.location}
                     </span>
                   </div>
 
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    <Link href={`/careers/${job.slug}`}>{job.title}</Link>
+                    {job.title}
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 text-sm mb-8 flex-grow leading-relaxed">
                     {job.summary}
                   </p>
 
-<div className="flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href={`/careers/${job.slug}`}
-                      className="flex-1 inline-flex items-center justify-center rounded-xl border border-blue-600 dark:border-blue-400 text-blue-700 dark:text-blue-300 font-semibold py-2.5 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
-                    >
-                      View Role
-                    </Link>
-                    <Link
-                      href={`/careers/${job.slug}#apply`}
-                      className="flex-1 inline-flex items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2.5 transition-colors"
-                    >
-                      Apply for this Role
-                    </Link>
-                  </div>
-                </div>
+                  <span className="inline-flex items-center gap-2 font-semibold text-blue-700 dark:text-blue-300">
+                    View role &amp; apply
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                  </span>
+                </Link>
               ))}
             </div>
+            )}
           </div>
         </section>
 

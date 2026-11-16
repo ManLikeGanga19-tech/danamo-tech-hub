@@ -51,14 +51,7 @@ async def get_messages(db: AsyncSession = Depends(get_db), admin: User = Depends
     return rows.all()
 
 
-# --- CAREER APPLICATIONS ---
-@router.get("/applications")
-async def get_applications(db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)):
-    stmt = select(CareerApplication).order_by(desc(CareerApplication.created_at))
-    rows = await db.scalars(stmt)
-    return rows.all()
-
-
+# --- CAREER APPLICATIONS (list/update/delete live in admin_jobs.py) ---
 @router.get("/cv/{cv_id}")
 async def download_cv(cv_id: uuid.UUID, db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)):
     cv = await db.get(CvFile, cv_id)

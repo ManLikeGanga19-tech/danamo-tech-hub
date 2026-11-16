@@ -5,6 +5,7 @@ import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const teamMembers = [
   {
@@ -56,10 +57,10 @@ export default function OurTeamPage() {
               size="lg"
               className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl group"
             >
-              <a href="/careers" className="flex items-center gap-2">
+              <Link href="/careers" className="flex items-center gap-2">
                 View Open Roles
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
             </Button>
           </div>
         </section>

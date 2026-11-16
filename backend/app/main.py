@@ -12,12 +12,14 @@ from sqlalchemy.exc import InterfaceError, OperationalError
 from app.api.routes import (
     admin_auth,
     admin_blog,
+    admin_jobs,
     admin_data,
     auth,
     blog,
     careers,
     forms,
     health,
+    jobs,
     newsletter,
     partners,
     projects,
@@ -115,8 +117,10 @@ for module in (
     admin_auth,
     admin_data,
     admin_blog,
+    admin_jobs,
     projects,
     partners,
     blog,
+    jobs,
 ):
     app.include_router(module.router, prefix="/api/v1")

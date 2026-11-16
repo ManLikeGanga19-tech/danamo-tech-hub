@@ -4,24 +4,20 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Briefcase, CalendarDays, Check, MapPin, Building2 } from "lucide-react";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import { getJob, jobs } from "@/lib/jobs";
+import { getOpenJob, paragraphs } from "@/lib/jobs";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import ApplyForm from "./ApplyForm";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return jobs.map((job) => ({ slug: job.slug }));
-}
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const job = getJob(slug);
+  const job = await getOpenJob(slug);
   if (!job) return { title: "Role not found", robots: { index: false } };
 
-  const title = `${job.title} (${job.type}, ${job.location})`;
+  const title = `${job.title} (${job.employment_type}, ${job.location})`;
   return {
     title,
     description: job.summary,
@@ -42,6 +38,10 @@ const EMPLOYMENT_TYPE: Record<string, string> = {
   Contract: "CONTRACTOR",
   Internship: "INTERN",
 };
+
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
@@ -66,8 +66,10 @@ function Section({ title, items }: { title: string; items: string[] }) {
 
 export default async function JobPage({ params }: Props) {
   const { slug } = await params;
-  const job = getJob(slug);
+  const job = await getOpenJob(slug);
   if (!job) notFound();
+  const about = paragraphs(job.about);
+  const list = (items: string[]) => `<ul>${items.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>`;
 
   // Lets Google show the role in job search results.
   const jsonLd = {
@@ -75,12 +77,12 @@ export default async function JobPage({ params }: Props) {
     "@type": "JobPosting",
     title: job.title,
     description: [
-      ...job.about.map((p) => `<p>${p}</p>`),
-      `<p><strong>Responsibilities</strong></p><ul>${job.responsibilities.map((r) => `<li>${r}</li>`).join("")}</ul>`,
-      `<p><strong>Requirements</strong></p><ul>${job.requirements.map((r) => `<li>${r}</li>`).join("")}</ul>`,
+      ...about.map((p) => `<p>${escapeHtml(p)}</p>`),
+      `<p><strong>Responsibilities</strong></p>${list(job.responsibilities)}`,
+      `<p><strong>Requirements</strong></p>${list(job.requirements)}`,
     ].join(""),
-    datePosted: job.postedAt,
-    employmentType: EMPLOYMENT_TYPE[job.type],
+    ...(job.posted_at ? { datePosted: job.posted_at.slice(0, 10) } : {}),
+    employmentType: EMPLOYMENT_TYPE[job.employment_type],
     hiringOrganization: { "@type": "Organization", name: SITE_NAME, sameAs: SITE_URL, logo: `${SITE_URL}/logo.png` },
     ...(job.workplace === "Remote"
       ? { jobLocationType: "TELECOMMUTE", applicantLocationRequirements: { "@type": "Country", name: "Kenya" } }
@@ -107,7 +109,7 @@ export default async function JobPage({ params }: Props) {
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-6">{job.title}</h1>
             <div className="flex flex-wrap gap-2 mb-8">
               <span className="inline-flex items-center text-sm font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-500/10 rounded-full px-3 py-1">
-                <Briefcase className="w-4 h-4 mr-1.5" aria-hidden="true" /> {job.type}
+                <Briefcase className="w-4 h-4 mr-1.5" aria-hidden="true" /> {job.employment_type}
               </span>
               <span className="inline-flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1">
                 <MapPin className="w-4 h-4 mr-1.5" aria-hidden="true" /> {job.location}
@@ -127,13 +129,13 @@ export default async function JobPage({ params }: Props) {
           <article>
             <section className="mb-10">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">About the role</h2>
-              {job.about.map((p) => (
+              {about.map((p) => (
                 <p key={p} className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{p}</p>
               ))}
             </section>
             <Section title="What you'll do" items={job.responsibilities} />
             <Section title="What we're looking for" items={job.requirements} />
-            <Section title="Nice to have" items={job.niceToHave} />
+            <Section title="Nice to have" items={job.nice_to_have} />
             <Section title="What we offer" items={job.offer} />
 
             <section className="mb-4">
@@ -149,13 +151,15 @@ export default async function JobPage({ params }: Props) {
           <aside className="lg:sticky lg:top-28 h-fit p-6 rounded-2xl bg-white dark:bg-[#1E1E2F] border border-gray-100 dark:border-gray-800 shadow-sm">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Role summary</h2>
             <dl className="space-y-3 text-sm mb-6">
-              <div className="flex justify-between gap-4"><dt className="text-gray-600 dark:text-gray-300">Employment</dt><dd className="font-semibold text-gray-900 dark:text-white">{job.type}</dd></div>
+              <div className="flex justify-between gap-4"><dt className="text-gray-600 dark:text-gray-300">Employment</dt><dd className="font-semibold text-gray-900 dark:text-white">{job.employment_type}</dd></div>
               <div className="flex justify-between gap-4"><dt className="text-gray-600 dark:text-gray-300">Location</dt><dd className="font-semibold text-gray-900 dark:text-white text-right">{job.location}</dd></div>
               <div className="flex justify-between gap-4"><dt className="text-gray-600 dark:text-gray-300">Workplace</dt><dd className="font-semibold text-gray-900 dark:text-white">{job.workplace}</dd></div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-gray-600 dark:text-gray-300 inline-flex items-center"><CalendarDays className="w-4 h-4 mr-1.5" aria-hidden="true" />Posted</dt>
-                <dd className="font-semibold text-gray-900 dark:text-white">{formatDate(job.postedAt)}</dd>
-              </div>
+              {job.posted_at && (
+                <div className="flex justify-between gap-4">
+                  <dt className="text-gray-600 dark:text-gray-300 inline-flex items-center"><CalendarDays className="w-4 h-4 mr-1.5" aria-hidden="true" />Posted</dt>
+                  <dd className="font-semibold text-gray-900 dark:text-white">{formatDate(job.posted_at)}</dd>
+                </div>
+              )}
             </dl>
             <a href="#apply" className="w-full inline-flex items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-3 transition-colors">
               Apply for this Role
@@ -168,10 +172,10 @@ export default async function JobPage({ params }: Props) {
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">Apply for this Role</h2>
-              <p className="text-gray-700 dark:text-gray-300">{job.title} · {job.type} · {job.location}</p>
+              <p className="text-gray-700 dark:text-gray-300">{job.title} · {job.employment_type} · {job.location}</p>
             </div>
             <div className="p-6 md:p-10 rounded-2xl bg-white dark:bg-[#1E1E2F] border border-gray-100 dark:border-gray-800 shadow-sm">
-              <ApplyForm roleTitle={job.title} />
+              <ApplyForm roleTitle={job.title} jobSlug={job.slug} />
             </div>
           </div>
         </section>

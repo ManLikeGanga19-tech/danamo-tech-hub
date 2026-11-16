@@ -93,6 +93,9 @@ class CareerApplication(Base):
     role_slug: Mapped[str] = mapped_column(String(80), index=True)
     cover_letter: Mapped[str | None] = mapped_column(Text)
     cv_file_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("cv_files.id", ondelete="SET NULL"))
+    # Optional uploaded cover letter (stored like CVs); the typed one is cover_letter.
+    cover_letter_file_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("cv_files.id", ondelete="SET NULL"), nullable=True)
+    job_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("job_openings.id", ondelete="SET NULL"), nullable=True, index=True)
     status: Mapped[str] = mapped_column(String(20), default="received")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
@@ -172,5 +175,29 @@ class BlogPost(Base):
     read_minutes: Mapped[int] = mapped_column(BigInteger, default=1, server_default="1")
     status: Mapped[str] = mapped_column(String(20), default="draft", server_default="draft", index=True)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class JobOpening(Base):
+    """Open role listed on /careers, managed from the admin console."""
+
+    __tablename__ = "job_openings"
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title: Mapped[str] = mapped_column(String(120))
+    slug: Mapped[str] = mapped_column(String(120), unique=True, index=True)
+    employment_type: Mapped[str] = mapped_column(String(20))  # Full-time | Part-time | Contract | Internship
+    location: Mapped[str] = mapped_column(String(120))
+    workplace: Mapped[str] = mapped_column(String(20))  # Remote | Hybrid | On-site
+    summary: Mapped[str] = mapped_column(String(300))
+    about: Mapped[str] = mapped_column(Text)  # paragraphs separated by blank lines
+    # JSON lists of strings
+    responsibilities: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    requirements: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    nice_to_have: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    offer: Mapped[str] = mapped_column(Text, default="[]", server_default="[]")
+    status: Mapped[str] = mapped_column(String(20), default="draft", server_default="draft", index=True)  # draft | open | closed
+    display_order: Mapped[int] = mapped_column(BigInteger, default=0, server_default="0")
+    posted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())

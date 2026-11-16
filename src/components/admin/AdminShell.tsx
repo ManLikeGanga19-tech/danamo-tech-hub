@@ -20,7 +20,7 @@ import { adminPath, toAppPath } from "@/lib/admin/paths";
 const sidebarLinks = [
   { name: "Dashboard", path: "/", icon: LayoutDashboard },
   { name: "Contact Messages", path: "/messages", icon: MessageSquare },
-  { name: "Career Applications", path: "/careers", icon: Briefcase },
+  { name: "Careers", path: "/careers", icon: Briefcase },
   { name: "Webinars", path: "/webinars", icon: Users },
   { name: "Projects", path: "/projects", icon: FolderKanban },
   { name: "Blog", path: "/blog", icon: FileText },

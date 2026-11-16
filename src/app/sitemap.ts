@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { getPublishedPosts } from "@/lib/blog";
-import { jobs } from "@/lib/jobs";
+import { getOpenJobs } from "@/lib/jobs";
 
 // Rebuilt at most hourly so new articles are picked up without a redeploy.
 export const revalidate = 3600;
@@ -37,9 +37,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "monthly" as const,
         priority: 0.6,
     }));
-    const roles = jobs.map((job) => ({
+    const roles = (await getOpenJobs()).map((job) => ({
         url: `${SITE_URL}/careers/${job.slug}`,
-        lastModified: new Date(job.postedAt),
+        lastModified: job.posted_at ? new Date(job.posted_at) : lastModified,
         changeFrequency: "weekly" as const,
         priority: 0.6,
     }));
