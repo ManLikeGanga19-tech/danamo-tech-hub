@@ -16,25 +16,12 @@ from app.models import (
 from app.api.deps import get_current_admin
 from app.core.files import EXTENSIONS, IMAGE_TYPES, read_validated_upload
 from app.core.rate_limit import ADMIN_UPLOAD_LIMIT, limiter
-from app.schemas.webinars import WebinarOut
 from app.schemas.projects import ProjectOut, ProjectCreate
 from app.schemas.partners import PartnerOut, PartnerCreate, PartnerUpdate
 
 router = APIRouter(prefix="/admin/data", tags=["admin_data"])
 
 # --- SCHEMAS ---
-class WebinarCreate(BaseModel):
-    title: str
-    description: str
-    date: str
-    time: str
-    host: str
-    image_url: str
-    join_url: str | None = None
-    replay_url: str | None = None
-    status: str = "upcoming"
-
-
 class ProjectUpdate(ProjectCreate):
     pass
 
@@ -64,31 +51,6 @@ async def download_cv(cv_id: uuid.UUID, db: AsyncSession = Depends(get_db), admi
 
 
 # --- WEBINARS ---
-@router.get("/webinars", response_model=list[WebinarOut])
-async def admin_get_webinars(db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)):
-    stmt = select(Webinar).order_by(desc(Webinar.created_at))
-    rows = await db.scalars(stmt)
-    return rows.all()
-
-
-@router.post("/webinars", response_model=WebinarOut)
-async def admin_create_webinar(payload: WebinarCreate, db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)):
-    row = Webinar(**payload.model_dump())
-    db.add(row)
-    await db.commit()
-    await db.refresh(row)
-    return row
-
-
-@router.delete("/webinars/{webinar_id}")
-async def admin_delete_webinar(webinar_id: str, db: AsyncSession = Depends(get_db), admin: User = Depends(get_current_admin)):
-    row = await db.get(Webinar, webinar_id)
-    if row:
-        await db.delete(row)
-        await db.commit()
-    return {"status": "deleted"}
-
-
 WEBINAR_IMAGES_DIR = Path("storage/webinars")
 WEBINAR_IMAGES_DIR.mkdir(parents=True, exist_ok=True)
 

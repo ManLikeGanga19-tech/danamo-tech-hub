@@ -1,4 +1,6 @@
+import asyncio
 import logging
+from contextlib import asynccontextmanager, suppress
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -13,6 +15,7 @@ from app.api.routes import (
     admin_auth,
     admin_blog,
     admin_jobs,
+    admin_webinars,
     admin_data,
     auth,
     blog,
@@ -39,7 +42,21 @@ MAX_REQUEST_BYTES = 6 * 1024 * 1024
 # they are personal data and only reachable through the admin download endpoint.
 PUBLIC_UPLOAD_DIRS = ("webinars", "projects", "partners", "blog")
 
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    # Imported here so the email/database modules load after logging is set up.
+    from app.services.webinars import reminder_loop
+
+    task = asyncio.create_task(reminder_loop()) if settings.webinar_reminders_enabled else None
+    yield
+    if task:
+        task.cancel()
+        with suppress(asyncio.CancelledError):
+            await task
+
+
 app = FastAPI(
+    lifespan=lifespan,
     title="Danamo Tech Hub API",
     version="0.1.0",
     docs_url=None if settings.is_production else "/docs",
@@ -118,6 +135,7 @@ for module in (
     admin_data,
     admin_blog,
     admin_jobs,
+    admin_webinars,
     projects,
     partners,
     blog,

@@ -108,6 +108,11 @@ class WebinarRegistration(Base):
     name: Mapped[str] = mapped_column(String(120))
     email: Mapped[str] = mapped_column(String(320))
     webinar_title: Mapped[str] = mapped_column(String(255)) # Keep this for easy reading
+    # "live" = registered for the session, "replay" = unlocked the recording.
+    kind: Mapped[str] = mapped_column(String(10), default="live", server_default="live")
+    # When the join link was last emailed, and when the 24-hour reminder went out.
+    join_link_sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    reminder_sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 class Webinar(Base):
@@ -115,8 +120,12 @@ class Webinar(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     title: Mapped[str] = mapped_column(String(255))
     description: Mapped[str] = mapped_column(Text)
-    date: Mapped[str] = mapped_column(String(100)) # e.g., "June 15, 2025"
-    time: Mapped[str] = mapped_column(String(100)) # e.g., "3:00 PM GMT"
+    # Display text derived from starts_at (East Africa Time), e.g. "Tuesday, 24 November 2026" / "3:00 PM EAT".
+    date: Mapped[str] = mapped_column(String(100))
+    time: Mapped[str] = mapped_column(String(100))
+    # Real start time: drives reminders and when a webinar counts as past.
+    starts_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    duration_minutes: Mapped[int] = mapped_column(BigInteger, default=60, server_default="60")
     host: Mapped[str] = mapped_column(String(120))
     image_url: Mapped[str] = mapped_column(String(500))
     
@@ -127,6 +136,7 @@ class Webinar(Base):
     # Status: 'upcoming' or 'past'
     status: Mapped[str] = mapped_column(String(20), default="upcoming")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=True)
 
 class Project(Base):
     __tablename__ = "projects"

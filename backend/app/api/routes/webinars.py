@@ -1,21 +1,39 @@
+"""Public webinar API. Join and replay links are never listed publicly:
+join links go out by email, replay links only after an email is given."""
+
+import logging
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.db.session import get_db
-from app.models import Webinar, WebinarRegistration
-from app.schemas.webinars import WebinarOut, WebinarRegisterIn, ReplayUnlockIn
+
 from app.core.email import send_webinar_registration
 from app.core.rate_limit import FORM_LIMIT, limiter
+from app.db.session import get_db
+from app.models import Webinar, WebinarRegistration
+from app.schemas.webinars import ReplayUnlockIn, WebinarOut, WebinarRegisterIn, is_finished
+from app.services.webinars import in_reminder_window
 
 router = APIRouter(prefix="/webinars", tags=["webinars"])
+logger = logging.getLogger(__name__)
 
 
 @router.get("", response_model=list[WebinarOut])
 async def get_webinars(db: AsyncSession = Depends(get_db)):
-    """Public list of all webinars."""
-    stmt = select(Webinar).order_by(Webinar.created_at.desc())
-    rows = await db.scalars(stmt)
-    return rows.all()
+    rows = await db.scalars(select(Webinar).order_by(Webinar.starts_at.asc().nulls_last(), Webinar.created_at.desc()))
+    return [WebinarOut.from_model(r) for r in rows.all()]
+
+
+async def _find(db: AsyncSession, webinar_id, kind: str, email: str) -> WebinarRegistration | None:
+    return await db.scalar(
+        select(WebinarRegistration).where(
+            WebinarRegistration.webinar_id == webinar_id,
+            WebinarRegistration.kind == kind,
+            WebinarRegistration.email == email,
+        )
+    )
 
 
 @router.post("/register")
@@ -24,33 +42,40 @@ async def register_for_webinar(request: Request, payload: WebinarRegisterIn, db:
     webinar = await db.get(Webinar, payload.webinar_id)
     if not webinar:
         raise HTTPException(404, "Webinar not found")
+    if is_finished(webinar):
+        raise HTTPException(409, "This webinar has already taken place. Registration is closed.")
 
-    row = WebinarRegistration(
-        webinar_id=webinar.id,
-        name=payload.name,
-        email=payload.email,
-        webinar_title=webinar.title,
-    )
-    db.add(row)
-    await db.commit()
+    email = payload.email.lower()
+    name = " ".join(payload.name.split())
+    now = datetime.now(timezone.utc)
+    has_link = bool(webinar.join_url)
 
-    # Send confirmation email with join link.
-    # Wrapped in try/except so a mail failure never breaks the user's registration.
-    try:
-        await send_webinar_registration(
-            name=payload.name,
-            email=payload.email,
-            webinar_title=webinar.title,
-            date=webinar.date,
-            time=webinar.time,
-            join_url=webinar.join_url,
+    row = await _find(db, webinar.id, "live", email)
+    already = row is not None
+    if not already:
+        row = WebinarRegistration(
+            webinar_id=webinar.id, name=name, email=email, webinar_title=webinar.title, kind="live",
+            join_link_sent_at=now if has_link else None,
+            # Registering inside the last 24 hours: this email is the reminder.
+            reminder_sent_at=now if has_link and in_reminder_window(webinar, now) else None,
         )
-    except Exception as e:
-        # Registration already succeeded — log but do not fail the request
-        import logging
-        logging.getLogger(__name__).error(f"[webinar] Email send failed: {e}")
+        db.add(row)
+        try:
+            await db.commit()
+        except IntegrityError:  # same email submitted twice at once
+            await db.rollback()
+            already = True
 
-    return {"status": "success", "message": "Registered successfully. Check your email."}
+    # Registering again simply re-sends the confirmation (with the link if set).
+    await send_webinar_registration(
+        name=name, email=email, webinar_title=webinar.title, date=webinar.date, time=webinar.time,
+        join_url=webinar.join_url,
+    )
+    if already:
+        return {"status": "success", "message": "You're already registered. We've re-sent your confirmation email."}
+    if has_link:
+        return {"status": "success", "message": "You're registered. Check your email for the joining link."}
+    return {"status": "success", "message": "You're registered. We'll email you the joining link before the event."}
 
 
 @router.post("/unlock-replay")
@@ -60,8 +85,11 @@ async def unlock_replay(request: Request, payload: ReplayUnlockIn, db: AsyncSess
     if not webinar or not webinar.replay_url:
         raise HTTPException(404, "Replay not available")
 
-    # Optional: log the lead capture for analytics
-    import logging
-    logging.getLogger(__name__).info(f"[webinar] Replay unlocked for {payload.email}")
-
+    email = payload.email.lower()
+    if not await _find(db, webinar.id, "replay", email):
+        db.add(WebinarRegistration(webinar_id=webinar.id, name="", email=email, webinar_title=webinar.title, kind="replay"))
+        try:
+            await db.commit()
+        except IntegrityError:
+            await db.rollback()
     return {"status": "success", "replay_url": webinar.replay_url}

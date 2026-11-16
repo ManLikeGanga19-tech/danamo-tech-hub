@@ -10,7 +10,7 @@ import Newsletter from "@/components/NewsLetter/NewsLetter";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import Image from "next/image";
-import { CalendarDays, Clock, User, PlayCircle, CheckCircle2, Video, Loader2 } from "lucide-react";
+import { ArrowRight, CalendarDays, Clock, User, PlayCircle, CheckCircle2, Video, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
 import { errorMessage } from "@/lib/errors";
@@ -24,8 +24,9 @@ interface Webinar {
   host: string;
   image_url: string;
   status: "upcoming" | "past";
-  join_url?: string | null;
-  replay_url?: string | null;
+  starts_at: string | null;
+  duration_minutes: number;
+  has_replay: boolean;
 }
 
 export default function WebinarsPage() {
@@ -104,11 +105,11 @@ export default function WebinarsPage() {
     e.preventDefault();
     setSubmitting(true); setError("");
     try {
-      await apiFetch("/webinars/register", {
+      const res = await apiFetch<{ message: string }>("/webinars/register", {
         method: "POST",
         body: JSON.stringify({ webinar_id: selectedWebinar?.id, name, email }),
       });
-      setSuccess("Registration successful! Check your email for the link.");
+      setSuccess(res.message || "You're registered. Check your email.");
     } catch (err) {
       setError(errorMessage(err, "Failed to register."));
     } finally { setSubmitting(false); }
@@ -171,24 +172,28 @@ export default function WebinarsPage() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {upcoming.map((webinar) => (
-                <Card key={webinar.id} className="group rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1E1E2F] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1">
+                <Card key={webinar.id} className="group relative rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1E1E2F] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200 dark:hover:border-blue-900 transition-all duration-300 hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-500">
                   <div className="relative w-full h-52 overflow-hidden">
-                    <img src={webinar.image_url} alt={webinar.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
+                    <img src={webinar.image_url} alt="" className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
                   </div>
                   <CardHeader className="p-6 pb-2">
                     <CardTitle className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {webinar.title}
+                      {/* The whole card is the click target (stretched button). */}
+                      <button type="button" onClick={() => handleRegisterClick(webinar)} className="text-left after:absolute after:inset-0 after:content-[''] focus:outline-none">
+                        {webinar.title}
+                      </button>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-6 pt-4">
                     <div className="space-y-3 mb-6">
-                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><CalendarDays className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.date}</p>
-                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><Clock className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.time}</p>
-                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><User className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" />{webinar.host}</p>
+                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><CalendarDays className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" aria-hidden="true" />{webinar.date}</p>
+                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><Clock className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" aria-hidden="true" />{webinar.time}</p>
+                      <p className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium"><User className="w-4 h-4 mr-3 text-blue-600 dark:text-blue-400" aria-hidden="true" />{webinar.host}</p>
                     </div>
-                    <Button onClick={() => handleRegisterClick(webinar)} className="w-full bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 rounded-xl py-6">
-                      Register Now
-                    </Button>
+                    <span className="inline-flex items-center gap-2 font-semibold text-blue-700 dark:text-blue-300">
+                      Register for free
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                    </span>
                   </CardContent>
                 </Card>
               ))}
@@ -215,22 +220,37 @@ export default function WebinarsPage() {
             ) : (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {past.map((webinar) => (
-                  <Card key={webinar.id} className="group rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1E1E2F] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
+                  <Card key={webinar.id} className={`group relative rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1E1E2F] overflow-hidden shadow-sm transition-all duration-300 ${webinar.has_replay ? "hover:shadow-lg hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-500" : ""}`}>
                     <div className="relative w-full h-52 overflow-hidden">
-                      <img src={webinar.image_url} alt={webinar.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                        <PlayCircle className="w-14 h-14 text-white opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-300" />
-                      </div>
+                      <img src={webinar.image_url} alt="" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                      {webinar.has_replay && (
+                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                          <PlayCircle className="w-14 h-14 text-white opacity-80 group-hover:scale-110 group-hover:opacity-100 transition-all duration-300" aria-hidden="true" />
+                        </div>
+                      )}
                     </div>
                     <CardHeader className="p-6 pb-2">
-                      <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">{webinar.title}</CardTitle>
+                      <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">
+                        {webinar.has_replay ? (
+                          <button type="button" onClick={() => handleReplayClick(webinar)} className="text-left after:absolute after:inset-0 after:content-[''] focus:outline-none">
+                            {webinar.title}
+                          </button>
+                        ) : (
+                          webinar.title
+                        )}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent className="p-6 pt-4">
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{webinar.date}</p>
                       <p className="text-sm text-gray-700 dark:text-gray-300 font-medium mb-6">Host: {webinar.host}</p>
-                      <Button onClick={() => handleReplayClick(webinar)} variant="outline" className="w-full border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl py-6">
-                        Watch Replay
-                      </Button>
+                      {webinar.has_replay ? (
+                        <span className="inline-flex items-center gap-2 font-semibold text-blue-700 dark:text-blue-300">
+                          Watch the replay
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                        </span>
+                      ) : (
+                        <span className="text-sm text-gray-600 dark:text-gray-300">Recording coming soon</span>
+                      )}
                     </CardContent>
                   </Card>
                 ))}

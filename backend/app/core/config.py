@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     resend_from_email: str = "noreply@danamotech.co.ke"
     admin_notification_email: str = "hello@danamotech.co.ke"
 
+    # Background job that emails join links 24 hours before each webinar.
+    webinar_reminders_enabled: bool = True
+    webinar_reminder_interval_seconds: int = 300
+
     @property
     def is_production(self) -> bool:
         return self.environment == "production"

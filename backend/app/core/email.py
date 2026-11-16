@@ -274,33 +274,81 @@ async def send_application_notification(name: str, email: str, role: str, phone:
 
 # ─── WEBINAR REGISTRATION ─────────────────────────────────────────
 
+def _join_button(join_url: str) -> str:
+    url = _e(join_url)
+    return (
+        '<div style="text-align:center; margin:32px 0;">'
+        f'<a href="{url}" style="display:inline-block; background:{BLUE}; color:#ffffff; text-decoration:none; padding:14px 32px; border-radius:8px; font-weight:600; font-size:15px;">Join Webinar</a>'
+        f'<p style="margin:12px 0 0 0; font-size:12px; color:{GRAY};">Or copy this link:<br><span style="font-family:monospace; color:{BLUE};">{url}</span></p>'
+        "</div>"
+    )
+
+
+def _event_box(webinar_title: str, date: str, time: str) -> str:
+    return (
+        f'<div style="background:{LIGHT_BG}; padding:20px; border-radius:8px; margin-bottom:24px; text-align:center;">'
+        f'<h3 style="margin:0 0 8px 0; font-size:18px; color:{DARK};">{_e(webinar_title)}</h3>'
+        f'<p style="margin:0; font-size:14px; color:{GRAY};">{_e(date)} &middot; {_e(time)}</p></div>'
+    )
+
+
+def _has_link(join_url: str | None) -> bool:
+    return bool(join_url and join_url.startswith("https://"))
+
+
 async def send_webinar_registration(name: str, email: str, webinar_title: str, date: str, time: str, join_url: str | None) -> bool:
-    """Confirm webinar registration and share the join link (admin-set fields)."""
-    if join_url and join_url.startswith(("https://", "http://")):
-        url = _e(join_url)
-        join_section = (
-            '<div style="text-align:center; margin:32px 0;">'
-            f'<a href="{url}" style="display:inline-block; background:{BLUE}; color:#ffffff; text-decoration:none; padding:14px 32px; border-radius:8px; font-weight:600; font-size:15px;">Join Webinar</a>'
-            f'<p style="margin:12px 0 0 0; font-size:12px; color:{GRAY};">Or copy this link:<br><span style="font-family:monospace; color:{BLUE};">{url}</span></p>'
-            "</div>"
-        )
+    """Confirm webinar registration; includes the join link when it is already set."""
+    if _has_link(join_url):
+        join_section = _join_button(join_url)
     else:
         join_section = (
             '<div style="background:#fef3c7; border-left:4px solid #f59e0b; padding:16px 20px; border-radius:6px; margin:24px 0;">'
-            '<p style="margin:0; font-size:14px; color:#92400e; line-height:1.6;"><strong>The joining link will be sent to you 24 hours before the event.</strong></p>'
-            "</div>"
+            '<p style="margin:0; font-size:14px; color:#92400e; line-height:1.6;"><strong>We\'ll email you the joining link before the event, '
+            "and a reminder 24 hours before it starts.</strong></p></div>"
         )
     body = (
         _h2("You're Registered")
         + _p(f"Hi {_e(name)},")
         + _p("Your spot is confirmed for the upcoming webinar:", "0 0 24px 0")
-        + f'<div style="background:{LIGHT_BG}; padding:20px; border-radius:8px; margin-bottom:24px; text-align:center;">'
-        + f'<h3 style="margin:0 0 8px 0; font-size:18px; color:{DARK};">{_e(webinar_title)}</h3>'
-        + f'<p style="margin:0; font-size:14px; color:{GRAY};">{_e(date)} &middot; {_e(time)}</p></div>'
+        + _event_box(webinar_title, date, time)
         + join_section
         + _signoff()
     )
     return await _send(email, f"Confirmed: {webinar_title}", _wrap_html("Webinar registration confirmed", body))
+
+
+async def send_webinar_join_link(name: str, email: str, webinar_title: str, date: str, time: str, join_url: str, updated: bool = False) -> bool:
+    """The join link was added (or changed) after this person registered."""
+    intro = (
+        "The joining link for your webinar has changed. Please use this new link:"
+        if updated
+        else "Good news: the joining link for your webinar is ready."
+    )
+    body = (
+        _h2("Your joining link" + (" has changed" if updated else ""))
+        + _p(f"Hi {_e(name) or 'there'},")
+        + _p(intro, "0 0 24px 0")
+        + _event_box(webinar_title, date, time)
+        + _join_button(join_url)
+        + _p("We'll also send you a reminder 24 hours before we start.", "0")
+        + _signoff()
+    )
+    subject = f"{'Updated link' if updated else 'Your joining link'}: {webinar_title}"
+    return await _send(email, subject, _wrap_html("Webinar joining link", body))
+
+
+async def send_webinar_reminder(name: str, email: str, webinar_title: str, date: str, time: str, join_url: str) -> bool:
+    """24-hour reminder with the join link."""
+    body = (
+        _h2("Starting soon")
+        + _p(f"Hi {_e(name) or 'there'},")
+        + _p("This is a reminder that your webinar starts within the next 24 hours:", "0 0 24px 0")
+        + _event_box(webinar_title, date, time)
+        + _join_button(join_url)
+        + _p("Tip: open the link a few minutes early to check your audio and video.", "0")
+        + _signoff()
+    )
+    return await _send(email, f"Reminder: {webinar_title} starts soon", _wrap_html("Webinar reminder", body))
 
 
 # ─── NEWSLETTER ───────────────────────────────────────────────────
