@@ -46,9 +46,8 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 },
   },
-  verification: {
-    google: "8qSi6rQ_CKWZRfvonMwGlEV0ZdTwDupn4FTocPbFufw",
-  },
+  // Google Search Console is verified by public/google4c249a539a678fdd.html.
+  // Keep that file: Google re-checks it periodically.
   category: "technology",
 };
 
