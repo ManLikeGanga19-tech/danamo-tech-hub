@@ -1,9 +1,12 @@
+import { pageMetadata } from "@/lib/seo";
 import LegalLayout from "@/components/Legal/LegalLayout";
 
-export const metadata = {
-  title: "Cookies Policy | Danamo Tech",
-  description: "How Danamo Tech uses cookies and similar technologies, and how you can control them under the Kenya Data Protection Act, 2019.",
-};
+export const metadata = pageMetadata({
+  title: "Cookies Policy",
+  description:
+    "Which cookies the Danamo Tech website uses, why, and how you can accept, reject or change your cookie preferences at any time.",
+  path: "/cookies",
+});
 
 export default function CookiesPage() {
   return (

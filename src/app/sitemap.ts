@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import { getPublishedPosts } from "@/lib/blog";
 import { getOpenJobs } from "@/lib/jobs";
+import { getProjects } from "@/lib/projects";
 
 // Rebuilt at most hourly so new articles are picked up without a redeploy.
 export const revalidate = 3600;
@@ -24,24 +25,30 @@ const pages: { path: string; changeFrequency: "daily" | "weekly" | "monthly" | "
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const lastModified = new Date();
+    // No lastModified on static pages: a date that changes on every rebuild
+    // teaches search engines to ignore the field.
     const staticPages = pages.map(({ path, changeFrequency, priority }) => ({
         url: `${SITE_URL}${path === "/" ? "" : path}`,
-        lastModified,
         changeFrequency,
         priority,
     }));
+    const projects = (await getProjects()).map((project) => ({
+        url: `${SITE_URL}/projects/${project.slug}`,
+        ...(project.created_at ? { lastModified: new Date(project.created_at) } : {}),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+    }));
     const posts = (await getPublishedPosts()).map((post) => ({
         url: `${SITE_URL}/blog/${post.slug}`,
-        lastModified: post.published_at ? new Date(post.published_at) : lastModified,
+        ...(post.published_at ? { lastModified: new Date(post.published_at) } : {}),
         changeFrequency: "monthly" as const,
         priority: 0.6,
     }));
     const roles = (await getOpenJobs()).map((job) => ({
         url: `${SITE_URL}/careers/${job.slug}`,
-        lastModified: job.posted_at ? new Date(job.posted_at) : lastModified,
+        ...(job.posted_at ? { lastModified: new Date(job.posted_at) } : {}),
         changeFrequency: "weekly" as const,
         priority: 0.6,
     }));
-    return [...staticPages, ...roles, ...posts];
+    return [...staticPages, ...projects, ...roles, ...posts];
 }

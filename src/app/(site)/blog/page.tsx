@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import BlogIndex from "./BlogIndex";
 import { getPublishedPosts } from "@/lib/blog";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "Practical articles from Danamo Tech on software, products and running technology for growing businesses.",
-  alternates: { canonical: "/blog" },
-};
+export const metadata = pageMetadata({
+  title: "Blog: Software & Tech Insights for Businesses",
+  description:
+    "Practical articles from Danamo Tech in Mombasa on custom software, websites, M-Pesa integration, SaaS and running technology for growing Kenyan businesses.",
+  path: "/blog",
+});
 
 // Re-fetched at most once a minute, so new posts appear without a redeploy.
 export const revalidate = 60;

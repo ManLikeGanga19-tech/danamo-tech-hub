@@ -1,5 +1,4 @@
-"use client"
-
+import { pageMetadata } from "@/lib/seo";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Hero from "@/components/hero/Hero";
 import Services from "@/components/ServiceSection/Services";
@@ -10,6 +9,14 @@ import Footer from "@/components/Footer/Footer";
 import PartnersSlider from "@/components/Partners/PartnersSlider";
 // announcement bar temporary
 // import AnnouncementBar from "@/components/AnnouncementBar";
+
+export const metadata = pageMetadata({
+  title: "Software Development Company in Mombasa | Danamo Tech",
+  absoluteTitle: true,
+  description:
+    "Danamo Tech builds custom websites, web and mobile apps, SaaS products and M-Pesa integrated business systems for companies and schools in Mombasa and across Kenya.",
+  path: "/",
+});
 
 export default function Home() {
   return (

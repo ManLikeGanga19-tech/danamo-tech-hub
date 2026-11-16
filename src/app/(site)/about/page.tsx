@@ -1,37 +1,13 @@
-import { Metadata } from "next";
 import AboutClient from "./AboutClient";
-import { SITE_URL, SOCIAL_LINKS } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us | Danamo Tech",
-  description: "Learn about Danamo Tech, a premier technology consultancy in Mombasa empowering startups and SMEs with enterprise-grade digital solutions.",
-  openGraph: {
-    title: "About Danamo Tech",
-    description: "Empowering startups and SMEs with enterprise-grade digital solutions.",
-    url: `${SITE_URL}/about`,
-    images: [{ url: `${SITE_URL}/about-bg.jpg` }],
-  },
-};
+export const metadata = pageMetadata({
+  title: "About Us: Software Developers in Mombasa",
+  description:
+    "Danamo Tech is a Mombasa software company building websites, apps and business systems for startups, SMEs and schools in Kenya. Learn who we are and how we work.",
+  path: "/about",
+});
 
 export default function AboutPage() {
-  return (
-    <>
-      {/* Structured Data for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'Danamo Tech',
-            url: SITE_URL,
-            logo: `${SITE_URL}/logo.png`,
-            sameAs: Object.values(SOCIAL_LINKS).filter(Boolean),
-            description: 'Danamo Tech empowers startups and SMEs in Mombasa with affordable and innovative digital solutions.',
-          }),
-        }}
-      />
-      <AboutClient />
-    </>
-  );
+  return <AboutClient />;
 }

@@ -6,6 +6,7 @@ import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { getOpenJob, paragraphs } from "@/lib/jobs";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 import ApplyForm from "./ApplyForm";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -17,19 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const job = await getOpenJob(slug);
   if (!job) return { title: "Role not found", robots: { index: false } };
 
-  const title = `${job.title} (${job.employment_type}, ${job.location})`;
-  return {
-    title,
-    description: job.summary,
-    alternates: { canonical: `/careers/${job.slug}` },
-    openGraph: {
-      type: "website",
-      url: `${SITE_URL}/careers/${job.slug}`,
-      title: `${title} | ${SITE_NAME}`,
-      description: job.summary,
-      siteName: SITE_NAME,
-    },
-  };
+  return pageMetadata({
+    title: `${job.title} Job (${job.employment_type}, ${job.location})`,
+    description: `${job.summary} ${job.employment_type}, ${job.workplace.toLowerCase()} role in ${job.location}. Apply online.`.slice(0, 160),
+    path: `/careers/${job.slug}`,
+  });
 }
 
 const EMPLOYMENT_TYPE: Record<string, string> = {

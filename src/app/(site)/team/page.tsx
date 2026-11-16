@@ -1,5 +1,4 @@
-"use client"
-
+import { pageMetadata } from "@/lib/seo";
 import { TeamCard } from "@/components/TeamCard/TeamCard";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
@@ -18,6 +17,13 @@ const teamMembers = [
   },
 ]
 
+export const metadata = pageMetadata({
+  title: "Our Team: Daniel Oganga, Founder & CEO",
+  description:
+    "Meet Daniel Oganga, founder and CEO of Danamo Tech, the Mombasa software company behind ShuleHQ, WIFI.OS and VendaPOS.",
+  path: "/team",
+});
+
 export default function OurTeamPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -28,9 +34,9 @@ export default function OurTeamPage() {
         <section className="py-24 px-4 md:px-8 max-w-[85rem] mx-auto w-full">
           
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">
               Meet <span className="text-blue-600 dark:text-blue-400">The Founder</span>
-            </h2>
+            </h1>
             <p className="text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
               The person behind Danamo Tech and the products and platforms we build.
             </p>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { Navbar1 } from "@/components/Navbar/Navbar";
@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { CONTACT_EMAIL } from "@/lib/site";
 import { getOpenJobs } from "@/lib/jobs";
 
-export const metadata: Metadata = {
-  title: "Careers",
+export const metadata = pageMetadata({
+  title: "Careers: Tech Jobs in Mombasa & Remote",
   description:
-    "Join Danamo Tech in Mombasa, Kenya. See open software engineering and design roles, read the full job descriptions and apply online.",
-  alternates: { canonical: "/careers" },
-};
+    "Join Danamo Tech in Mombasa, Kenya. See open software engineering and design roles, read the full job descriptions and apply online with your CV.",
+  path: "/careers",
+});
 
 export const revalidate = 60;
 

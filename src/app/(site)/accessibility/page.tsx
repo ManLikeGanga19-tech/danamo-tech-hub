@@ -1,9 +1,12 @@
+import { pageMetadata } from "@/lib/seo";
 import LegalLayout from "@/components/Legal/LegalLayout";
 
-export const metadata = {
-  title: "Accessibility Statement | Danamo Tech",
-  description: "Danamo Tech's commitment to digital accessibility under the Constitution of Kenya, the Persons with Disabilities Act, 2003, and WCAG 2.1 Level AA.",
-};
+export const metadata = pageMetadata({
+  title: "Accessibility Statement",
+  description:
+    "Danamo Tech's commitment to an accessible website under the Constitution of Kenya, the Persons with Disabilities Act and WCAG 2.1 Level AA.",
+  path: "/accessibility",
+});
 
 export default function AccessibilityPage() {
   return (

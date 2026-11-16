@@ -42,8 +42,9 @@ const Hero = () => {
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-700 dark:text-gray-200 mb-10 max-w-2xl leading-relaxed mx-auto lg:mx-0">
-                        We build scalable web apps, design modern interfaces, and deliver
-                        top-notch DevOps solutions for startups and enterprises.
+                        A software development company in Mombasa, Kenya. We build custom
+                        websites, web and mobile apps and M-Pesa integrated business systems
+                        for startups, SMEs and schools.
                     </p>
 
                     {/* Action Buttons */}

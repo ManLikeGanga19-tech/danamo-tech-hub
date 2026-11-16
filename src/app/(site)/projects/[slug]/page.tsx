@@ -1,84 +1,66 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ExternalLink,
-  Loader2,
-  Tag,
-  User,
-  Building2,
-  FolderKanban,
-} from "lucide-react";
-import { apiFetch } from "@/lib/api/client";
+import { ArrowLeft, ArrowRight, ExternalLink, Tag, User, Building2 } from "lucide-react";
+import { getProject } from "@/lib/projects";
+import { jsonLd, pageMetadata } from "@/lib/seo";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-interface Project {
-  id: string;
-  title: string;
-  slug: string;
-  category: string;
-  description: string;
-  content: string;
-  client_name: string | null;
-  client_industry: string | null;
-  image_url: string;
-  live_url: string | null;
-  featured: boolean;
-  created_at: string | null;
+export const revalidate = 60;
+
+type Props = { params: Promise<{ slug: string }> };
+
+function absolute(url: string): string {
+  return url.startsWith("http") ? url : `${SITE_URL}${url}`;
 }
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const slug = params?.slug as string;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const project = await getProject(slug);
+  if (!project) return { title: "Project not found", robots: { index: false } };
+  return pageMetadata({
+    title: `${project.title} Case Study`,
+    description: project.description.slice(0, 160),
+    path: `/projects/${project.slug}`,
+    image: absolute(project.image_url),
+    imageAlt: project.title,
+    type: "article",
+  });
+}
 
-  const [project, setProject] = useState<Project | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+export default async function ProjectDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const project = await getProject(slug);
+  if (!project) notFound();
 
-  useEffect(() => {
-    if (!slug) return;
-    apiFetch<Project>(`/projects/${slug}`)
-      .then(setProject)
-      .catch(() => setNotFound(true))
-      .finally(() => setLoading(false));
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0e0e15]">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
-      </div>
-    );
-  }
-
-  if (notFound || !project) {
-    return (
-      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-[#0e0e15]">
-        <Navbar1 />
-        <main className="flex-grow flex items-center justify-center px-4">
-          <div className="text-center max-w-md">
-            <FolderKanban className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-              Project not found
-            </h1>
-            <p className="text-gray-600 dark:text-gray-300 mb-8">
-              This case study may have been removed or is not published yet.
-            </p>
-            <Button asChild className="bg-blue-600 text-white rounded-xl">
-              <Link href="/projects">Back to all projects</Link>
-            </Button>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  const url = `${SITE_URL}/projects/${project.slug}`;
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: project.title,
+      headline: project.title,
+      description: project.description,
+      url,
+      image: absolute(project.image_url),
+      genre: project.category,
+      creator: { "@id": `${SITE_URL}/#organization`, "@type": "Organization", name: SITE_NAME },
+      ...(project.created_at ? { dateCreated: project.created_at } : {}),
+      ...(project.technologies?.length ? { keywords: project.technologies.join(", ") } : {}),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Our Work", item: `${SITE_URL}/projects` },
+        { "@type": "ListItem", position: 3, name: project.title, item: url },
+      ],
+    },
+  ];
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F]">
@@ -90,7 +72,7 @@ export default function ProjectDetailPage() {
           <div className="absolute inset-0 z-0 bg-gray-900">
             <img
               src={project.image_url}
-              alt={project.title}
+              alt=""
               className="w-full h-full object-cover"
             />
             <div className="hero-shade absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
@@ -224,6 +206,7 @@ export default function ProjectDetailPage() {
       </main>
 
       <Footer />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }} />
     </div>
   );
 }

@@ -1,9 +1,12 @@
+import { pageMetadata } from "@/lib/seo";
 import LegalLayout from "@/components/Legal/LegalLayout";
 
-export const metadata = {
-  title: "Terms & Conditions | Danamo Tech",
-  description: "The terms governing your use of the Danamo Tech website and services under Kenyan law.",
-};
+export const metadata = pageMetadata({
+  title: "Terms & Conditions",
+  description:
+    "The terms that govern your use of the Danamo Tech website and our software development services, under the laws of Kenya.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

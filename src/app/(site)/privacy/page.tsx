@@ -1,9 +1,12 @@
+import { pageMetadata } from "@/lib/seo";
 import LegalLayout from "@/components/Legal/LegalLayout";
 
-export const metadata = {
-  title: "Privacy Policy | Danamo Tech",
-  description: "How Danamo Tech collects, uses, and protects your personal data under the Kenya Data Protection Act, 2019.",
-};
+export const metadata = pageMetadata({
+  title: "Privacy Policy",
+  description:
+    "How Danamo Tech Ltd collects, uses and protects your personal data under the Kenya Data Protection Act, 2019, and how to exercise your rights.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (
