@@ -1,5 +1,9 @@
 import { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
+import { getPublishedPosts } from "@/lib/blog";
+
+// Rebuilt at most hourly so new articles are picked up without a redeploy.
+export const revalidate = 3600;
 
 const pages: { path: string; changeFrequency: "daily" | "weekly" | "monthly" | "yearly"; priority: number }[] = [
     { path: "/", changeFrequency: "weekly", priority: 1.0 },
@@ -18,12 +22,19 @@ const pages: { path: string; changeFrequency: "daily" | "weekly" | "monthly" | "
     { path: "/accessibility", changeFrequency: "yearly", priority: 0.3 },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const lastModified = new Date();
-    return pages.map(({ path, changeFrequency, priority }) => ({
+    const staticPages = pages.map(({ path, changeFrequency, priority }) => ({
         url: `${SITE_URL}${path === "/" ? "" : path}`,
         lastModified,
         changeFrequency,
         priority,
     }));
+    const posts = (await getPublishedPosts()).map((post) => ({
+        url: `${SITE_URL}/blog/${post.slug}`,
+        lastModified: post.published_at ? new Date(post.published_at) : lastModified,
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+    }));
+    return [...staticPages, ...posts];
 }

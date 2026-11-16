@@ -2,9 +2,9 @@
 
 import { ReactNode, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useTheme } from "@/hooks/useTheme";
 import {
   Briefcase,
+  FileText,
   FolderKanban,
   Handshake,
   LayoutDashboard,
@@ -12,13 +12,10 @@ import {
   LogOut,
   Mail,
   MessageSquare,
-  Moon,
-  Sun,
   Users,
 } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin/AdminAuthContext";
 import { adminPath, toAppPath } from "@/lib/admin/paths";
-import { useMounted } from "@/hooks/useMounted";
 
 const sidebarLinks = [
   { name: "Dashboard", path: "/", icon: LayoutDashboard },
@@ -26,27 +23,10 @@ const sidebarLinks = [
   { name: "Career Applications", path: "/careers", icon: Briefcase },
   { name: "Webinars", path: "/webinars", icon: Users },
   { name: "Projects", path: "/projects", icon: FolderKanban },
+  { name: "Blog", path: "/blog", icon: FileText },
   { name: "Partners", path: "/partners", icon: Handshake },
   { name: "Newsletter", path: "/newsletter", icon: Mail },
 ];
-
-function ThemeSwitch() {
-  const { theme, toggleTheme } = useTheme();
-  const mounted = useMounted();
-  if (!mounted) return <div className="h-9 w-9" />;
-
-  const isDark = theme === "dark";
-  return (
-    <button
-      type="button"
-      onClick={toggleTheme}
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="h-9 w-9 inline-flex items-center justify-center rounded-lg text-gray-500 hover:text-blue-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-gray-800 transition-colors"
-    >
-      {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-    </button>
-  );
-}
 
 export default function AdminShell({ children }: { children: ReactNode }) {
   const { user, loading, logout } = useAdminAuth();
@@ -78,7 +58,6 @@ export default function AdminShell({ children }: { children: ReactNode }) {
           <span className="text-xl font-bold text-gray-900 dark:text-white">
             Danamo <span className="text-blue-600 dark:text-blue-400">Admin</span>
           </span>
-          <ThemeSwitch />
         </div>
 
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">

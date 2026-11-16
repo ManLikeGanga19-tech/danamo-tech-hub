@@ -7,11 +7,14 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
+from sqlalchemy.exc import InterfaceError, OperationalError
 
 from app.api.routes import (
     admin_auth,
+    admin_blog,
     admin_data,
     auth,
+    blog,
     careers,
     forms,
     health,
@@ -32,7 +35,7 @@ MAX_REQUEST_BYTES = 6 * 1024 * 1024
 
 # Upload folders that are safe to serve publicly. CVs are deliberately NOT here:
 # they are personal data and only reachable through the admin download endpoint.
-PUBLIC_UPLOAD_DIRS = ("webinars", "projects", "partners")
+PUBLIC_UPLOAD_DIRS = ("webinars", "projects", "partners", "blog")
 
 app = FastAPI(
     title="Danamo Tech Hub API",
@@ -44,6 +47,28 @@ app = FastAPI(
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+db_log = logging.getLogger("app.db")
+
+
+async def database_unavailable(request: Request, exc: Exception) -> JSONResponse:
+    """The database is unreachable (down, restarting, refusing connections).
+
+    Answer 503 with one log line instead of a 500 and a full traceback per
+    request; clients and the health check can tell "try again" from a bug.
+    """
+    db_log.error("Database unavailable on %s %s: %s", request.method, request.url.path, exc.__class__.__name__)
+    return JSONResponse(
+        status_code=503,
+        content={"detail": "Service temporarily unavailable. Please try again shortly."},
+        headers={"Retry-After": "10"},
+    )
+
+
+# asyncpg raises ConnectionRefusedError (a ConnectionError) unwrapped when the
+# server is not listening; SQLAlchemy wraps other connection failures.
+for _exc in (ConnectionError, OperationalError, InterfaceError):
+    app.add_exception_handler(_exc, database_unavailable)
 
 
 @app.middleware("http")
@@ -89,7 +114,9 @@ for module in (
     webinars,
     admin_auth,
     admin_data,
+    admin_blog,
     projects,
     partners,
+    blog,
 ):
     app.include_router(module.router, prefix="/api/v1")
