@@ -8,79 +8,13 @@ import {
     CardTitle,
     CardDescription,
 } from "@/components/ui/card"
-import {
-    Code2,
-    Megaphone,
-    ShoppingCart,
-    Headphones,
-    Package,
-    ServerCog,
-    Brush,
-    Zap,
-    ArrowRight
-} from "lucide-react"
-
-interface Service {
-    title: string
-    value: string // matches the inquiry form option on /services
-    description: string
-    icon: React.ReactNode
-}
-
-const services: Service[] = [
-    {
-        title: "Custom Web Development",
-        value: "Web Development",
-        description: "Tailored websites and web apps to meet your unique business needs.",
-        icon: <Code2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-    {
-        title: "Search Engine Optimisation",
-        value: "SEO",
-        description: "Improve your online visibility and drive organic traffic with SEO best practices.",
-        icon: <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-    {
-        title: "Branding & UI/UX Design",
-        value: "Branding",
-        description: "Designing digital experiences that resonate with your brand and audience.",
-        icon: <Brush className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-    {
-        title: "Social Media & Digital Marketing",
-        value: "Marketing",
-        description: "Strategic content and marketing to grow your online presence and engagement.",
-        icon: <Megaphone className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-    {
-        title: "E-Commerce Solutions",
-        value: "E-Commerce",
-        description: "Robust online stores with secure checkout and smooth user experience.",
-        icon: <ShoppingCart className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-    {
-        title: "IT Consulting & Support",
-        value: "Consulting",
-        description: "Expert advice and hands-on support to keep your IT systems running smoothly.",
-        icon: <Headphones className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-    {
-        title: "SaaS Product Development",
-        value: "SaaS",
-        description: "Build scalable SaaS platforms from MVP to full product lifecycle.",
-        icon: <Package className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-    {
-        title: "Cloud & DevOps",
-        value: "Cloud",
-        description: "CI/CD implementation, serverless architecture, and cloud hosting solutions.",
-        icon: <ServerCog className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    },
-]
+import { ArrowRight } from "lucide-react"
+import { services, type Service } from "@/lib/services"
+import { ServiceIcon } from "@/components/services/ServiceIcon"
 
 const ServiceCard = memo(({ service, index }: { service: Service; index: number }) => (
     <Link
-        href={`/services?service=${encodeURIComponent(service.value)}`}
+        href={`/services/${service.slug}`}
         className="group block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         aria-labelledby={`service-${index}`}
     >
@@ -90,14 +24,14 @@ const ServiceCard = memo(({ service, index }: { service: Service; index: number 
                     className="flex items-center justify-center w-14 h-14 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 group-hover:scale-105 transition-transform duration-300"
                     aria-hidden="true"
                 >
-                    {service.icon}
+                    <ServiceIcon icon={service.icon} />
                 </div>
                 <div className="flex-grow">
                     <CardTitle id={`service-${index}`} className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {service.title}
+                        {service.name}
                     </CardTitle>
                     <CardDescription className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {service.description}
+                        {service.summary}
                     </CardDescription>
                 </div>
                 <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
@@ -132,9 +66,9 @@ export default function Services() {
                 </div>
 
                 {/* Static Responsive Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {services.map((service, index) => (
-                        <ServiceCard key={index} service={service} index={index} />
+                        <ServiceCard key={service.slug} service={service} index={index} />
                     ))}
                 </div>
                 

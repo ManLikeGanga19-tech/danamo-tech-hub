@@ -170,7 +170,12 @@ def _admin_link(path: str, label: str = "admin dashboard") -> str:
 
 
 def _humanize(slug: str) -> str:
-    return " ".join(part.capitalize() for part in str(slug).replace("_", "-").split("-") if part)
+    """Turn a slug ("web-development") into a label; keep names that are already
+    readable ("M-Pesa Integration", "E-Commerce", "Backend Engineer") as they are."""
+    text = str(slug).strip()
+    if text != text.lower() or " " in text:
+        return text
+    return " ".join(part.capitalize() for part in text.replace("_", "-").split("-") if part)
 
 
 # ─── CONTACT FORM ─────────────────────────────────────────────────

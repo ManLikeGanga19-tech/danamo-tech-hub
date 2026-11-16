@@ -3,6 +3,7 @@ import { SITE_URL } from "@/lib/site";
 import { getPublishedPosts } from "@/lib/blog";
 import { getOpenJobs } from "@/lib/jobs";
 import { getProjects } from "@/lib/projects";
+import { services } from "@/lib/services";
 
 // Rebuilt at most hourly so new articles are picked up without a redeploy.
 export const revalidate = 3600;
@@ -32,6 +33,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency,
         priority,
     }));
+    const servicePages = services.map((service) => ({
+        url: `${SITE_URL}/services/${service.slug}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+    }));
     const projects = (await getProjects()).map((project) => ({
         url: `${SITE_URL}/projects/${project.slug}`,
         ...(project.created_at ? { lastModified: new Date(project.created_at) } : {}),
@@ -50,5 +56,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly" as const,
         priority: 0.6,
     }));
-    return [...staticPages, ...projects, ...roles, ...posts];
+    return [...staticPages, ...servicePages, ...projects, ...roles, ...posts];
 }

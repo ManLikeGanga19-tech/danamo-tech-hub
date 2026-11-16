@@ -1,6 +1,7 @@
 import { getProjects } from "@/lib/projects";
 import { getOpenJobs } from "@/lib/jobs";
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
+import { services } from "@/lib/services";
 
 // Plain-text company summary for AI assistants and LLM crawlers (llmstxt.org).
 // Facts only: everything here must be true and match the website.
@@ -12,6 +13,7 @@ export async function GET() {
   const caseStudies = projects.length
     ? projects.map((p) => `- [${p.title}](${SITE_URL}/projects/${p.slug}): ${p.description}`).join("\n")
     : "- See " + SITE_URL + "/projects";
+  const serviceList = services.map((s) => `- [${s.name}](${SITE_URL}/services/${s.slug}): ${s.summary}`).join("\n");
   const roles = jobs.length
     ? jobs.map((j) => `- [${j.title}](${SITE_URL}/careers/${j.slug}): ${j.employment_type}, ${j.location}`).join("\n")
     : "- No open roles at the moment. See " + SITE_URL + "/careers";
@@ -30,14 +32,7 @@ export async function GET() {
 
 ## Services
 
-- Custom web development: business websites, web applications, portals and admin dashboards
-- M-Pesa integration: STK Push, Paybill and Till payments with automatic confirmation
-- SaaS product development: from MVP to production, multi-tenant platforms with subscriptions
-- E-commerce development: online shops with M-Pesa and card checkout
-- Branding and UI/UX design
-- Search engine optimisation (SEO)
-- Cloud hosting and DevOps: Docker, CI/CD, backups, monitoring
-- IT consulting and support
+${serviceList}
 
 ## Own products
 

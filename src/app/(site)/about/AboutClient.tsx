@@ -3,6 +3,7 @@
 import React, { useState, useCallback, lazy, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import Link from 'next/link';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -185,9 +186,7 @@ export default function AboutClient() {
               size="lg"
               className="bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
             >
-              <a href="/services" aria-label="Explore our services">
-                Explore Our Services
-              </a>
+              <Link href="/services">Explore Our Services</Link>
             </Button>
           </div>
         </section>

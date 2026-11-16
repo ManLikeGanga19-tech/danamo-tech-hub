@@ -1,12 +1,12 @@
 "use client";
 
 import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
+import Link from "next/link";
+import { services } from "@/lib/services";
+import { ServiceIcon } from "@/components/services/ServiceIcon";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
-import {
-  Code2, Megaphone, ShoppingCart, Headphones, Package,
-  ServerCog, Brush, Zap, Send, CheckCircle2, ArrowRight
-} from "lucide-react";
+import { Send, CheckCircle2, ArrowRight } from "lucide-react";
 import {
   Card, CardHeader, CardDescription,
   CardContent, CardFooter
@@ -52,56 +52,6 @@ const structuredData = {
   ]
 };
 
-const services = [
-  {
-    title: "Custom Web Development",
-    desc: "Tailored websites and web apps to meet your unique business needs.",
-    value: "Web Development",
-    icon: <Code2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-  {
-    title: "Search Engine Optimisation",
-    desc: "Improve your online visibility and drive organic traffic with SEO best practices.",
-    value: "SEO",
-    icon: <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-  {
-    title: "Branding & UI/UX Design",
-    desc: "Designing digital experiences that resonate with your brand and audience.",
-    value: "Branding",
-    icon: <Brush className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-  {
-    title: "Social Media & Digital Marketing",
-    desc: "Strategic content and marketing to grow your online presence and engagement.",
-    value: "Marketing",
-    icon: <Megaphone className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-  {
-    title: "E-Commerce Solutions",
-    desc: "Robust online stores with secure checkout and smooth user experience.",
-    value: "E-Commerce",
-    icon: <ShoppingCart className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-  {
-    title: "IT Consulting & Support",
-    desc: "Expert advice and hands-on support to keep your IT systems running smoothly.",
-    value: "Consulting",
-    icon: <Headphones className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-  {
-    title: "SaaS Product Development",
-    desc: "Build scalable SaaS platforms from MVP to full product lifecycle.",
-    value: "SaaS",
-    icon: <Package className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-  {
-    title: "Cloud & DevOps",
-    desc: "CI/CD implementation, serverless architecture, and cloud hosting solutions.",
-    value: "Cloud",
-    icon: <ServerCog className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-  },
-];
 
 export default function ServicesPage() {
   const formSectionRef = useRef<HTMLDivElement | null>(null);
@@ -129,10 +79,6 @@ export default function ServicesPage() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  const handleCardClick = (value: string) => {
-    setSelectedService(value);
-    formSectionRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -234,33 +180,31 @@ export default function ServicesPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {services.map((service, idx) => (
-              <article
-                key={idx}
-                className="group relative bg-white dark:bg-[#1E1E2F] rounded-2xl p-8 flex flex-col items-start gap-4 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-700 focus-within:ring-2 focus-within:ring-blue-500"
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service) => (
+              <Link
+                key={service.slug}
+                href={`/services/${service.slug}`}
+                className="group relative bg-white dark:bg-[#1E1E2F] rounded-2xl p-8 flex flex-col items-start gap-4 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 group-hover:scale-110 transition-transform duration-300">
-                  {service.icon}
+                  <ServiceIcon icon={service.icon} />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {/* Stretched button: the whole card starts an inquiry for this service */}
-                    <button type="button" onClick={() => handleCardClick(service.value)} className="text-left after:absolute after:inset-0 after:content-[''] focus:outline-none">
-                      {service.title}
-                    </button>
+                    {service.name}
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                    {service.desc}
+                    {service.summary}
                   </p>
                 </div>
                 <span className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
-                  Start an inquiry
+                  Learn more
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </span>
                 {/* Bottom accent line */}
                 <div className="absolute bottom-0 left-0 h-1 w-0 bg-blue-600 dark:bg-blue-400 transition-all duration-500 group-hover:w-full rounded-b-2xl" />
-              </article>
+              </Link>
             ))}
           </div>
         </section>
@@ -363,8 +307,8 @@ export default function ServicesPage() {
                             <SelectValue placeholder="Select a service" />
                           </SelectTrigger>
                           <SelectContent className="bg-white dark:bg-[#1E1E2F] rounded-xl border-gray-200 dark:border-gray-700">
-                            {services.map((service, idx) => (
-                              <SelectItem key={idx} value={service.value}>{service.title}</SelectItem>
+                            {services.map((service) => (
+                              <SelectItem key={service.slug} value={service.value}>{service.name}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
