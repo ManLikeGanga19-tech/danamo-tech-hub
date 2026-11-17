@@ -242,7 +242,7 @@ export default function HelpCenterPage() {
           <Button
             asChild
             size="lg"
-            className="bg-green-500 hover:bg-green-600 text-white transition-all duration-300 shadow-lg shadow-green-500/20 text-base px-8 py-6 rounded-xl group"
+            className="h-auto max-w-full whitespace-normal text-center bg-green-500 hover:bg-green-600 text-white transition-all duration-300 shadow-lg shadow-green-500/20 text-base px-6 sm:px-8 py-4 sm:py-6 rounded-xl group"
           >
             <a
               href="https://wa.me/+254785640048"
@@ -255,7 +255,7 @@ export default function HelpCenterPage() {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 viewBox="0 0 24 24"
-                className="w-6 h-6 group-hover:scale-110 transition-transform"
+                className="w-6 h-6 shrink-0 group-hover:scale-110 transition-transform"
               >
                 <path d="M12.04 2.004a9.998 9.998 0 00-8.49 14.987L2 22l5.126-1.494a9.998 9.998 0 004.914 1.276h.005a9.998 9.998 0 000-19.997zm0 2a8 8 0 018 8 7.97 7.97 0 01-1.365 4.495l.923 2.701-2.76-.894A8 8 0 014 12a8 8 0 018-8zm3.89 11.544c-.22-.11-1.29-.635-1.49-.71-.2-.08-.35-.11-.5.11-.15.22-.57.71-.7.86-.13.15-.26.17-.48.06a6.46 6.46 0 01-1.9-1.17 7.03 7.03 0 01-1.3-1.61c-.14-.24-.02-.37.1-.49.11-.11.24-.28.37-.42.12-.14.16-.24.25-.4.08-.16.04-.3-.01-.42-.05-.11-.5-1.2-.68-1.65-.18-.43-.37-.37-.5-.38h-.43c-.15 0-.4.06-.61.28-.21.23-.8.78-.8 1.89 0 1.11.82 2.19.93 2.34.11.15 1.61 2.45 3.91 3.34.55.24.98.38 1.31.48.55.18 1.05.15 1.44.09.44-.07 1.29-.52 1.47-1.03.18-.52.18-.96.13-1.05-.06-.09-.2-.15-.42-.26z" />
               </svg>

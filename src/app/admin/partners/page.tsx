@@ -203,7 +203,8 @@ export default function AdminPartners() {
         </div>
       ) : (
         <div className="bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-          <table className="w-full text-left">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-left">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
                 <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 w-20">Order</th>
@@ -274,6 +275,7 @@ export default function AdminPartners() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
 

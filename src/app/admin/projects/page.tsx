@@ -278,7 +278,7 @@ export default function AdminProjects() {
                     </DialogHeader>
 
                     <form onSubmit={handleSubmit} className="space-y-4 mt-2">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <Label>Title *</Label>
                                 <Input required value={formData.title} onChange={(e) => handleTitleChange(e.target.value)} className="rounded-xl" />
@@ -304,7 +304,7 @@ export default function AdminProjects() {
                             <textarea required rows={6} value={formData.content} onChange={(e) => setFormData({ ...formData, content: e.target.value })} className="w-full mt-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm resize-none font-mono text-xs" placeholder="<p>Your case study...</p>" />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <Label>Client Name</Label>
                                 <Input value={formData.client_name} onChange={(e) => setFormData({ ...formData, client_name: e.target.value })} className="rounded-xl" />
@@ -375,7 +375,7 @@ export default function AdminProjects() {
                             )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 border-t border-gray-100 dark:border-gray-800 pt-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-gray-100 dark:border-gray-800 pt-4">
                             <div>
                                 <Label>Status</Label>
                                 <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} className="w-full mt-1.5 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 text-sm">
@@ -383,7 +383,7 @@ export default function AdminProjects() {
                                     <option value="published">Published (visible to public)</option>
                                 </select>
                             </div>
-                            <div className="flex items-end pb-2">
+                            <div className="flex sm:items-end sm:pb-2">
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input type="checkbox" checked={formData.featured} onChange={(e) => setFormData({ ...formData, featured: e.target.checked })} className="w-4 h-4 rounded" />
                                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Featured (top of grid)</span>

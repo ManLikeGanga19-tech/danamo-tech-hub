@@ -178,7 +178,7 @@ export default function AdminBlog() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Blog</h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -187,7 +187,7 @@ export default function AdminBlog() {
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold"
+          className="self-start sm:self-auto shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold"
         >
           <Plus className="w-4 h-4" /> New article
         </button>
@@ -205,8 +205,8 @@ export default function AdminBlog() {
         ) : (
           <ul className="divide-y divide-gray-200 dark:divide-gray-800">
             {posts.map((p) => (
-              <li key={p.id} className="flex items-center gap-4 p-4">
-                <div className="w-24 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0 flex items-center justify-center">
+              <li key={p.id} className="flex items-center gap-3 sm:gap-4 p-4">
+                <div className="hidden sm:flex w-24 h-16 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0 items-center justify-center">
                   {p.cover_image_url ? (
                     <img src={p.cover_image_url} alt="" className="w-full h-full object-cover" />
                   ) : (

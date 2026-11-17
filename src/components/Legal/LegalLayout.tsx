@@ -44,8 +44,8 @@ export default function LegalLayout({ title, subtitle, lastUpdated, children }: 
           </div>
         </section>
 
-        <div className="max-w-[85rem] mx-auto px-4 md:px-8 py-16">
-          <div className="grid lg:grid-cols-[260px_1fr] gap-12">
+        <div className="max-w-[85rem] mx-auto px-4 md:px-8 py-10 md:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] gap-8 lg:gap-12">
             {/* Sidebar */}
             <aside className="lg:sticky lg:top-24 lg:self-start">
               <div className="bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm">
@@ -76,9 +76,10 @@ export default function LegalLayout({ title, subtitle, lastUpdated, children }: 
             </aside>
 
             {/* Content */}
-            <article className="prose prose-lg dark:prose-invert prose-blue max-w-none
+            <article className="min-w-0 prose md:prose-lg dark:prose-invert prose-blue max-w-none
+              [&_table]:block [&_table]:overflow-x-auto [&_table]:whitespace-normal
               prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
-              prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4
+              prose-h2:text-xl md:prose-h2:text-2xl prose-h2:mt-10 md:prose-h2:mt-12 prose-h2:mb-4
               prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
               prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
               prose-li:text-gray-700 dark:prose-li:text-gray-300

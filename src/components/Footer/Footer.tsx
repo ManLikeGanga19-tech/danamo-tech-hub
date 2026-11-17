@@ -14,10 +14,10 @@ export default function Footer() {
       <div className="layout w-full max-w-[85rem] mx-auto px-4 md:px-8">
 
         {/* Top Section: Logo, Description, Links */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10 lg:gap-8 mb-12 md:mb-16">
 
           {/* Brand & Social Column (Takes up 2 columns on large screens) */}
-          <div className="lg:col-span-2 flex flex-col items-start">
+          <div className="col-span-2 md:col-span-3 lg:col-span-2 flex flex-col items-start">
             <Link href="/" className="mb-6 inline-block">
               <Image
                 src="/nav-img.jpg"

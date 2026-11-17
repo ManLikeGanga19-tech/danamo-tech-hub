@@ -34,7 +34,7 @@ const Hero = () => {
             <div className="layout relative z-10 w-full max-w-[85rem] mx-auto px-4 md:px-8 py-24 flex flex-col items-center lg:items-start text-center lg:text-left">
                 
                 <div className="max-w-3xl">
-                    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-[1.1] tracking-tight text-gray-900 dark:text-white drop-shadow-sm">
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-[1.1] tracking-tight text-gray-900 dark:text-white drop-shadow-sm">
                         Empowering Digital Innovation with{" "}
                         <span className="text-blue-700 dark:text-blue-400">
                             Danamo Tech

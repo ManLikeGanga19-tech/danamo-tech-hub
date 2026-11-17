@@ -74,15 +74,15 @@ export default function AdminDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {kpis.map((kpi, i) => (
-          <div key={i} className="bg-white dark:bg-[#1E1E2F] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-all hover:shadow-md">
-            <div className="flex items-center justify-between">
-              <div>
+          <div key={i} className="bg-white dark:bg-[#1E1E2F] p-4 sm:p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm transition-all hover:shadow-md">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">{kpi.title}</p>
-                <h3 className="text-4xl font-extrabold text-gray-900 dark:text-white">{kpi.value}</h3>
+                <h3 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">{kpi.value}</h3>
               </div>
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${kpi.color}`}>
+              <div className={`hidden sm:flex w-14 h-14 shrink-0 rounded-2xl items-center justify-center ${kpi.color}`}>
                 <kpi.icon className="w-7 h-7" />
               </div>
             </div>
@@ -91,8 +91,8 @@ export default function AdminDashboard() {
       </div>
 
       {/* Chart Section */}
-      <div className="bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm p-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <div className="bg-white dark:bg-[#1E1E2F] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <div>
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">Platform Activity</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">Messages and applications over the last 7 days.</p>

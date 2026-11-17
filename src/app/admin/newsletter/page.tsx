@@ -100,7 +100,7 @@ export default function AdminNewsletter() {
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <Button asChild variant="outline" className="rounded-lg">
                         <button type="button" onClick={handleExport} disabled={subscribers.length === 0}>
                             <Download className="w-4 h-4 mr-2" /> Export CSV

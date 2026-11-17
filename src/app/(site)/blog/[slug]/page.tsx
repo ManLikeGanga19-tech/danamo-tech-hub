@@ -116,7 +116,7 @@ export default async function BlogPostPage({ params }: Props) {
         <section className="py-16 px-4">
           <article className="max-w-3xl mx-auto">
             <div
-              className="prose prose-lg dark:prose-invert prose-blue max-w-none
+              className="prose md:prose-lg dark:prose-invert prose-blue max-w-none
                          prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
                          prose-p:text-gray-800 dark:prose-p:text-gray-200 prose-p:leading-relaxed
                          prose-li:text-gray-800 dark:prose-li:text-gray-200
@@ -124,7 +124,7 @@ export default async function BlogPostPage({ params }: Props) {
                          prose-code:before:content-none prose-code:after:content-none prose-code:font-medium
                          prose-code:text-[0.9em] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md
                          prose-code:bg-gray-100 prose-code:text-gray-900 dark:prose-code:bg-gray-800 dark:prose-code:text-gray-100
-                         prose-th:text-left prose-table:text-base"
+                         prose-th:text-left prose-table:text-sm md:prose-table:text-base"
             >
               <MarkdownContent>{post.content}</MarkdownContent>
             </div>

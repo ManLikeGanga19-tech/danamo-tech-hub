@@ -39,7 +39,7 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-gray-50 dark:from-[#1E1E2F] dark:to-[#0e0e15] px-4">
-      <div className="w-full max-w-md bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-8">
+      <div className="w-full max-w-md bg-white dark:bg-[#1E1E2F] rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-6 sm:p-8">
         <div className="flex justify-center mb-6">
           <Image
             src="/nav-img.jpg"
