@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CONTACT_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
+import { CONTACT_EMAIL, FOUNDER, SITE_NAME, SITE_URL } from "@/lib/site";
 
 /** Default share image (1200x630). Pages with their own image pass `image`. */
 export const OG_IMAGE = "/og-image.jpg";
@@ -80,7 +80,15 @@ export const organizationJsonLd = {
     { "@type": "Country", name: "Kenya" },
     { "@type": "Place", name: "East Africa" },
   ],
-  founder: { "@type": "Person", name: "Daniel Oganga", jobTitle: "CEO & Founder", sameAs: "https://github.com/ManLikeGanga19-tech" },
+  founder: {
+    "@type": "Person",
+    name: FOUNDER.name,
+    jobTitle: [FOUNDER.role, ...FOUNDER.titles],
+    description: FOUNDER.summary,
+    knowsAbout: [...FOUNDER.knowsAbout],
+    url: `${SITE_URL}/team`,
+    sameAs: FOUNDER.github,
+  },
   knowsAbout: [
     "Custom software development",
     "Web development",

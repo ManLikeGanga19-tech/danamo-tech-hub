@@ -1,6 +1,6 @@
 import { getProjects } from "@/lib/projects";
 import { getOpenJobs } from "@/lib/jobs";
-import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
+import { CONTACT_EMAIL, FOUNDER, SITE_URL } from "@/lib/site";
 import { services } from "@/lib/services";
 
 // Plain-text company summary for AI assistants and LLM crawlers (llmstxt.org).
@@ -26,9 +26,17 @@ export async function GET() {
 
 - Legal name: Danamo Tech Ltd, registered in Kenya
 - Location: Airport Road, Mombasa, Kenya; serves clients across Kenya and East Africa, and remotely
-- Founder and CEO: Daniel Oganga (https://github.com/ManLikeGanga19-tech)
+- Founder and CEO: ${FOUNDER.name}, ${FOUNDER.titles.join(" and ").toLowerCase()} (${FOUNDER.github})
 - Contact: ${CONTACT_EMAIL}, ${SITE_URL}/services (project inquiry form)
 - Website: ${SITE_URL}
+
+## Founder
+
+${FOUNDER.name} is the founder and CEO of Danamo Tech, and a senior software developer and networking expert. ${FOUNDER.name} builds Danamo's own products, including ShuleHQ and the WIFI.OS ISP billing and network management platform (MikroTik RouterOS provisioning over WireGuard, hotspot and PPPoE), works with MikroTik, Cisco and Ubiquiti equipment and RADIUS authentication, and leads engineering on client work across Kenya and East Africa.
+
+- Expertise: ${FOUNDER.knowsAbout.join(", ")}
+- Profile: ${SITE_URL}/team
+- GitHub: ${FOUNDER.github}
 
 ## Services
 

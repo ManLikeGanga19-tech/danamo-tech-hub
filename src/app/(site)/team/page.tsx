@@ -5,22 +5,23 @@ import Footer from "@/components/Footer/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { FOUNDER } from "@/lib/site";
 
 const teamMembers = [
   {
-    name: "Daniel Oganga",
-    role: "CEO & Founder",
-    bio: "Founded Danamo Tech in 2024 in Mombasa to give small businesses and startups access to affordable, enterprise-grade software. Leads product and engineering across Danamo's platforms and client work.",
+    name: FOUNDER.name,
+    role: `${FOUNDER.role} · ${FOUNDER.titles.join(" & ")}`,
+    bio: "Senior software developer and networking expert. Founded Danamo Tech in 2024 in Mombasa to give small businesses and startups access to affordable, enterprise-grade software. Leads product, engineering and network infrastructure across Danamo's platforms, from ShuleHQ to the WIFI.OS ISP billing and network management system.",
     socials: {
-      github: "https://github.com/ManLikeGanga19-tech",
+      github: FOUNDER.github,
     },
   },
 ]
 
 export const metadata = pageMetadata({
-  title: "Our Team: Daniel Oganga, Founder & CEO",
+  title: "Daniel Oganga, Founder & CEO, Senior Software Developer & Networking Expert",
   description:
-    "Meet Daniel Oganga, founder and CEO of Danamo Tech, the Mombasa software company behind ShuleHQ, WIFI.OS and VendaPOS.",
+    "Meet Daniel Oganga, founder and CEO of Danamo Tech: a senior software developer and networking expert behind ShuleHQ, WIFI.OS and VendaPOS, based in Mombasa, Kenya.",
   path: "/team",
 });
 

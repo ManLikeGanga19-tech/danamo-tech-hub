@@ -5,7 +5,7 @@ import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { absoluteUrl, coverSrc, formatDate, getPublishedPost } from "@/lib/blog";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { FOUNDER, SITE_NAME, SITE_URL } from "@/lib/site";
 import ShareButtons from "./ShareButtons";
 import MarkdownContent from "@/components/markdown/MarkdownContent";
 
@@ -55,7 +55,10 @@ export default async function BlogPostPage({ params }: Props) {
     image: [absoluteUrl(coverSrc(post))],
     datePublished: post.published_at,
     dateModified: post.updated_at,
-    author: { "@type": "Person", name: post.author_name },
+    author:
+      post.author_name === FOUNDER.name
+        ? { "@type": "Person", name: FOUNDER.name, jobTitle: [FOUNDER.role, ...FOUNDER.titles], url: `${SITE_URL}/team`, sameAs: FOUNDER.github }
+        : { "@type": "Person", name: post.author_name },
     publisher: { "@type": "Organization", name: SITE_NAME, logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` } },
     mainEntityOfPage: url,
   };
@@ -141,8 +144,8 @@ export default async function BlogPostPage({ params }: Props) {
               <div className="text-center sm:text-left">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{post.author_name}</h2>
                 <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {post.author_name === "Daniel Oganga"
-                    ? "Founder and CEO of Danamo Tech, building software products and platforms for businesses across Kenya and East Africa."
+                  {post.author_name === FOUNDER.name
+                    ? "Founder and CEO of Danamo Tech. Senior software developer and networking expert, building software products, platforms and network systems for businesses across Kenya and East Africa."
                     : `Writing for ${SITE_NAME}.`}
                 </p>
               </div>
