@@ -185,7 +185,7 @@ export const services: Service[] = [
       },
     ],
     proof: [
-      { key: "shulehq", note: "Parents pay school fees by M-Pesa STK Push, and invoices update automatically." },
+      { key: "shulehq", note: "Schools pay their subscription by M-Pesa STK Push, and fee payments recorded by M-Pesa code update balances and send the parent an SMS receipt." },
       { key: "wifios", note: "Internet customers pay by STK Push or Paybill, and their service is restored instantly." },
       { key: "tusome", note: "Families subscribe to CBC lessons with M-Pesa STK Push in seconds." },
     ],
