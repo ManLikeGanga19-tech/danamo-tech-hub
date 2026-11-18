@@ -13,3 +13,4 @@ resend==2.53.2
 slowapi==0.1.10
 limits==5.8.0
 redis==8.1.0
+nh3==0.3.8
