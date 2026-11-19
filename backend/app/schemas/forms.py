@@ -6,6 +6,8 @@ class ContactIn(BaseModel):
     email: EmailStr
     subject: str = Field(min_length=1, max_length=200)
     message: str = Field(min_length=1, max_length=5000)
+    # Honeypot: hidden from people, filled in by spam bots.
+    website: str | None = Field(default=None, max_length=200)
 
 class ServiceInquiryIn(BaseModel):
     name: str = Field(min_length=1, max_length=120)

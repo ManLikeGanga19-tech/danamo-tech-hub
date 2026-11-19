@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
 import { CONTACT_EMAIL } from "@/lib/site";
 
@@ -29,7 +28,7 @@ function Contact() {
   const [email, setEmail] = useState("");
   const [interest, setInterest] = useState("");
   const [message, setMessage] = useState("");
-  const { user, loading } = useAuth();
+  const [website, setWebsite] = useState(""); // honeypot, hidden from people
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -38,11 +37,6 @@ function Contact() {
     e.preventDefault();
     setError("");
     setSuccess("");
-
-    if (!user) {
-      setError("Please log in to submit the form.");
-      return;
-    }
 
     if (!name || !email || !interest || !message) {
       setError("All fields are required.");
@@ -58,6 +52,7 @@ function Contact() {
           email,
           subject: interest,
           message,
+          website,
         }),
       });
       setSuccess("Message sent successfully!");
@@ -154,11 +149,7 @@ function Contact() {
             <Card className="w-full max-w-xl rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/60 dark:bg-[#1E1E2F]/60 backdrop-blur-sm shadow-2xl shadow-blue-500/5">
               <CardHeader className="pb-6">
                 <CardDescription className="text-base text-gray-700 dark:text-gray-300">
-                  {loading
-                    ? "Checking login status..."
-                    : user
-                      ? "Fill out the form and we will get back to you shortly."
-                      : "Please log in to send a message."}
+                  Fill out the form and we will get back to you shortly.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -173,6 +164,19 @@ function Contact() {
                   </div>
                 )}
                 <form id="contact-form" onSubmit={handleSubmit} className="grid w-full gap-5">
+                  {/* Honeypot: off-screen and skipped by keyboard and screen readers; bots fill it in. */}
+                  <div aria-hidden="true" className="absolute -left-[10000px] top-auto w-px h-px overflow-hidden">
+                    <label htmlFor="contact-website">Website</label>
+                    <input
+                      id="contact-website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                    />
+                  </div>
                   <div className="flex flex-col space-y-2">
                     <Label htmlFor="name" className="text-gray-700 dark:text-gray-300 font-medium">Name</Label>
                     <Input
@@ -181,7 +185,7 @@ function Contact() {
                       className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 placeholder:text-gray-400"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      disabled={!user || loading || submitting}
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex flex-col space-y-2">
@@ -193,7 +197,7 @@ function Contact() {
                       className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 placeholder:text-gray-400"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      disabled={!user || loading || submitting}
+                      disabled={submitting}
                     />
                   </div>
                   <div className="flex flex-col space-y-2">
@@ -201,7 +205,7 @@ function Contact() {
                     <Select
                       value={interest}
                       onValueChange={setInterest}
-                      disabled={!user || loading || submitting}
+                      disabled={submitting}
                     >
                       <SelectTrigger id="interest" className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                         <SelectValue placeholder="Select a service" />
@@ -227,32 +231,23 @@ function Contact() {
                       className="rounded-xl bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 placeholder:text-gray-400 resize-none"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      disabled={!user || loading || submitting}
+                      disabled={submitting}
                     />
                   </div>
                 </form>
               </CardContent>
               <CardFooter className="flex justify-end pt-2 pb-6 px-6">
-                {user ? (
-                  <Button asChild>
-                    <button
-                      type="submit"
-                      form="contact-form"
-                      disabled={loading || submitting}
-                      className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl flex items-center justify-center"
-                    >
-                      <Send size={18} className={`mr-2 ${submitting ? "animate-pulse" : ""}`} />
-                      {submitting ? "Sending..." : "Send Message"}
-                    </button>
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
+                <Button asChild>
+                  <button
+                    type="submit"
+                    form="contact-form"
+                    disabled={submitting}
+                    className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl flex items-center justify-center"
                   >
-                    <a href="/login">Log in to Send</a>
-                  </Button>
-                )}
+                    <Send size={18} className={`mr-2 ${submitting ? "animate-pulse" : ""}`} />
+                    {submitting ? "Sending..." : "Send Message"}
+                  </button>
+                </Button>
               </CardFooter>
             </Card>
           </div>

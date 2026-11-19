@@ -1,3 +1,6 @@
+import logging
+from uuid import uuid4
+
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.session import get_db
@@ -9,15 +12,23 @@ from app.core.email import (
     send_service_inquiry_notification,
     send_service_inquiry_received,
 )
-from app.core.rate_limit import FORM_LIMIT, limiter
+from app.core.rate_limit import FORM_LIMIT, client_ip, limiter
 
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["forms"])
 
 
 @router.post("/contact", response_model=SubmissionOut, status_code=201)
 @limiter.limit(FORM_LIMIT)
 async def create_contact(request: Request, payload: ContactIn, db: AsyncSession = Depends(get_db)):
-    row = ContactMessage(**payload.model_dump())
+    # The form is public, so a bot could use it to send our confirmation email
+    # to any address. Bots fill the hidden honeypot field; answer them as if it
+    # worked, but store and send nothing.
+    if payload.website:
+        logger.info("[contact] Honeypot triggered from %s - dropped", client_ip(request))
+        return SubmissionOut(id=uuid4(), status="new")
+
+    row = ContactMessage(**payload.model_dump(exclude={"website"}))
     db.add(row)
     await db.commit()
     await db.refresh(row)
