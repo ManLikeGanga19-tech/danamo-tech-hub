@@ -15,6 +15,7 @@ class ServiceInquiryIn(BaseModel):
     company: str | None = Field(default=None, max_length=120)
     service_slug: str = Field(min_length=1, max_length=80)
     message: str = Field(min_length=1, max_length=5000)
+    website: str | None = Field(default=None, max_length=200)  # honeypot
 
 class SubmissionOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)

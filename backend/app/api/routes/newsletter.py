@@ -1,25 +1,35 @@
+import logging
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.email import _mask, send_newsletter_notification, send_newsletter_welcome
-from app.core.rate_limit import FORM_LIMIT, limiter
+from app.core.rate_limit import FORM_LIMIT, client_ip, limiter
 from app.db.session import get_db
 from app.models import NewsletterSubscriber
 
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["newsletter"])
 
 
 class NewsletterIn(BaseModel):
     email: EmailStr
+    # Honeypot: hidden from people, filled in by spam bots.
+    website: str | None = Field(default=None, max_length=200)
 
 
 @router.post("/newsletter", status_code=201)
 @limiter.limit(FORM_LIMIT)
 async def subscribe(request: Request, payload: NewsletterIn, db: AsyncSession = Depends(get_db)):
+    # The form is public, so a bot could use it to send our welcome email to
+    # any address. Answer bots as if it worked, but store and send nothing.
+    if payload.website:
+        logger.info("[newsletter] Honeypot triggered from %s - dropped", client_ip(request))
+        return {"status": "subscribed"}
+
     email = payload.email.lower()
     existing = await db.scalar(select(NewsletterSubscriber).where(NewsletterSubscriber.email == email))
 

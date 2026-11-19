@@ -5,12 +5,12 @@ import { CalendarDays, Hand, BellIcon } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useAuth } from "@/lib/auth/AuthContext"
 import { apiFetch } from "@/lib/api/client"
 
 export default function Newsletter() {
   const [email, setEmail] = useState("")
-  const { user, loading } = useAuth()
+  const [website, setWebsite] = useState("") // honeypot, hidden from people
+  const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
 
@@ -19,26 +19,24 @@ export default function Newsletter() {
     setError("")
     setSuccess("")
 
-    if (!user) {
-      setError("Please log in to subscribe.")
-      return
-    }
-
     if (!email) {
       setError("Email is required.")
       return
     }
 
+    setSubmitting(true)
     try {
       await apiFetch<{ status: string }>("/newsletter", {
         method: "POST",
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, website }),
       })
       setSuccess("Subscribed successfully!")
       setEmail("")
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Failed to subscribe."
       setError(errorMessage.replace(/^API \d+: /, ""))
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -81,6 +79,11 @@ export default function Newsletter() {
                 )}
                 
                 <form id="newsletter-form" onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-start gap-4">
+                  {/* Honeypot: off-screen and skipped by keyboard and screen readers; bots fill it in. */}
+                  <div aria-hidden="true" className="absolute -left-[10000px] top-auto w-px h-px overflow-hidden">
+                    <label htmlFor="newsletter-website">Website</label>
+                    <input id="newsletter-website" name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                  </div>
                   <div className="w-full">
                     <Label htmlFor="email-address" className="sr-only">
                       Email address
@@ -95,28 +98,19 @@ export default function Newsletter() {
                       className="w-full rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 placeholder:text-gray-400 h-14 px-4 text-base focus:ring-2 focus:ring-blue-600"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      disabled={!user || loading}
+                      disabled={submitting}
                     />
                   </div>
                   
-                  {user ? (
-                    <Button
-                      asChild
-                      className="w-full sm:w-auto flex-none h-14 rounded-xl px-8 text-base font-semibold bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20"
-                    >
-                      <button type="submit" form="newsletter-form" disabled={loading}>
-                        Subscribe
-                        <BellIcon size={18} className="ml-2 animate-pulse" />
-                      </button>
-                    </Button>
-                  ) : (
-                    <Button
-                      asChild
-                      className="w-full sm:w-auto flex-none h-14 rounded-xl px-8 text-base font-semibold bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20"
-                    >
-                      <a href="/login">Log in to Subscribe</a>
-                    </Button>
-                  )}
+                  <Button
+                    asChild
+                    className="w-full sm:w-auto flex-none h-14 rounded-xl px-8 text-base font-semibold bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20"
+                  >
+                    <button type="submit" form="newsletter-form" disabled={submitting}>
+                      Subscribe
+                      <BellIcon size={18} className="ml-2 animate-pulse" />
+                    </button>
+                  </Button>
                 </form>
                 <p className="text-xs text-gray-600 dark:text-gray-300 mt-2">
                   We care about your data in our privacy policy.

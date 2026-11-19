@@ -48,7 +48,11 @@ async def create_contact(request: Request, payload: ContactIn, db: AsyncSession 
 @router.post("/service-inquiries", response_model=SubmissionOut, status_code=201)
 @limiter.limit(FORM_LIMIT)
 async def create_service_inquiry(request: Request, payload: ServiceInquiryIn, db: AsyncSession = Depends(get_db)):
-    row = ServiceInquiry(**payload.model_dump())
+    if payload.website:  # honeypot, see create_contact
+        logger.info("[inquiry] Honeypot triggered from %s - dropped", client_ip(request))
+        return SubmissionOut(id=uuid4(), status="new")
+
+    row = ServiceInquiry(**payload.model_dump(exclude={"website"}))
     db.add(row)
     await db.commit()
     await db.refresh(row)

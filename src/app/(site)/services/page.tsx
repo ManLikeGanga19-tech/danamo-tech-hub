@@ -20,7 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/lib/auth/AuthContext";
 import { apiFetch } from "@/lib/api/client";
 import Image from 'next/image';
 import Script from "next/script";
@@ -59,13 +58,13 @@ export default function ServicesPage() {
   const [email, setEmail] = useState("");
   const [selectedService, setSelectedService] = useState("");
   const [message, setMessage] = useState("");
-  const { user, loading: authLoading } = useAuth();
+  const [website, setWebsite] = useState(""); // honeypot, hidden from people
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   // Preserve original behavior: `loading` covered both auth-check AND submit
-  const loading = authLoading || submitting;
+  const loading = submitting;
 
   // Home page service cards link here with ?service=<value> to preselect it.
   // Read after mount (the page is statically rendered without the query).
@@ -86,12 +85,6 @@ export default function ServicesPage() {
     setSuccess("");
     setSubmitting(true);
 
-    if (!user) {
-      setError("Please log in to submit the form.");
-      setSubmitting(false);
-      return;
-    }
-
     if (!name || !email || !selectedService || !message) {
       setError("All fields are required.");
       setSubmitting(false);
@@ -107,6 +100,7 @@ export default function ServicesPage() {
           service_slug: selectedService,
           message,
           company: null,
+          website,
         }),
       });
       setSuccess("Message sent successfully! Our team will get back to you shortly.");
@@ -250,11 +244,7 @@ export default function ServicesPage() {
                 <Card className="w-full rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1E1E2F] shadow-2xl shadow-blue-500/5">
                   <CardHeader className="pb-6">
                     <CardDescription className="text-base text-gray-700 dark:text-gray-300">
-                      {loading
-                        ? "Checking login status..."
-                        : user
-                          ? "Fill out the form and we will get back to you shortly."
-                          : "Please log in to send a message."}
+                      Fill out the form and we will get back to you shortly.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -269,6 +259,11 @@ export default function ServicesPage() {
                       </div>
                     )}
                     <form id="service-form" onSubmit={handleSubmit} className="grid w-full gap-5">
+                      {/* Honeypot: off-screen and skipped by keyboard and screen readers; bots fill it in. */}
+                      <div aria-hidden="true" className="absolute -left-[10000px] top-auto w-px h-px overflow-hidden">
+                        <label htmlFor="service-website">Website</label>
+                        <input id="service-website" name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                      </div>
                       <div className="flex flex-col space-y-2">
                         <Label htmlFor="name" className="text-gray-700 dark:text-gray-300 font-medium">Name</Label>
                         <Input
@@ -277,7 +272,7 @@ export default function ServicesPage() {
                           className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 h-12"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
-                          disabled={!user || loading}
+                          disabled={loading}
                           required
                         />
                       </div>
@@ -291,7 +286,7 @@ export default function ServicesPage() {
                           className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 h-12"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          disabled={!user || loading}
+                          disabled={loading}
                           required
                         />
                       </div>
@@ -301,7 +296,7 @@ export default function ServicesPage() {
                         <Select
                           value={selectedService}
                           onValueChange={(value) => setSelectedService(value)}
-                          disabled={!user || loading}
+                          disabled={loading}
                         >
                           <SelectTrigger id="interest" className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 h-12">
                             <SelectValue placeholder="Select a service" />
@@ -323,30 +318,21 @@ export default function ServicesPage() {
                           className="rounded-xl bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 resize-none"
                           value={message}
                           onChange={(e) => setMessage(e.target.value)}
-                          disabled={!user || loading}
+                          disabled={loading}
                           required
                         />
                       </div>
 
                       <CardFooter className="flex justify-end p-0 pt-4">
-                        {user ? (
-                          <Button
-                            asChild
-                            className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
-                          >
-                            <button type="submit" form="service-form" disabled={loading}>
-                              <Send size={18} className={`mr-2 ${loading ? "animate-pulse" : ""}`} />
-                              {loading ? "Sending..." : "Send Inquiry"}
-                            </button>
-                          </Button>
-                        ) : (
-                          <Button
-                            asChild
-                            className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
-                          >
-                            <a href="/login">Log in to Send</a>
-                          </Button>
-                        )}
+                        <Button
+                          asChild
+                          className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-300 shadow-lg shadow-blue-600/20 text-base px-8 py-6 rounded-xl"
+                        >
+                          <button type="submit" form="service-form" disabled={loading}>
+                            <Send size={18} className={`mr-2 ${loading ? "animate-pulse" : ""}`} />
+                            {loading ? "Sending..." : "Send Inquiry"}
+                          </button>
+                        </Button>
                       </CardFooter>
                     </form>
                   </CardContent>
