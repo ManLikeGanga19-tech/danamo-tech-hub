@@ -12,6 +12,22 @@ export const CONTACT_PHONE = "+254785640048";
 export const CONTACT_PHONE_DISPLAY = "+254 785 640 048";
 export const WHATSAPP_URL = "https://wa.me/254785640048";
 
+/** Year the company was founded (stated on /team; Business Profile opening date 15 Apr 2024). */
+export const FOUNDING_YEAR = "2024";
+
+/**
+ * Danamo's own products (not client work). Each has its own website where one
+ * exists. Add a URL only when that site names Danamo Tech Ltd as the maker, so
+ * Google ties the product to this company instead of treating the product site
+ * as the company's main home.
+ */
+export const OWN_PRODUCTS: { name: string; summary: string; url?: string }[] = [
+  { name: "ShuleHQ", summary: "school management SaaS for Kenyan schools", url: "https://shulehq.co.ke" },
+  { name: "WIFI.OS", summary: "ISP and Wi-Fi hotspot billing and network management with M-Pesa", url: "https://wifios.co.ke" },
+  { name: "VendaPOS", summary: "point of sale software for businesses" },
+  { name: "Tusome", summary: "CBC e-learning platform" },
+];
+
 export const BUSINESS_ADDRESS = {
   streetAddress: "Airport Road",
   addressLocality: "Mombasa",

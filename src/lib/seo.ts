@@ -5,8 +5,10 @@ import {
   CONTACT_EMAIL,
   CONTACT_PHONE,
   FOUNDER,
+  FOUNDING_YEAR,
   GOOGLE_BUSINESS_PROFILE_URL,
   OPENING_HOURS,
+  OWN_PRODUCTS,
   SITE_NAME,
   SITE_URL,
   SOCIAL_LINKS,
@@ -80,7 +82,11 @@ export const organizationJsonLd = {
   description: DEFAULT_DESCRIPTION,
   email: CONTACT_EMAIL,
   telephone: CONTACT_PHONE,
+  foundingDate: FOUNDING_YEAR,
   address: { "@type": "PostalAddress", ...BUSINESS_ADDRESS },
+  // Own products. Their sites describe Danamo Tech Ltd too; listing them here
+  // tells Google they are brands of this company, whose home is this site.
+  brand: OWN_PRODUCTS.map(({ name, url }) => ({ "@type": "Brand", name, ...(url ? { url } : {}) })),
   // Optional local signals: emitted only once verified in lib/site.ts.
   ...(BUSINESS_GEO ? { geo: { "@type": "GeoCoordinates", ...BUSINESS_GEO } } : {}),
   ...(GOOGLE_BUSINESS_PROFILE_URL ? { hasMap: GOOGLE_BUSINESS_PROFILE_URL } : {}),

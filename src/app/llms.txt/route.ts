@@ -1,6 +1,6 @@
 import { getProjects } from "@/lib/projects";
 import { getOpenJobs } from "@/lib/jobs";
-import { CONTACT_EMAIL, FOUNDER, SITE_URL } from "@/lib/site";
+import { CONTACT_EMAIL, FOUNDER, FOUNDING_YEAR, OWN_PRODUCTS, SITE_URL } from "@/lib/site";
 import { services } from "@/lib/services";
 import { publishedLocations } from "@/lib/locations";
 
@@ -17,6 +17,7 @@ export async function GET() {
   const areas = ["Mombasa (head office, Airport Road)", ...publishedLocations.map((l) => `[${l.name}, ${l.county}](${SITE_URL}/locations/${l.slug})`)]
     .map((a) => `- ${a}`)
     .join("\n");
+  const ownProducts = OWN_PRODUCTS.map((p) => `- ${p.url ? `[${p.name}](${p.url})` : p.name}: ${p.summary}`).join("\n");
   const serviceList = services.map((s) => `- [${s.name}](${SITE_URL}/services/${s.slug}): ${s.summary}`).join("\n");
   const roles = jobs.length
     ? jobs.map((j) => `- [${j.title}](${SITE_URL}/careers/${j.slug}): ${j.employment_type}, ${j.location}`).join("\n")
@@ -29,6 +30,8 @@ export async function GET() {
 ## Key facts
 
 - Legal name: Danamo Tech Ltd, registered in Kenya
+- Founded: ${FOUNDING_YEAR}, in Mombasa
+- Main business: custom software development for clients. Danamo also builds and runs its own products (listed below); each is one product of the company, not the company itself.
 - Location: Airport Road, Mombasa, Kenya; serves clients across Kenya and East Africa, and remotely
 - Founder and CEO: ${FOUNDER.name}, ${FOUNDER.titles.join(" and ").toLowerCase()} (${FOUNDER.github})
 - Contact: ${CONTACT_EMAIL}, ${SITE_URL}/services (project inquiry form)
@@ -52,10 +55,7 @@ ${areas}
 
 ## Own products
 
-- ShuleHQ: school management SaaS for Kenyan schools
-- WIFI.OS: ISP and Wi-Fi hotspot billing and network management with M-Pesa
-- VendaPOS: point of sale software for businesses
-- Tusome: CBC e-learning platform
+${ownProducts}
 
 ## Case studies
 
