@@ -1,7 +1,7 @@
 import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { CONTACT_EMAIL, SOCIAL_LINKS } from '@/lib/site'
+import { CONTACT_EMAIL, OWN_PRODUCTS, SOCIAL_LINKS } from '@/lib/site'
 import { publishedLocations } from '@/lib/locations'
 import CookiePreferencesButton from './CookiePreferencesButton'
 
@@ -62,6 +62,9 @@ export default function Footer() {
               <li><Link href="/careers" className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Careers</Link></li>
               <li><Link href="/services" className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Services</Link></li>
               <li><Link href="/team" className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Our Founder</Link></li>
+              {OWN_PRODUCTS.filter((p) => p.url).map((p) => (
+                <li key={p.name}><a href={p.url} target="_blank" rel="noopener" className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{p.name} (our product)</a></li>
+              ))}
               {publishedLocations.map((loc) => (
                 <li key={loc.slug}><Link href={`/locations/${loc.slug}`} className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{loc.name}</Link></li>
               ))}
