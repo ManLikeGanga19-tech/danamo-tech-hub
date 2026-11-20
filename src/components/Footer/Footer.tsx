@@ -4,6 +4,7 @@ import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CONTACT_EMAIL, SOCIAL_LINKS } from '@/lib/site'
+import { publishedLocations } from '@/lib/locations'
 import { openCookiePreferences } from '@/lib/consent'
 
 export default function Footer() {
@@ -63,6 +64,9 @@ export default function Footer() {
               <li><Link href="/careers" className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Careers</Link></li>
               <li><Link href="/services" className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Services</Link></li>
               <li><Link href="/team" className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Our Founder</Link></li>
+              {publishedLocations.map((loc) => (
+                <li key={loc.slug}><Link href={`/locations/${loc.slug}`} className="text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{loc.name}</Link></li>
+              ))}
             </ul>
           </div>
 

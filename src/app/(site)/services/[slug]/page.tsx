@@ -5,9 +5,11 @@ import { ArrowRight, Check, ChevronDown, ChevronRight } from "lucide-react";
 import { Navbar1 } from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import { ServiceIcon } from "@/components/services/ServiceIcon";
-import { caseStudies, getService, services, type ServiceSection } from "@/lib/services";
+import { ContentSection } from "@/components/services/ContentSection";
+import { caseStudies, getService, services } from "@/lib/services";
 import { jsonLd, pageMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { publishedLocations } from "@/lib/locations";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,52 +33,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-function Section({ section }: { section: ServiceSection }) {
-  return (
-    <section className="mb-16">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">{section.heading}</h2>
-      {section.paragraphs?.map((p) => (
-        <p key={p} className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 max-w-3xl">{p}</p>
-      ))}
-      {section.features && (
-        <div className="grid sm:grid-cols-2 gap-4 mt-6">
-          {section.features.map((f) => (
-            <div key={f.title} className="p-5 rounded-2xl bg-white dark:bg-[#1E1E2F] border border-gray-100 dark:border-gray-800 shadow-sm">
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{f.title}</h3>
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{f.text}</p>
-            </div>
-          ))}
-        </div>
-      )}
-      {section.steps && (
-        <ol className="mt-6 space-y-4">
-          {section.steps.map((step, i) => (
-            <li key={step.title} className="flex gap-4">
-              <span className="flex-none w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center" aria-hidden="true">
-                {i + 1}
-              </span>
-              <div className="pt-1">
-                <h3 className="font-semibold text-gray-900 dark:text-white">{step.title}</h3>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{step.text}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      )}
-      {section.bullets && (
-        <ul className="mt-6 space-y-3 max-w-3xl">
-          {section.bullets.map((b) => (
-            <li key={b} className="flex gap-3 text-gray-700 dark:text-gray-300 leading-relaxed">
-              <Check className="w-5 h-5 mt-0.5 shrink-0 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-              <span>{b}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-}
-
 export default async function ServicePage({ params }: Props) {
   const { slug } = await params;
   const service = getService(slug);
@@ -97,6 +53,7 @@ export default async function ServicePage({ params }: Props) {
       provider: { "@id": `${SITE_URL}/#organization` },
       areaServed: [
         { "@type": "City", name: "Mombasa" },
+        ...publishedLocations.map((l) => ({ "@type": "City", name: l.name, url: `${SITE_URL}/locations/${l.slug}` })),
         { "@type": "Country", name: "Kenya" },
       ],
     },
@@ -152,7 +109,7 @@ export default async function ServicePage({ params }: Props) {
 
         <div className="max-w-5xl mx-auto px-4 md:px-8 py-16">
           {service.sections.map((section) => (
-            <Section key={section.heading} section={section} />
+            <ContentSection key={section.heading} section={section} />
           ))}
 
           {/* PROOF */}

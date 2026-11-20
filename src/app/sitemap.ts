@@ -4,6 +4,7 @@ import { getPublishedPosts } from "@/lib/blog";
 import { getOpenJobs } from "@/lib/jobs";
 import { getProjects } from "@/lib/projects";
 import { services } from "@/lib/services";
+import { publishedLocations } from "@/lib/locations";
 
 // Rebuilt at most hourly so new articles are picked up without a redeploy.
 export const revalidate = 3600;
@@ -19,10 +20,8 @@ const pages: { path: string; changeFrequency: "daily" | "weekly" | "monthly" | "
     { path: "/blog", changeFrequency: "weekly", priority: 0.6 },
     { path: "/faqs", changeFrequency: "monthly", priority: 0.5 },
     { path: "/help-center", changeFrequency: "monthly", priority: 0.5 },
-    { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
-    { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
-    { path: "/cookies", changeFrequency: "yearly", priority: 0.3 },
-    { path: "/accessibility", changeFrequency: "yearly", priority: 0.3 },
+    // Legal pages (/privacy, /terms, /cookies, /accessibility) are noindex,
+    // so they are deliberately not listed here.
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -35,6 +34,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
     const servicePages = services.map((service) => ({
         url: `${SITE_URL}/services/${service.slug}`,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+    }));
+    const locationPages = publishedLocations.map((loc) => ({
+        url: `${SITE_URL}/locations/${loc.slug}`,
         changeFrequency: "monthly" as const,
         priority: 0.8,
     }));
@@ -56,5 +60,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly" as const,
         priority: 0.6,
     }));
-    return [...staticPages, ...servicePages, ...projects, ...roles, ...posts];
+    return [...staticPages, ...servicePages, ...locationPages, ...projects, ...roles, ...posts];
 }

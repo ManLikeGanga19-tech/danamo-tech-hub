@@ -6,6 +6,9 @@ export const metadata = pageMetadata({
   description:
     "How Danamo Tech Ltd collects, uses and protects your personal data under the Kenya Data Protection Act, 2019, and how to exercise your rights.",
   path: "/privacy",
+  // Legal pages stay crawlable (follow) but out of search results: they
+  // were outranking service pages for site: and brand queries.
+  noindex: true,
 });
 
 export default function PrivacyPage() {

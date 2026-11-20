@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { apiFetch } from "@/lib/api/client";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_DISPLAY } from "@/lib/site";
 
 function Contact() {
   const [name, setName] = useState("");
@@ -125,8 +125,8 @@ function Contact() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Call Us</p>
-                  <a href="tel:+254785640048" className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
-                    +254 785 640 048
+                  <a href={`tel:${CONTACT_PHONE}`} className="text-gray-900 dark:text-white font-semibold hover:text-blue-600 transition-colors">
+                    {CONTACT_PHONE_DISPLAY}
                   </a>
                 </div>
               </li>

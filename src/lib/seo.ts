@@ -1,5 +1,16 @@
 import type { Metadata } from "next";
-import { CONTACT_EMAIL, FOUNDER, SITE_NAME, SITE_URL } from "@/lib/site";
+import {
+  BUSINESS_ADDRESS,
+  BUSINESS_GEO,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  FOUNDER,
+  GOOGLE_BUSINESS_PROFILE_URL,
+  OPENING_HOURS,
+  SITE_NAME,
+  SITE_URL,
+  SOCIAL_LINKS,
+} from "@/lib/site";
 
 /** Default share image (1200x630). Pages with their own image pass `image`. */
 export const OG_IMAGE = "/og-image.jpg";
@@ -68,13 +79,21 @@ export const organizationJsonLd = {
   image: `${SITE_URL}${OG_IMAGE}`,
   description: DEFAULT_DESCRIPTION,
   email: CONTACT_EMAIL,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Airport Road",
-    addressLocality: "Mombasa",
-    addressRegion: "Mombasa County",
-    addressCountry: "KE",
-  },
+  telephone: CONTACT_PHONE,
+  address: { "@type": "PostalAddress", ...BUSINESS_ADDRESS },
+  // Optional local signals: emitted only once verified in lib/site.ts.
+  ...(BUSINESS_GEO ? { geo: { "@type": "GeoCoordinates", ...BUSINESS_GEO } } : {}),
+  ...(GOOGLE_BUSINESS_PROFILE_URL ? { hasMap: GOOGLE_BUSINESS_PROFILE_URL } : {}),
+  ...(OPENING_HOURS.length
+    ? {
+        openingHoursSpecification: OPENING_HOURS.map(({ days, opens, closes }) => ({
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: days,
+          opens,
+          closes,
+        })),
+      }
+    : {}),
   areaServed: [
     { "@type": "City", name: "Mombasa" },
     { "@type": "Country", name: "Kenya" },
@@ -115,8 +134,20 @@ export const organizationJsonLd = {
       "Digital marketing",
     ].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })),
   },
-  contactPoint: { "@type": "ContactPoint", email: CONTACT_EMAIL, contactType: "sales", areaServed: "KE", availableLanguage: ["English"] },
-  sameAs: ["https://github.com/ManLikeGanga19-tech"],
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: CONTACT_EMAIL,
+    telephone: CONTACT_PHONE,
+    contactType: "sales",
+    areaServed: "KE",
+    availableLanguage: ["English"],
+  },
+  // Every official profile, so Google ties them to one entity.
+  sameAs: [
+    "https://github.com/ManLikeGanga19-tech",
+    ...Object.values(SOCIAL_LINKS),
+    GOOGLE_BUSINESS_PROFILE_URL,
+  ].filter(Boolean),
 };
 
 export const websiteJsonLd = {

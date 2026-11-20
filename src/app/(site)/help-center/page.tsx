@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, Briefcase, FolderKanban, Search, ShieldCheck, Video, Zap, ChevronDown, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
-import { CONTACT_EMAIL } from '@/lib/site';
+import { CONTACT_EMAIL, WHATSAPP_URL } from '@/lib/site';
 import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Image from 'next/image';
@@ -245,7 +245,7 @@ export default function HelpCenterPage() {
             className="h-auto max-w-full whitespace-normal text-center bg-green-500 hover:bg-green-600 text-white transition-all duration-300 shadow-lg shadow-green-500/20 text-base px-6 sm:px-8 py-4 sm:py-6 rounded-xl group"
           >
             <a
-              href="https://wa.me/+254785640048"
+              href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3"

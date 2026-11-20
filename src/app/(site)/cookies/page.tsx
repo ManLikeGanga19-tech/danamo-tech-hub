@@ -6,6 +6,9 @@ export const metadata = pageMetadata({
   description:
     "Which cookies the Danamo Tech website uses, why, and how you can accept, reject or change your cookie preferences at any time.",
   path: "/cookies",
+  // Legal pages stay crawlable (follow) but out of search results: they
+  // were outranking service pages for site: and brand queries.
+  noindex: true,
 });
 
 export default function CookiesPage() {

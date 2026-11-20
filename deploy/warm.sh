@@ -8,13 +8,16 @@
 set -euo pipefail
 SITE="https://danamotech.co.ke"
 API="https://api.danamotech.co.ke/api/v1"
-STATIC_PAGES=23 # 14 site pages + 9 service pages in src/app/sitemap.ts
+# 10 site pages + 9 service pages in src/app/sitemap.ts, plus one per
+# published location in src/lib/locations.ts (bump when you publish one).
+STATIC_PAGES=19
 
 count() { python3 -c 'import json,sys; print(len(json.load(sys.stdin)))'; }
 
 fail=0
 paths=$(curl -fsS "$SITE/sitemap.xml" | grep -o '<loc>[^<]*</loc>' | sed -e 's/<[^>]*>//g' -e "s#^$SITE##")
-for p in "" $paths /sitemap.xml /llms.txt /robots.txt; do
+# Legal pages are noindex and not in the sitemap, but still warmed.
+for p in "" $paths /privacy /terms /cookies /accessibility /sitemap.xml /llms.txt /robots.txt; do
   code=$(curl -s -o /dev/null -w '%{http_code}' "$SITE${p:-/}")
   [ "$code" = 200 ] || { echo "FAIL $code ${p:-/}"; fail=1; }
 done

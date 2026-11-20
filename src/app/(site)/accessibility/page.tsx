@@ -1,11 +1,15 @@
 import { pageMetadata } from "@/lib/seo";
 import LegalLayout from "@/components/Legal/LegalLayout";
+import { CONTACT_PHONE_DISPLAY } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Accessibility Statement",
   description:
     "Danamo Tech's commitment to an accessible website under the Constitution of Kenya, the Persons with Disabilities Act and WCAG 2.1 Level AA.",
   path: "/accessibility",
+  // Legal pages stay crawlable (follow) but out of search results: they
+  // were outranking service pages for site: and brand queries.
+  noindex: true,
 });
 
 export default function AccessibilityPage() {
@@ -94,7 +98,7 @@ export default function AccessibilityPage() {
       </p>
       <ul>
         <li><strong>Email:</strong> support@danamotech.co.ke</li>
-        <li><strong>Phone:</strong> +254 785 640 048</li>
+        <li><strong>Phone:</strong> {CONTACT_PHONE_DISPLAY}</li>
         <li><strong>Postal:</strong> Danamo Tech Ltd, 93294 - 80102, Mombasa, Kenya</li>
       </ul>
       <p>

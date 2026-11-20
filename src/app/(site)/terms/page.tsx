@@ -6,6 +6,9 @@ export const metadata = pageMetadata({
   description:
     "The terms that govern your use of the Danamo Tech website and our software development services, under the laws of Kenya.",
   path: "/terms",
+  // Legal pages stay crawlable (follow) but out of search results: they
+  // were outranking service pages for site: and brand queries.
+  noindex: true,
 });
 
 export default function TermsPage() {

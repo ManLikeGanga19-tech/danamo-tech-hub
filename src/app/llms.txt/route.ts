@@ -2,6 +2,7 @@ import { getProjects } from "@/lib/projects";
 import { getOpenJobs } from "@/lib/jobs";
 import { CONTACT_EMAIL, FOUNDER, SITE_URL } from "@/lib/site";
 import { services } from "@/lib/services";
+import { publishedLocations } from "@/lib/locations";
 
 // Plain-text company summary for AI assistants and LLM crawlers (llmstxt.org).
 // Facts only: everything here must be true and match the website.
@@ -13,6 +14,9 @@ export async function GET() {
   const caseStudies = projects.length
     ? projects.map((p) => `- [${p.title}](${SITE_URL}/projects/${p.slug}): ${p.description}`).join("\n")
     : "- See " + SITE_URL + "/projects";
+  const areas = ["Mombasa (head office, Airport Road)", ...publishedLocations.map((l) => `[${l.name}, ${l.county}](${SITE_URL}/locations/${l.slug})`)]
+    .map((a) => `- ${a}`)
+    .join("\n");
   const serviceList = services.map((s) => `- [${s.name}](${SITE_URL}/services/${s.slug}): ${s.summary}`).join("\n");
   const roles = jobs.length
     ? jobs.map((j) => `- [${j.title}](${SITE_URL}/careers/${j.slug}): ${j.employment_type}, ${j.location}`).join("\n")
@@ -41,6 +45,10 @@ ${FOUNDER.name} is the founder and CEO of Danamo Tech, and a senior software dev
 ## Services
 
 ${serviceList}
+
+## Areas served
+
+${areas}
 
 ## Own products
 
