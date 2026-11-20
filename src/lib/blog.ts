@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/site";
+import { SERVER_API } from "@/lib/server-api";
 
 export type BlogSummary = {
   title: string;
@@ -22,8 +23,7 @@ export type BlogPost = BlogSummary & {
 /** Fallback image when a post has no cover. */
 export const DEFAULT_BLOG_COVER = "/blogs/blog-bg.jpg";
 
-// Server-side only: the Next.js server reaches the API on the private network.
-const API = `${process.env.BACKEND_INTERNAL_URL ?? "http://localhost:8000"}/api/v1`;
+const API = SERVER_API;
 const REVALIDATE_SECONDS = 60;
 
 export async function getPublishedPosts(): Promise<BlogSummary[]> {

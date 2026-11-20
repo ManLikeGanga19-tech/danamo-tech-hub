@@ -1,3 +1,5 @@
+import { SERVER_API } from "@/lib/server-api";
+
 /** Published case studies, fetched on the server (rendered HTML for search engines). */
 
 export type ProjectSummary = {
@@ -20,7 +22,7 @@ export type Project = ProjectSummary & {
   technologies: string[];
 };
 
-const API = `${process.env.BACKEND_INTERNAL_URL ?? "http://localhost:8000"}/api/v1`;
+const API = SERVER_API;
 const REVALIDATE_SECONDS = 60;
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 

@@ -1,3 +1,5 @@
+import { SERVER_API } from "@/lib/server-api";
+
 /**
  * Open roles for /careers and /careers/[slug]. Managed in the admin console
  * (Careers -> Job Openings); only roles with status "open" are returned.
@@ -19,8 +21,7 @@ export type Job = {
   posted_at: string | null;
 };
 
-// Server-side only: the Next.js server reaches the API on the private network.
-const API = `${process.env.BACKEND_INTERNAL_URL ?? "http://localhost:8000"}/api/v1`;
+const API = SERVER_API;
 const REVALIDATE_SECONDS = 60;
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 

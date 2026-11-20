@@ -71,6 +71,13 @@ docker compose run --rm backend alembic upgrade head
 docker compose up -d
 ```
 
+Then, from a checkout of this repo (any machine):
+
+```bash
+./deploy/warm.sh       # refresh every page's cache; checks sitemap + llms.txt are complete
+./deploy/indexnow.sh   # if content changed: ask Bing & co. to re-crawl
+```
+
 ## Roll back
 
 Set `IMAGE_TAG` in `.env` to the previous `sha-<short>` tag, then
