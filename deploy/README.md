@@ -89,13 +89,13 @@ Measured 2026-11-20. The server itself is fast:
 | --- | --- |
 | On the VPS, `curl http://127.0.0.1:3001/` (Next.js, prerendered `/`) | 7–16 ms |
 | On the VPS, through Caddy over HTTPS (`--resolve danamotech.co.ke:443:127.0.0.1`) | 40–150 ms |
-| From Kenya (wired), public URL | 0.9–1.35 s (TCP connect 0.33–0.54 s, TLS done at 0.72–1.12 s) |
+| From the dev machine, public URL (its traffic exits in the Netherlands, so this is *not* a Kenyan measurement) | 0.9–1.35 s (TCP connect 0.33–0.54 s, TLS done at 0.72–1.12 s) |
 | From a phone in Mombasa (browser) | 3.1 s TTFB, 13.5 s DOMContentLoaded |
 
 The host is not the problem: the load average is about 1 on 4 cores, 4.4 GB RAM
 is free, and the shared ShuleHQ Caddy adds well under 150 ms. The time goes on
-the network. Round trips from Kenya to the VPS take 170–270 ms (more on mobile
-data), and a new visitor needs 3–4 of them (DNS, TCP, TLS, then the request)
+the network. Round trips to the VPS took 170–270 ms from the dev machine (more
+on mobile data), and a new visitor needs 3–4 of them (DNS, TCP, TLS, then the request)
 before the first byte. Then each JavaScript file crosses the same distance,
 which is why DOMContentLoaded is so late on a phone.
 
@@ -121,6 +121,22 @@ HTML stays at the edge until it is purged**, so `cf-purge.sh` is a required
 step after every deploy (see "Update to a new build"). Admin edits to blog
 posts, projects and jobs show up within about two minutes without a purge
 (ISR, 60 s).
+
+### Status
+
+**Live since 2026-11-20.** The apex and `www` are proxied, and `admin` and
+`api` are DNS only. Cache rules 1–4 below are deployed. Verified: HTML and
+images MISS then HIT; RSC requests DYNAMIC; 404s BYPASS; the ACME path still
+gets Caddy's 308; AI crawlers get 200; robots.txt is unchanged. Email Address
+Obfuscation is off.
+
+The purge token (Zone → Cache Purge only) and the zone ID are kept outside the
+repo in `~/.danamo-cf` (mode 600) on the deploying machine:
+
+```bash
+set -a; . ~/.danamo-cf; set +a
+./deploy/cf-purge.sh && ./deploy/warm.sh
+```
 
 ### Settings to click (Cloudflare dashboard → danamotech.co.ke)
 
@@ -172,7 +188,7 @@ applies, and a later rule overrides an earlier one, so the bypass rule must be *
 3. *HTML pages (respect Next.js)*
    - Expression:
      ```
-     (http.host eq "danamotech.co.ke" and not starts_with(http.request.uri.path, "/_next/") and not starts_with(http.request.uri.path, "/uploads/") and not starts_with(http.request.uri.path, "/api/") and not starts_with(http.request.uri.path, "/.well-known/"))
+     (http.host eq "danamotech.co.ke" and not starts_with(http.request.uri.path, "/_next/") and not starts_with(http.request.uri.path, "/uploads/") and not starts_with(http.request.uri.path, "/api/") and not starts_with(http.request.uri.path, "/.well-known/") and not starts_with(http.request.uri.path, "/cdn-cgi/"))
      ```
    - Eligible for cache. Edge TTL: **Use cache-control header if present, bypass cache if not**.
      Browser TTL: **Respect origin TTL**.
