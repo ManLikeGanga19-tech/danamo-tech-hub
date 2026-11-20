@@ -1,6 +1,5 @@
-"use client"
-
-import React, { memo } from "react"
+// Server component: the service data stays on the server instead of being
+// shipped to the browser just to render these cards.
 import Link from "next/link"
 import {
     Card,
@@ -12,7 +11,8 @@ import { ArrowRight } from "lucide-react"
 import { services, type Service } from "@/lib/services"
 import { ServiceIcon } from "@/components/services/ServiceIcon"
 
-const ServiceCard = memo(({ service, index }: { service: Service; index: number }) => (
+function ServiceCard({ service, index }: { service: Service; index: number }) {
+    return (
     <Link
         href={`/services/${service.slug}`}
         className="group block h-full rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
@@ -41,9 +41,8 @@ const ServiceCard = memo(({ service, index }: { service: Service; index: number 
             </CardHeader>
         </Card>
     </Link>
-))
-
-ServiceCard.displayName = "ServiceCard"
+    )
+}
 
 export default function Services() {
     return (

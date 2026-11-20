@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -18,7 +16,7 @@ const Hero = () => {
                     src={heroImage}
                     alt="Danamo Tech Digital Innovation"
                     fill
-                    priority
+                    preload
                     placeholder="blur"
                     sizes="100vw"
                     className="object-cover object-center"

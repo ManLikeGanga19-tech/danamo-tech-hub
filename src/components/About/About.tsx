@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
@@ -24,7 +22,7 @@ const AboutUs = () => {
                     src="/about.jpg"
                     alt="Danamo Tech Team"
                     fill
-                    priority
+                    sizes="100vw"
                     className="object-cover object-center"
                 />
                 {/* Consistent dark overlay */}
