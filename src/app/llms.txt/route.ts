@@ -1,6 +1,6 @@
 import { getProjects } from "@/lib/projects";
 import { getOpenJobs } from "@/lib/jobs";
-import { CONTACT_EMAIL, FOUNDER, FOUNDING_YEAR, OWN_PRODUCTS, SITE_URL } from "@/lib/site";
+import { CONTACT_EMAIL, FOUNDER, FOUNDING_YEAR, OWN_PRODUCTS, SITE_URL, SOCIAL_LINKS } from "@/lib/site";
 import { services } from "@/lib/services";
 import { publishedLocations } from "@/lib/locations";
 
@@ -36,6 +36,7 @@ export async function GET() {
 - Founder and CEO: ${FOUNDER.name}, ${FOUNDER.titles.join(" and ").toLowerCase()} (${FOUNDER.github})
 - Contact: ${CONTACT_EMAIL}, ${SITE_URL}/services (project inquiry form)
 - Website: ${SITE_URL}
+- Official profiles: ${Object.values(SOCIAL_LINKS).filter(Boolean).join(", ")}
 
 ## Founder
 

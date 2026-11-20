@@ -1,9 +1,18 @@
-import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react'
+import { Facebook, Github, Instagram, Linkedin, Mail, Youtube } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { CONTACT_EMAIL, OWN_PRODUCTS, SOCIAL_LINKS } from '@/lib/site'
 import { publishedLocations } from '@/lib/locations'
 import CookiePreferencesButton from './CookiePreferencesButton'
+
+// lucide has no X (Twitter) logo; this is the X mark as a single path.
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  )
+}
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -32,7 +41,7 @@ export default function Footer() {
             </p>
 
             {/* Social Icons — only profiles configured in src/lib/site.ts */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               {SOCIAL_LINKS.facebook && (
                 <a href={SOCIAL_LINKS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Danamo Tech on Facebook" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-blue-600 hover:border-blue-600 dark:hover:text-blue-400 dark:hover:border-blue-400 transition-all duration-300">
                   <Facebook className="w-4 h-4" aria-hidden="true" />
@@ -49,6 +58,21 @@ export default function Footer() {
               {SOCIAL_LINKS.linkedin && (
                 <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Danamo Tech on LinkedIn" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-blue-700 hover:border-blue-700 dark:hover:text-blue-500 dark:hover:border-blue-500 transition-all duration-300">
                   <Linkedin className="w-4 h-4" aria-hidden="true" />
+                </a>
+              )}
+              {SOCIAL_LINKS.x && (
+                <a href={SOCIAL_LINKS.x} target="_blank" rel="noopener noreferrer" aria-label="Danamo Tech on X" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:border-gray-900 dark:hover:text-white dark:hover:border-white transition-all duration-300">
+                  <XIcon className="w-3.5 h-3.5" />
+                </a>
+              )}
+              {SOCIAL_LINKS.youtube && (
+                <a href={SOCIAL_LINKS.youtube} target="_blank" rel="noopener noreferrer" aria-label="Danamo Tech on YouTube" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-red-600 hover:border-red-600 dark:hover:text-red-400 dark:hover:border-red-400 transition-all duration-300">
+                  <Youtube className="w-4 h-4" aria-hidden="true" />
+                </a>
+              )}
+              {SOCIAL_LINKS.github && (
+                <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="Danamo Tech on GitHub" className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-[#1E1E2F] border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 hover:border-gray-900 dark:hover:text-white dark:hover:border-white transition-all duration-300">
+                  <Github className="w-4 h-4" aria-hidden="true" />
                 </a>
               )}
             </div>

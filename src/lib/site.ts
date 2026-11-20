@@ -52,12 +52,16 @@ export const OPENING_HOURS: { days: ("Monday" | "Tuesday" | "Wednesday" | "Thurs
 
 /**
  * Official social profiles. Leave a value empty to hide that icon — never
- * link to a generic homepage. Fill these in when the profiles exist.
+ * link to a generic homepage. These are the company's profiles; the founder's
+ * own profiles belong in FOUNDER below.
  */
 export const SOCIAL_LINKS = {
-  facebook: "",
-  instagram: "",
-  linkedin: "",
+  facebook: "https://www.facebook.com/profile.php?id=61596343787837",
+  instagram: "https://www.instagram.com/danamotech",
+  linkedin: "https://www.linkedin.com/company/danamotech",
+  x: "https://x.com/danamotech",
+  youtube: "https://www.youtube.com/@danamotech",
+  github: "https://github.com/danamotech",
 } as const;
 
 // Single source of truth for the founder (Team page, blog author box,

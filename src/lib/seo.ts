@@ -148,9 +148,9 @@ export const organizationJsonLd = {
     areaServed: "KE",
     availableLanguage: ["English"],
   },
-  // Every official profile, so Google ties them to one entity.
+  // Every official company profile, so Google ties them to one entity. (The
+  // founder's personal GitHub is on the founder, not the company.)
   sameAs: [
-    "https://github.com/ManLikeGanga19-tech",
     ...Object.values(SOCIAL_LINKS),
     GOOGLE_BUSINESS_PROFILE_URL,
   ].filter(Boolean),
