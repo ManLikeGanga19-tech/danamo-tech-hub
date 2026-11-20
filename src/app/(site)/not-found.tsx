@@ -49,7 +49,7 @@ export default function NotFound() {
               variant="outline"
               className="w-full sm:w-auto border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 text-base px-8 py-6 rounded-xl"
             >
-              <Link href="/contact">Contact Support</Link>
+              <Link href="/#contact">Contact Support</Link>
             </Button>
           </div>
         </div>
