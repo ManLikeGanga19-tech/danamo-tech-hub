@@ -31,7 +31,7 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import { useAuth } from "@/lib/auth/AuthContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 
 interface MenuItem {
     title: string;
@@ -258,7 +258,7 @@ export const Navbar1 = ({
                 {isMobileMenuOpen && (
                     <>
                         {/* Dark Backdrop */}
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -267,7 +267,7 @@ export const Navbar1 = ({
                         />
 
                         {/* Sliding Drawer */}
-                        <motion.div
+                        <m.div
                             initial={{ x: "100%" }}
                             animate={{ x: 0 }}
                             exit={{ x: "100%" }}
@@ -322,7 +322,7 @@ export const Navbar1 = ({
                                     ) : null}
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
                     </>
                 )}
             </AnimatePresence>

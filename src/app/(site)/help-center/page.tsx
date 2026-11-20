@@ -9,7 +9,7 @@ import { CONTACT_EMAIL, WHATSAPP_URL } from '@/lib/site';
 import { Navbar1 } from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
 // Each topic card links to the page that answers it.
@@ -200,18 +200,18 @@ export default function HelpCenterPage() {
                         {item.question}
                       </span>
                       <div className={`flex-none flex items-center justify-center w-8 h-8 rounded-full transition-colors ${isOpen ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600'}`}>
-                        <motion.div
+                        <m.div
                           animate={{ rotate: isOpen ? 180 : 0 }}
                           transition={{ duration: 0.3 }}
                         >
                           <ChevronDown size={18} />
-                        </motion.div>
+                        </m.div>
                       </div>
                     </button>
 
                     <AnimatePresence initial={false}>
                       {isOpen && (
-                        <motion.div
+                        <m.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
@@ -221,7 +221,7 @@ export default function HelpCenterPage() {
                           <div className="px-6 pb-6 pt-0 text-gray-700 dark:text-gray-300 leading-relaxed">
                             {item.answer}
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
                     </AnimatePresence>
                   </Card>

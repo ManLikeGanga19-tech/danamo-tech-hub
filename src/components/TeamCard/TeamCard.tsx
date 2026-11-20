@@ -2,7 +2,7 @@
 
 import React from "react"
 import { Github, Linkedin } from "lucide-react"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import Image from "next/image";
 
 interface TeamCardProps {
@@ -28,7 +28,7 @@ function initials(name: string): string {
 
 export const TeamCard: React.FC<TeamCardProps> = ({ name, role, bio, imageUrl, socials }) => {
     return (
-        <motion.div
+        <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
@@ -83,6 +83,6 @@ export const TeamCard: React.FC<TeamCardProps> = ({ name, role, bio, imageUrl, s
                     </a>
                 )}
             </div>
-        </motion.div>
+        </m.div>
     )
 }

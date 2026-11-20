@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 
 const Navbar1 = lazy(() =>
   import('@/components/Navbar/Navbar').then(module => ({
@@ -91,7 +91,7 @@ const AccordionCard = React.memo(
 
         <AnimatePresence initial={false}>
           {isOpen && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
@@ -102,7 +102,7 @@ const AccordionCard = React.memo(
               <p className="pt-6 text-lg text-gray-700 dark:text-gray-300 leading-relaxed pl-0 md:pl-12">
                 {card.content}
               </p>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>

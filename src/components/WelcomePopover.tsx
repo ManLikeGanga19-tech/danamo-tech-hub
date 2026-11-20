@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useRouter, usePathname } from "next/navigation";
@@ -52,7 +52,7 @@ export default function WelcomeCard() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm px-4">
-      <motion.div
+      <m.div
         className="max-w-md w-full"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -61,12 +61,12 @@ export default function WelcomeCard() {
         <Card className="p-6 transition-colors duration-700 bg-gradient-to-b from-gray-100 to-white dark:from-[#0e0e15] dark:to-[#1E1E2F] shadow-xl rounded-2xl min-h-[180px] flex flex-col justify-center items-center">
           <AnimatePresence>
             {loading ? (
-              <motion.div key="spinner" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center space-y-2">
+              <m.div key="spinner" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center space-y-2">
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
                 <p className="text-sm text-muted-foreground">Loading...</p>
-              </motion.div>
+              </m.div>
             ) : show === "welcome" ? (
-              <motion.div key="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
+              <m.div key="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
                 <h3 className="text-lg font-semibold mb-2">
                   Welcome to <span className="text-blue-600 dark:text-blue-400">Danamo</span> Tech 🎉
                 </h3>
@@ -88,9 +88,9 @@ export default function WelcomeCard() {
                     Go to Settings
                   </Button>
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div key="greeting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
+              <m.div key="greeting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
                 <h3 className="text-lg font-semibold mb-2">
                   Hello, {user?.full_name || "there"}! 🎉
                 </h3>
@@ -105,11 +105,11 @@ export default function WelcomeCard() {
                     Got It
                   </Button>
                 </div>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </Card>
-      </motion.div>
+      </m.div>
     </div>
   );
 }
