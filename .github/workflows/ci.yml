@@ -1,6 +1,6 @@
 name: CI
 
-# Quality gate for the Next.js frontend: lint, then a production build.
+# Quality gate for the Next.js frontend: lint, typecheck, then a production build.
 # The build also enforces content rules that fail at build time, e.g. a
 # location page published without local proof (src/lib/locations.ts).
 
@@ -31,4 +31,5 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm run lint
+      - run: npm run typecheck
       - run: npm run build
