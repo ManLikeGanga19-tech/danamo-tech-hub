@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.email import send_webinar_registration
-from app.core.rate_limit import FORM_LIMIT, limiter
+from app.core.rate_limit import FORM_LIMIT, client_ip, limiter
 from app.db.session import get_db
 from app.models import Webinar, WebinarRegistration
 from app.schemas.webinars import ReplayUnlockIn, WebinarOut, WebinarRegisterIn, is_finished
@@ -39,6 +39,13 @@ async def _find(db: AsyncSession, webinar_id, kind: str, email: str) -> WebinarR
 @router.post("/register")
 @limiter.limit(FORM_LIMIT)
 async def register_for_webinar(request: Request, payload: WebinarRegisterIn, db: AsyncSession = Depends(get_db)):
+    # The form is public, so a bot could use it to send our confirmation email
+    # to any address. Bots fill the hidden honeypot field; answer them as if it
+    # worked, but store and send nothing.
+    if payload.website:
+        logger.info("[webinar] Honeypot triggered from %s - dropped", client_ip(request))
+        return {"status": "success", "message": "You're registered. Check your email."}
+
     webinar = await db.get(Webinar, payload.webinar_id)
     if not webinar:
         raise HTTPException(404, "Webinar not found")

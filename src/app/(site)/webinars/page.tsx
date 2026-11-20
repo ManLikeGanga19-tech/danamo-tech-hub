@@ -43,6 +43,7 @@ export default function WebinarsPage() {
   // Form States
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot, hidden from people
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -107,7 +108,7 @@ export default function WebinarsPage() {
     try {
       const res = await apiFetch<{ message: string }>("/webinars/register", {
         method: "POST",
-        body: JSON.stringify({ webinar_id: selectedWebinar?.id, name, email }),
+        body: JSON.stringify({ webinar_id: selectedWebinar?.id, name, email, website }),
       });
       setSuccess(res.message || "You're registered. Check your email.");
     } catch (err) {
@@ -282,6 +283,11 @@ export default function WebinarsPage() {
             </div>
           ) : (
             <form onSubmit={submitRegistration} className="space-y-4">
+              {/* Honeypot: off-screen and skipped by keyboard and screen readers; bots fill it in. */}
+              <div aria-hidden="true" className="absolute -left-[10000px] top-auto w-px h-px overflow-hidden">
+                <label htmlFor="webinar-website">Website</label>
+                <input id="webinar-website" name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+              </div>
               <div className="space-y-2">
                 <Label className="text-gray-700 dark:text-gray-300">Full Name</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)} required className="rounded-xl h-12" />

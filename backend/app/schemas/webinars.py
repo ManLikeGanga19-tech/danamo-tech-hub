@@ -130,6 +130,7 @@ class WebinarRegisterIn(BaseModel):
     webinar_id: UUID
     name: str = Field(min_length=1, max_length=120)
     email: EmailStr
+    website: str | None = Field(default=None, max_length=200)  # honeypot
 
 
 class ReplayUnlockIn(BaseModel):
